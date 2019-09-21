@@ -3,7 +3,7 @@ project(MapGeneration C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(MapGeneration Sources/main.c Header/room.h Header/shape.h)
+add_executable(MapGeneration Sources/main.c Header/room.h Header/shape.h Sources/shape.c)
 
 target_link_libraries(MapGeneration m)
 
