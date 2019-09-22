@@ -9,5 +9,6 @@ As for 'why in C' regarding the game - no particular reason, I'm using ncurses o
 ## How to reduce calculation's impact?
 
 We could think of many things that I haven't tried yet, as creating a thread dedicated to path calculus.
+
 **Side note:** My implemented algorithm here is not the fastest, by far, and may even be (very) slow. This is however 
 one that I'm implementing by passion and to see how far it goes, keep that in mind!
