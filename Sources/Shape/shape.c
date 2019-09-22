@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include <stdlib.h>
-#include "../Header/shape.h"
+#include "../../Header/shape.h"
 
 bool get_line(point_t start, point_t finish, line_t *diagonal)
 {
