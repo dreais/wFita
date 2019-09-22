@@ -33,6 +33,7 @@ int main(void)
         printf("something went wrong\n");
 	for (int i = 0; i < diagonal.size; i++)
 		printf("%d   %d\n", diagonal.pool[i].x, diagonal.pool[i].y);
-	//get_first_obst(&diagonal, start, finish, &main);
+	obst = get_first_obst(&diagonal, start, finish, &main);
+	printf("%d    %d\n", obst.x, obst.y);
     return 0;
 }
