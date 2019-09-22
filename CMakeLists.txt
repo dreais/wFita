@@ -7,4 +7,6 @@ add_executable(MapGeneration Sources/main.c Header/room.h Header/shape.h Sources
 
 target_link_libraries(MapGeneration m)
 
-target_compile_options(MapGeneration PRIVATE -Wall -Wextra)
+if (UNIX)
+	target_compile_options(MapGeneration PRIVATE -Wall -Wextra)
+endif (UNIX)
