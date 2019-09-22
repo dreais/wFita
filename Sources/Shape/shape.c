@@ -29,7 +29,7 @@ bool get_line(point_t start, point_t finish, line_t *diagonal)
         return true;
     }
     m = (float)dy / ((float)dx);
-    b = (float)(start.y + 1) - m * (float)(start.x + 1);
+    b = (float)(start.y) - m * (float)(start.x);
     step = 1.0f / ((float)fmax(abs(dx), abs(dy)));
 
     float tmp = (float)(finish.x + 1) / step;
@@ -42,14 +42,16 @@ bool get_line(point_t start, point_t finish, line_t *diagonal)
         if (counter > 0) {
             tmp_pt[1].x = tmp_pt[0].x;
             tmp_pt[1].y = tmp_pt[0].y;
-            tmp_pt[0].x = (int)steps[counter];
-            tmp_pt[0].y = (int)y;
+			tmp_pt[0].x = (int)floor(steps[counter]);
+			tmp_pt[0].y = (int)floor(y);
             if (tmp_pt[0].x != tmp_pt[1].x) {
                 diagonal->pool = realloc(diagonal->pool, sizeof(point_t) * (i  + 1));
                 if (!diagonal->pool)
                     return false;
                 diagonal->pool[i++] = tmp_pt[0];
                 diagonal->size = i;
+				if (diagonal->pool[i-1].x == finish.x && diagonal->pool[i-1].y == finish.y)
+					return true;
             }
             else if (tmp_pt[0].y != tmp_pt[1].y) {
                 diagonal->pool = realloc(diagonal->pool, sizeof(point_t) * (i  + 1));
@@ -57,11 +59,13 @@ bool get_line(point_t start, point_t finish, line_t *diagonal)
                     return false;
                 diagonal->pool[i++] = tmp_pt[0];
                 diagonal->size = i;
+				if (diagonal->pool[i - 1].x == finish.x && diagonal->pool[i - 1].y == finish.y)
+					return true;
             }
         }
         else {
-            tmp_pt[0].x = (int)steps[counter];
-            tmp_pt[0].y = (int)y;
+            tmp_pt[0].x = (int)round(steps[counter]);
+            tmp_pt[0].y = (int)round(y);
             diagonal->pool = realloc(diagonal->pool, sizeof(point_t) * (i  + 1));
             if (!diagonal->pool)
                 return false;
