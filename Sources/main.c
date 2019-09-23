@@ -34,10 +34,12 @@ int main(void)
 		main.room[i] = map_base[i];
     if (!get_line(&diagonal))
         printf("something went wrong\n");
+    for (int i = 0; i < diagonal.size; i++)
+        printf("%d    %d\n", diagonal.pool[i].x, diagonal.pool[i].y);
 	while (success == false) {
         obst = get_first_obst(&diagonal, start, finish, &main);
         if (obst.x > 0 && obst.y > 0) {
-            set_diag(&diagonal, obst, &main);
+            //set_diag(&diagonal, obst, &main);
         } else {
             success = true;
         }

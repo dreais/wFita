@@ -18,6 +18,7 @@ bool get_line(line_t *diagonal)
     int dy = diagonal->finish.y - diagonal->start.y;
     float step = 0;
     unsigned int counter = 0;
+    bool starting_point = false;
 
     diagonal->pool = malloc(sizeof(point_t) * 1);
     diagonal->pool[0] = (point_t) { .x = -1, .y = -1 };
@@ -39,39 +40,45 @@ bool get_line(line_t *diagonal)
     for (unsigned int i = 0; round((double)x) != round((double)tmp); x = x + copysign(1, dx)) {
         steps[counter] = x * step;
         float y = (m * steps[counter] + b);
-        if (counter > 0) {
+        if (starting_point == false) {
+            if (diagonal->start.x == round(steps[counter]) && diagonal->start.y == round(y))
+                starting_point = true;
+        }
+        if (counter > 0 && starting_point == true) {
             tmp_pt[1].x = tmp_pt[0].x;
             tmp_pt[1].y = tmp_pt[0].y;
-			tmp_pt[0].x = (int)floor(steps[counter]);
-			tmp_pt[0].y = (int)floor(y);
+			tmp_pt[0].x = (int)round(steps[counter]);
+			tmp_pt[0].y = (int)round(y);
             if (tmp_pt[0].x != tmp_pt[1].x) {
                 diagonal->pool = realloc(diagonal->pool, sizeof(point_t) * (i  + 1));
                 if (!diagonal->pool)
                     return false;
                 diagonal->pool[i++] = tmp_pt[0];
                 diagonal->size = i;
-				if (diagonal->pool[i - 1].x == finish.x && diagonal->pool[i - 1].y == finish.y) {
+				if (diagonal->pool[i - 1].x == diagonal->finish.x && diagonal->pool[i - 1].y == diagonal->finish.y) {
 					return true;
 				}
-            }
-            else if (tmp_pt[0].y != tmp_pt[1].y) {
+            } else if (tmp_pt[0].y != tmp_pt[1].y) {
                 diagonal->pool = realloc(diagonal->pool, sizeof(point_t) * (i  + 1));
                 if (!diagonal->pool)
                     return false;
                 diagonal->pool[i++] = tmp_pt[0];
                 diagonal->size = i;
-				if (diagonal->pool[i - 1].x == finish.x && diagonal->pool[i - 1].y == finish.y) {
+				if (diagonal->pool[i - 1].x == diagonal->finish.x && diagonal->pool[i - 1].y == diagonal->finish.y) {
 					return true;
 				}
             }
         } else {
-            tmp_pt[0].x = (int)round(steps[counter]);
-            tmp_pt[0].y = (int)round(y);
-            diagonal->pool = realloc(diagonal->pool, sizeof(point_t) * (i  + 1));
-            if (!diagonal->pool)
-                return false;
-            diagonal->pool[i++] = tmp_pt[0];
-            diagonal->size = i;
+            if (round(steps[counter]) == diagonal->start.x && round(y) == diagonal->start.y) {
+                starting_point = true;
+                tmp_pt[0].x = (int) round(steps[counter]);
+                tmp_pt[0].y = (int) round(y);
+                diagonal->pool = realloc(diagonal->pool, sizeof(point_t) * (i + 1));
+                if (!diagonal->pool)
+                    return false;
+                diagonal->pool[i++] = tmp_pt[0];
+                diagonal->size = i;
+            }
         }
         counter++;
     }
