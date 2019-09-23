@@ -9,13 +9,13 @@
 #include "../../Header/shape.h"
 #include "../../Header/room.h"
 
-bool get_line(point_t start, point_t finish, line_t *diagonal)
+bool get_line(line_t *diagonal)
 {
 	float m, b;
 	float* steps;
 	point_t tmp_pt[2]; 
-	int dx = finish.x - start.x;
-    int dy = finish.y - start.y;
+	int dx = diagonal->finish.x - diagonal->start.x;
+    int dy = diagonal->finish.y - diagonal->start.y;
     float step = 0;
     unsigned int counter = 0;
 
@@ -29,12 +29,12 @@ bool get_line(point_t start, point_t finish, line_t *diagonal)
         return true;
     }
     m = (float)dy / ((float)dx);
-    b = (float)(start.y) - m * (float)(start.x);
+    b = (float)(diagonal->start.y) - m * (float)(diagonal->start.x);
     step = 1.0f / ((float)fmax(abs(dx), abs(dy)));
 
-    float tmp = (float)(finish.x + 1) / step;
+    float tmp = (float)(diagonal->finish.x + 1) / step;
     tmp++;
-    float x = ((float)start.x + 1.0f) / step;
+    float x = ((float)diagonal->start.x + 1.0f) / step;
     steps = (float*) malloc(sizeof(float) * fabsf(fabsf(x) - fabsf(tmp)) + 2); // last is -1.0
     for (unsigned int i = 0; round((double)x) != round((double)tmp); x = x + copysign(1, dx)) {
         steps[counter] = x * step;
@@ -50,7 +50,7 @@ bool get_line(point_t start, point_t finish, line_t *diagonal)
                     return false;
                 diagonal->pool[i++] = tmp_pt[0];
                 diagonal->size = i;
-				if (diagonal->pool[i-1].x == finish.x && diagonal->pool[i-1].y == finish.y)
+				if (diagonal->pool[i-1].x == diagonal->finish.x && diagonal->pool[i-1].y == diagonal->finish.y)
 					return true;
             }
             else if (tmp_pt[0].y != tmp_pt[1].y) {
@@ -59,11 +59,10 @@ bool get_line(point_t start, point_t finish, line_t *diagonal)
                     return false;
                 diagonal->pool[i++] = tmp_pt[0];
                 diagonal->size = i;
-				if (diagonal->pool[i - 1].x == finish.x && diagonal->pool[i - 1].y == finish.y)
+				if (diagonal->pool[i - 1].x == diagonal->finish.x && diagonal->pool[i - 1].y == diagonal->finish.y)
 					return true;
             }
-        }
-        else {
+        } else {
             tmp_pt[0].x = (int)round(steps[counter]);
             tmp_pt[0].y = (int)round(y);
             diagonal->pool = realloc(diagonal->pool, sizeof(point_t) * (i  + 1));
@@ -126,4 +125,30 @@ point_t get_first_obst(line_t* diagonal, point_t start, point_t finish, room_t *
 		}
 	}
 	return (point_t) { .x = -1, .y = -1 };
+}
+
+bool set_diag(line_t *diagonal, point_t obst, room_t *room)
+{
+    short sign_x = (short)copysign(1.0f, (double)diagonal->finish.x - diagonal->start.x);
+    short sign_y = (short)copysign(1.0f, (double)diagonal->finish.y - diagonal->start.y);
+    point_t tmp[2];
+
+    // new diagonal ALWAYS goes in the contrary sense of ONE of the current sign. ex:
+    // sign_x == -1 && sign_y == -1 THEN new_diag_sign_x == 1 && new_diag_sign_y == -1 (or == -1 && == 1)
+    printf("%d\n", sign_x);
+    printf("%d\n", sign_y);
+    diagonal->start = obst;
+    if (sign_x != sign_y) {
+        tmp[0].x = 0;
+        tmp[1].y = room->width - 1;
+    } else {
+        tmp[0].y = room->height - 1;
+        tmp[1].x = 0;
+    }
+
+    printf("current x = %d\n", diagonal->start.x);
+    for (int x = diagonal->start.x; x != tmp[0].x; x += (-1 * sign_x)) {
+        printf("%d\n", x);
+    }
+    return true;
 }
