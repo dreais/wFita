@@ -50,8 +50,9 @@ bool get_line(line_t *diagonal)
                     return false;
                 diagonal->pool[i++] = tmp_pt[0];
                 diagonal->size = i;
-				if (diagonal->pool[i-1].x == diagonal->finish.x && diagonal->pool[i-1].y == diagonal->finish.y)
+				if (diagonal->pool[i - 1].x == finish.x && diagonal->pool[i - 1].y == finish.y) {
 					return true;
+				}
             }
             else if (tmp_pt[0].y != tmp_pt[1].y) {
                 diagonal->pool = realloc(diagonal->pool, sizeof(point_t) * (i  + 1));
@@ -59,8 +60,9 @@ bool get_line(line_t *diagonal)
                     return false;
                 diagonal->pool[i++] = tmp_pt[0];
                 diagonal->size = i;
-				if (diagonal->pool[i - 1].x == diagonal->finish.x && diagonal->pool[i - 1].y == diagonal->finish.y)
+				if (diagonal->pool[i - 1].x == finish.x && diagonal->pool[i - 1].y == finish.y) {
 					return true;
+				}
             }
         } else {
             tmp_pt[0].x = (int)round(steps[counter]);
