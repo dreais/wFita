@@ -7,15 +7,23 @@
 #include "../Header/contourn.h"
 
 // constructing map - this is a pre-made for test purpose!
-char map_base[8][10] = {
-		{FLOR, FLOR, FLOR, OBST, OBST, FLOR, FLOR, FLOR, FINI, FLOR},
-		{FLOR, FLOR, FLOR, OBST, FLOR, OBST, FLOR, FLOR, FLOR, FLOR},
-		{FLOR, FLOR, FLOR, FLOR, OBST, OBST, FLOR, FLOR, FLOR, FLOR},
-		{FLOR, FLOR, FLOR, FLOR, FLOR, OBST, OBST, FLOR, FLOR, FLOR},
-		{FLOR, FLOR, OBST, OBST, OBST, OBST, OBST, FLOR, FLOR, FLOR},
-		{FLOR, FLOR, OBST, FLOR, FLOR, OBST, FLOR, FLOR, FLOR, FLOR},
-		{FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
-		{STAR, FLOR, FLOR, FLOR, OBST, FLOR, FLOR, FLOR, FLOR, FLOR} };
+char map_base[15][15] = {
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, OBST, FLOR, FLOR, FLOR, FLOR, FINI, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, OBST, FLOR, FLOR, FLOR, FLOR, OBST, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, OBST, FLOR, FLOR, OBST, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, OBST, OBST, OBST, FLOR, OBST, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
+        {FLOR, FLOR, FLOR, FLOR, STAR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
+};
 
 // TODO: potentially use a file map + args
 int main(void)
@@ -28,31 +36,26 @@ int main(void)
 	room_t main;
 	bool success = false;
 
-	main.room = malloc(sizeof(char*) * 8);
-	main.width = 10;
-	main.height = 8;
-	for (int i = 0; i < 8; i++)
+	main.room = malloc(sizeof(char*) * 15);
+	main.width = 15;
+	main.height = 15;
+	for (int i = 0; i < 15; i++)
 		main.room[i] = map_base[i];
     if (!get_line(&diagonal)) {
         printf("something went wrong\n");
         return true ^ success;
     }
-    for (int i = 0; i < diagonal.size; i++)
-    {
+    for (int i = 0; i < diagonal.size; i++) {
         printf("x=%d\ty=%d\n", diagonal.pool[i].x,diagonal.pool[i].y);
+    }
+    while (success == false) {
+        obst = get_first_obst(&diagonal, start, finish, &main);
+        printf("obst:\n%d\t%d\n", obst.x, obst.y);
+        success = true;
     }
     return true ^ success;
 }
 
 /**
-    while (success == false) {
-        obst = get_first_obst(&diagonal, start, finish, &main);
-        if (obst.x > 0 && obst.y > 0) {
-            //set_diag(&diagonal, obst, &main);
-        } else {
-            //printf("bah yes\n");
-            success = true;
-        }
-        // for testing purpose, we will exit the loop after one occurrence
-        success = true;
+putting here codes that is removed to try earlier parts of the program:
  */

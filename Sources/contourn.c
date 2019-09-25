@@ -5,7 +5,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <math.h>
-#include <stdio.h>
 #include "../Header/shape.h"
 
 static bool append_point(point_t *pool, unsigned int size, point_t to_append)
@@ -66,4 +65,55 @@ bool get_line(line_t *line)
         return false;
     }
     return true;
+}
+
+point_t get_first_obst(line_t* diagonal, point_t start, point_t finish, room_t *room)
+{
+    int sign_x = (start.x < finish.x) ? 1 : -1;
+    int sign_y = (start.y < finish.y) ? 1 : -1;
+    unsigned int width = room->width;
+    unsigned int height = room->height;
+
+    for (unsigned int i = 0, x, y; i < diagonal->size; i++) {
+        x = diagonal->pool[i].x;
+        y = diagonal->pool[i].y;
+        if (room->room[diagonal->pool[i].y][diagonal->pool[i].x] == OBST) {
+            return (point_t) { .x = diagonal->pool[i].x, .y = diagonal->pool[i].y };
+        }
+        else if (diagonal->pool[i].x > 0 && diagonal->pool[i].y > 0) {
+            if (sign_x == 1) {
+                if (sign_y == 1) {
+                    if (x < width && y < height) {
+                        if (room->room[y + 1][x] == OBST && room->room[y][x + 1] == OBST) {
+                            return (point_t) { .x = x, .y = y };
+                        }
+                    }
+                }
+                else {
+                    if (x < width && y > 0) {
+                        if (room->room[y - 1][x] == OBST && room->room[y][x + 1] == OBST) {
+                            return (point_t) { .x = x, .y = y };
+                        }
+                    }
+                }
+            }
+            else {
+                if (sign_y == 1) {
+                    if (x > 0 && y < height) {
+                        if (room->room[y + 1][x] == OBST && room->room[y][x - 1] == OBST) {
+                            return (point_t) { .x = x, .y = y };
+                        }
+                    }
+                }
+                else {
+                    if (x > 0 && y > 0) {
+                        if (room->room[y - 1][x] == OBST && room->room[y][x - 1] == OBST) {
+                            return (point_t) { .x = x, .y = y };
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return (point_t) { .x = -1, .y = -1 };
 }

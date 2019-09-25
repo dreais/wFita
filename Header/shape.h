@@ -20,7 +20,6 @@ typedef struct {
 } line_t;
 
 bool depr_get_line(line_t *diagonal);
-point_t get_first_obst(line_t* diagonal, point_t start, point_t finish, room_t *room);
 bool set_diag(line_t *diagonal, point_t obst, room_t *room);
 
 #endif //MAPGENERATION_SHAPE_H
