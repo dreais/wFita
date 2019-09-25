@@ -9,7 +9,7 @@
 #include "../../Header/shape.h"
 #include "../../Header/room.h"
 
-bool get_line(line_t *diagonal)
+bool depr_get_line(line_t *diagonal)
 {
 	float m, b;
 	float* steps;
@@ -34,12 +34,16 @@ bool get_line(line_t *diagonal)
     step = 1.0f / ((float)fmax(abs(dx), abs(dy)));
 
     float tmp = (float)(diagonal->finish.x + 1) / step;
-    tmp++;
     float x = ((float)diagonal->start.x + 1.0f) / step;
+    tmp++;
     steps = (float*) malloc(sizeof(float) * fabsf(fabsf(x) - fabsf(tmp)) + 2); // last is -1.0
+
+    printf("%d    %d\n", diagonal->start.x, diagonal->start.y);
+
     for (unsigned int i = 0; round((double)x) != round((double)tmp); x = x + copysign(1, dx)) {
         steps[counter] = x * step;
         float y = (m * steps[counter] + b);
+        printf("%f    %f\n", steps[counter], y);
         if (starting_point == false) {
             if (diagonal->start.x == round(steps[counter]) && diagonal->start.y == round(y))
                 starting_point = true;
@@ -144,8 +148,8 @@ bool set_diag(line_t *diagonal, point_t obst, room_t *room)
 
     // new diagonal ALWAYS goes in the contrary sense of ONE of the current sign. ex:
     // sign_x == -1 && sign_y == -1 THEN new_diag_sign_x == 1 && new_diag_sign_y == -1 (or == -1 && == 1)
-    printf("%d\n", sign_x);
-    printf("%d\n", sign_y);
+    printf("sign x = %d\n", sign_x);
+    printf("sign y = %d\n", sign_y);
     diagonal->start = obst;
     if (sign_x != sign_y) {
         tmp[0].x = 0;
@@ -156,7 +160,7 @@ bool set_diag(line_t *diagonal, point_t obst, room_t *room)
     }
 
     printf("current x = %d\n", diagonal->start.x);
-    for (int x = diagonal->start.x; x != tmp[0].x; x += (-1 * sign_x)) {
+    for (int x = diagonal->start.x; x != tmp[0].x; x += (1 * sign_x)) {
         printf("%d\n", x);
     }
     return true;
