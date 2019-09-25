@@ -37,7 +37,6 @@ int main(void)
         printf("something went wrong\n");
         return true ^ success;
     }
-    printf("%d\n", diagonal.size);
     for (int i = 0; i < diagonal.size; i++)
     {
         printf("x=%d\ty=%d\n", diagonal.pool[i].x,diagonal.pool[i].y);
