@@ -19,7 +19,7 @@ typedef struct {
     point_t *pool;
 } line_t;
 
-bool get_line(line_t *diagonal);
+bool depr_get_line(line_t *diagonal);
 point_t get_first_obst(line_t* diagonal, point_t start, point_t finish, room_t *room);
 bool set_diag(line_t *diagonal, point_t obst, room_t *room);
 
