@@ -35,6 +35,7 @@ int main(void)
 	point_t obst;
 	room_t main;
 	bool success = false;
+	point_t tmp;
 
 	main.room = malloc(sizeof(char*) * 15);
 	main.width = 15;
@@ -43,17 +44,18 @@ int main(void)
 		main.room[i] = map_base[i];
     if (!get_line(&diagonal)) {
         printf("something went wrong\n");
-        return true ^ success;
+        return 1 ^ success;
     }
     for (int i = 0; i < diagonal.size; i++) {
         printf("x=%d\ty=%d\n", diagonal.pool[i].x,diagonal.pool[i].y);
     }
     while (success == false) {
         obst = get_first_obst(&diagonal, start, finish, &main);
-        printf("obst:\n%d\t%d\n", obst.x, obst.y);
+        look_next_position(&main, &diagonal, obst, &tmp);
+        printf("x=%d\ty=%d\n", tmp.x, tmp.y);
         success = true;
     }
-    return true ^ success;
+    return 1 ^ success;
 }
 
 /**

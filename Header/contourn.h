@@ -6,6 +6,7 @@
 #define MAPGENERATION_CONTOURN_H
 
 bool get_line(line_t *line);
-point_t get_first_obst(line_t* diagonal, point_t start, point_t finish, room_t *room);
+point_t get_first_obst(const line_t* diagonal, const point_t start, const point_t finish, const room_t *room);
+bool look_next_position(const room_t *room, const line_t *line, point_t start, point_t *tmp);
 
 #endif //MAPGENERATION_CONTOURN_H

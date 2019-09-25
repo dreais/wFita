@@ -5,9 +5,10 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdio.h> // will leave it, i often use printf here
 #include "../Header/shape.h"
 
-static bool append_point(point_t *pool, unsigned int size, point_t to_append)
+static bool append_point(point_t *pool, const unsigned int size, const point_t to_append)
 {
     pool = realloc(pool, sizeof(point_t) * size);
     pool[size] = to_append;
@@ -38,6 +39,10 @@ static bool get_diagonal(line_t *line, int x, int y)
     return true;
 }
 
+//////////////////////////////////
+/** NON STATIC FUNCTION BELOW **/
+/////////////////////////////////
+
 bool get_line(line_t *line)
 {
     int dx = line->finish.x - line->start.x;
@@ -67,7 +72,7 @@ bool get_line(line_t *line)
     return true;
 }
 
-point_t get_first_obst(line_t* diagonal, point_t start, point_t finish, room_t *room)
+point_t get_first_obst(const line_t* diagonal, const point_t start, const point_t finish, const room_t *room)
 {
     int sign_x = (start.x < finish.x) ? 1 : -1;
     int sign_y = (start.y < finish.y) ? 1 : -1;
@@ -116,4 +121,52 @@ point_t get_first_obst(line_t* diagonal, point_t start, point_t finish, room_t *
         }
     }
     return (point_t) { .x = -1, .y = -1 };
+}
+
+/////////////////////////
+/////////////////////////
+int directions[4][2] = {
+        {0, -1}, // TOP
+        {1, 0}, // RIGHT
+        {0, 1}, // BOTTOM
+        {-1, 1}}; // LEFT
+
+typedef enum {TOP, RIGHT, BOTTOM, LEFT} dir_name;
+
+static void insert_enum(dir_name *order, const dir_name to_insert[4])
+{
+    order[0] = to_insert[0];
+    order[1] = to_insert[1];
+    order[2] = to_insert[2];
+    order[3] = to_insert[3];
+}
+
+bool look_next_position(const room_t *room, const line_t *line, point_t start, point_t *tmp)
+{
+    int dx = line->finish.x - line->start.x;
+    int dy = line->finish.y - line->start.y;
+    dir_name order[4] = {-1};
+
+    if (dx > 0) {
+        if (dy > 0) {
+            insert_enum(order, (dir_name[4]) {RIGHT, BOTTOM, LEFT, TOP});
+        } else {
+            insert_enum(order, (dir_name[4]) {TOP, RIGHT, BOTTOM, LEFT});
+        }
+    } else { //if dx < 0
+        if (dy > 0) {
+            insert_enum(order, (dir_name[4]) {BOTTOM, LEFT, TOP, RIGHT});
+        } else { // if dx < 0 && if dy < 0
+            insert_enum(order, (dir_name[4]) {LEFT, TOP, RIGHT, BOTTOM});
+        }
+    }
+    for (int i = 0; i < 4; i++) {
+        // we're testing all 4 positions around one given (which is the start)
+        if (room->room[start.y + directions[order[i]][1]][start.x + directions[order[i]][0]] != OBST) {
+            tmp->x = start.x + directions[order[i]][0];
+            tmp->y = start.y + directions[order[i]][1];
+            return true;
+        }
+    }
+    return false;
 }
