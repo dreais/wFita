@@ -176,9 +176,8 @@ static dir_name get_position_direction_array(const int current_direction[2])
 {
     dir_name direction = -1;
 
-    printf("current dir %d\t%d\n", current_direction[0], current_direction[1]);
     for (int i = 0; i < 4; i++) {
-        if (current_direction[0] == directions[i][0] && current_direction[1] == directions[i][0]) {
+        if (current_direction[0] == directions[i][0] && current_direction[1] == directions[i][1]) {
             direction = i;
             return direction;
         }
@@ -186,7 +185,18 @@ static dir_name get_position_direction_array(const int current_direction[2])
     return direction;
 }
 
-void set_next_pos(room_t *room, line_t *line, point_t *next)
+static void set_next_pos(room_t *room, point_t *next, dir_name directions_path[4])
+{
+    for (int i = 0; i < 4; i++) {
+        if (room->room[next->y + directions[directions_path[i]][1]][next->x + directions[directions_path[i]][0]] != OBST) {
+            next->x = next->x + directions[directions_path[i]][0];
+            next->y = next->y + directions[directions_path[i]][1];
+            return;
+        }
+    }
+}
+
+void get_order_position(room_t *room, line_t *line, point_t *next)
 {
     int dx = line->finish.x - line->start.x;
     int dy = line->finish.y - line->start.y;
@@ -198,14 +208,15 @@ void set_next_pos(room_t *room, line_t *line, point_t *next)
     };
     dir_name directions_path[4];
 
-    directions_path[0] = get_position_direction_array(current_direction);
+    directions_path[0] = get_position_direction_array(current_direction) + 1;
+    if (directions_path[0] > 3)
+        directions_path[0] = 0;
     for (int i = 1; i < 4; i++) {
-        if (directions_path[i - 1] == 3)
-            directions_path[i] = directions_path[i - 1] + 1;
-        else
+        directions_path[i] = directions_path[i - 1] + 1;
+        if (directions_path[i] > 3)
             directions_path[i] = 0;
     }
-    printf("%d\n", directions_path[0]);
+    set_next_pos(room, next, directions_path);
 }
 
 bool check_fallback(line_t *line, const point_t *to_check)

@@ -45,20 +45,14 @@ int main(void)
         printf("something went wrong\n");
         return 1 ^ (int)success;
     }
-    for (unsigned int i = 0; i < diagonal.size; i++) {
-        printf("x=%d\ty=%d\n", diagonal.pool[i].x,diagonal.pool[i].y);
+    if (check_fallback(&diagonal, &next)) {
+        next.x = diagonal.pool[diagonal.size - 1].x;
+        next.y = diagonal.pool[diagonal.size - 1].y;
+        get_order_position(&main, &diagonal, &next);
     }
     while (success == false) {
         obst = get_first_obst(&diagonal, start, finish, &main);
         look_next_position(&main, &diagonal, obst, &next);
-        printf("x=%d\ty=%d\n", next.x, next.y);
-        if (check_fallback(&diagonal, &next)) {
-            next.x = diagonal.pool[diagonal.size].x;
-            next.y = diagonal.pool[diagonal.size].y;
-            printf("next (x=%d\ty=%d)\twill be avoided\n", next.x, next.y);
-            set_next_pos(&main, &diagonal, &next);
-            printf("x=%d\ty=%d\n", next.x, next.y);
-        }
         success = true;
     }
     return 1 ^ (int)success;
@@ -66,12 +60,4 @@ int main(void)
 
 /**
 putting here codes that is removed to try earlier parts of the program:
- for (int i = 0; i < 4; i++) {
-    // we're testing all 4 positions around one given (which is the start)
-    if (room->room[next->y + directions[directions_path[i]][1]][next->x + directions[directions_path[i]][0]] != OBST) {
-        next->x = next->x + directions[directions_path[i]][0];
-        next->y = next->y + directions[directions_path[i]][1];
-        return;
-    }
-}
  */
