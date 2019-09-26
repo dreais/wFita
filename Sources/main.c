@@ -36,7 +36,7 @@ int main(void)
 	room_t main;
 	bool success = false;
 
-	main.room = calloc(15, sizeof(char *));
+	main.room = malloc(sizeof(char *) * 15);
 	main.width = 15;
 	main.height = 15;
 	for (int i = 0; i < 15; i++)
