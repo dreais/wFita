@@ -8,6 +8,22 @@
 #include <stdio.h> // will leave it, i often use printf here
 #include "../Header/shape.h"
 
+static const int directions[4][2] = {
+        {0, -1}, // TOP
+        {1, 0}, // RIGHT
+        {0, 1}, // BOTTOM
+        {-1, 0}}; // LEFT
+
+typedef enum {TOP, RIGHT, BOTTOM, LEFT} dir_name;
+
+static void insert_enum(dir_name *order, const dir_name to_insert[4])
+{
+    order[0] = to_insert[0];
+    order[1] = to_insert[1];
+    order[2] = to_insert[2];
+    order[3] = to_insert[3];
+}
+
 static bool append_point(point_t *pool, const unsigned int size, const point_t to_append)
 {
     pool = realloc(pool, sizeof(point_t) * size);
@@ -125,21 +141,6 @@ point_t get_first_obst(const line_t* diagonal, const point_t start, const point_
 
 /////////////////////////
 /////////////////////////
-int directions[4][2] = {
-        {0, -1}, // TOP
-        {1, 0}, // RIGHT
-        {0, 1}, // BOTTOM
-        {-1, 1}}; // LEFT
-
-typedef enum {TOP, RIGHT, BOTTOM, LEFT} dir_name;
-
-static void insert_enum(dir_name *order, const dir_name to_insert[4])
-{
-    order[0] = to_insert[0];
-    order[1] = to_insert[1];
-    order[2] = to_insert[2];
-    order[3] = to_insert[3];
-}
 
 bool look_next_position(const room_t *room, const line_t *line, point_t start, point_t *tmp)
 {
@@ -169,4 +170,56 @@ bool look_next_position(const room_t *room, const line_t *line, point_t start, p
         }
     }
     return false;
+}
+
+static dir_name get_position_direction_array(const int current_direction[2])
+{
+    dir_name direction = -1;
+
+    printf("current dir %d\t%d\n", current_direction[0], current_direction[1]);
+    for (int i = 0; i < 4; i++) {
+        if (current_direction[0] == directions[i][0] && current_direction[1] == directions[i][0]) {
+            direction = i;
+            return direction;
+        }
+    }
+    return direction;
+}
+
+void set_next_pos(room_t *room, line_t *line, point_t *next)
+{
+    int dx = line->finish.x - line->start.x;
+    int dy = line->finish.y - line->start.y;
+    int current_direction[2] = { // TODO: make define with these conditions (how dirty!)
+            ((int)copysign(1, dx) == 1 && (int)copysign(1, dy) == 1) ? 1 :
+            ((int)copysign(1, dx) == -1 && (int)copysign(1, dy) == -1) ? -1 : 0,
+            ((int)copysign(1, dx) == -1 && (int)copysign(1, dy) == 1) ? 1 :
+            ((int)copysign(1, dx) == 1 && (int)copysign(1, dy) == -1) ? -1 : 0
+    };
+    dir_name directions_path[4];
+
+    directions_path[0] = get_position_direction_array(current_direction);
+    for (int i = 1; i < 4; i++) {
+        if (directions_path[i - 1] == 3)
+            directions_path[i] = directions_path[i - 1] + 1;
+        else
+            directions_path[i] = 0;
+    }
+    printf("%d\n", directions_path[0]);
+}
+
+bool check_fallback(line_t *line, const point_t *to_check)
+{
+    int dx = line->finish.x - line->start.x;
+    int dy = line->finish.y - line->start.y;
+    bool result = false;
+
+    for (unsigned int i = 0; i < line->size; i++) {
+        if (line->pool[i].x == to_check->x && line->pool[i].y == to_check->y) {
+            line->size = i + 1;
+            result = true;
+            return result;
+        }
+    }
+    return result;
 }
