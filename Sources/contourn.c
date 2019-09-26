@@ -61,23 +61,21 @@ static bool get_diagonal(line_t *line, int x, int y)
 
 bool get_line(line_t *line)
 {
-    int dx = line->finish.x - line->start.x;
-    int dy = line->finish.y - line->start.y;
     int x = line->start.x;
     int y = line->start.y;
 
     line->size = 0;
     line->pool = malloc(sizeof(point_t) * 1);
     line->pool[0] = line->start;
-    while (abs(dx) != abs(dy)) {
-        if (abs(dx) > abs(dy)) {
-            x = x + (1 * (int)copysign(1, dx));
-            dx = line->finish.x - x;
+    while (abs(line->dx) != abs(line->dy)) {
+        if (abs(line->dx) > abs(line->dy)) {
+            x = x + (1 * (int)copysign(1, line->dx));
+            line->dx = line->finish.x - x;
             line->size++;
             append_point(line->pool, line->size, (point_t) { .x = x, .y = y });
         } else {
-            y = y + (1 * (int)copysign(1, dy));
-            dy = line->finish.y - y;
+            y = y + (1 * (int)copysign(1, line->dy));
+            line->dy = line->finish.y - y;
             line->size++;
             append_point(line->pool, line->size, (point_t) { .x = x, .y = y });
         }
@@ -144,18 +142,16 @@ point_t get_first_obst(const line_t* diagonal, const point_t start, const point_
 
 bool look_next_position(const room_t *room, const line_t *line, point_t start, point_t *tmp)
 {
-    int dx = line->finish.x - line->start.x;
-    int dy = line->finish.y - line->start.y;
     dir_name order[4] = {-1};
 
-    if (dx > 0) {
-        if (dy > 0) {
+    if (line->dx > 0) {
+        if (line->dy > 0) {
             insert_enum(order, (dir_name[4]) {RIGHT, BOTTOM, LEFT, TOP});
         } else {
             insert_enum(order, (dir_name[4]) {TOP, RIGHT, BOTTOM, LEFT});
         }
     } else { //if dx < 0
-        if (dy > 0) {
+        if (line->dy > 0) {
             insert_enum(order, (dir_name[4]) {BOTTOM, LEFT, TOP, RIGHT});
         } else { // if dx < 0 && if dy < 0
             insert_enum(order, (dir_name[4]) {LEFT, TOP, RIGHT, BOTTOM});
@@ -185,7 +181,7 @@ static dir_name get_position_direction_array(const int current_direction[2])
     return direction;
 }
 
-static void set_next_pos(room_t *room, point_t *next, dir_name directions_path[4])
+static void set_next_pos(room_t *room, point_t *next, const dir_name directions_path[4])
 {
     for (int i = 0; i < 4; i++) {
         if (room->room[next->y + directions[directions_path[i]][1]][next->x + directions[directions_path[i]][0]] != OBST) {
@@ -198,13 +194,11 @@ static void set_next_pos(room_t *room, point_t *next, dir_name directions_path[4
 
 void get_order_position(room_t *room, line_t *line, point_t *next)
 {
-    int dx = line->finish.x - line->start.x;
-    int dy = line->finish.y - line->start.y;
     int current_direction[2] = { // TODO: make define with these conditions (how dirty!)
-            ((int)copysign(1, dx) == 1 && (int)copysign(1, dy) == 1) ? 1 :
-            ((int)copysign(1, dx) == -1 && (int)copysign(1, dy) == -1) ? -1 : 0,
-            ((int)copysign(1, dx) == -1 && (int)copysign(1, dy) == 1) ? 1 :
-            ((int)copysign(1, dx) == 1 && (int)copysign(1, dy) == -1) ? -1 : 0
+            ((int)copysign(1, line->dx) == 1 && (int)copysign(1, line->dy) == 1) ? 1 :
+            ((int)copysign(1, line->dx) == -1 && (int)copysign(1, line->dy) == -1) ? -1 : 0,
+            ((int)copysign(1, line->dx) == -1 && (int)copysign(1, line->dy) == 1) ? 1 :
+            ((int)copysign(1, line->dx) == 1 && (int)copysign(1, line->dy) == -1) ? -1 : 0
     };
     dir_name directions_path[4];
 
@@ -221,8 +215,6 @@ void get_order_position(room_t *room, line_t *line, point_t *next)
 
 bool check_fallback(line_t *line, const point_t *to_check)
 {
-    int dx = line->finish.x - line->start.x;
-    int dy = line->finish.y - line->start.y;
     bool result = false;
 
     for (unsigned int i = 0; i < line->size; i++) {

@@ -31,8 +31,9 @@ int main(void)
     // TODO: remove these manually start/finish to search them using a function instead
     point_t start = { .x = 4, .y = 14 };
     point_t finish = { .x = 11, .y = 0 };
-    line_t diagonal = { .start = start, .finish = finish };
-	point_t obst, next = {.x = -1, .y = -1};
+    line_t diagonal = { .start = start, .finish = finish, .dx =  finish.x - start.x,
+                        .dy= finish.y - start.y};
+    point_t obst, next = {.x = -1, .y = -1};
 	room_t main;
 	bool success = false;
 

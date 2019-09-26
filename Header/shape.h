@@ -17,6 +17,7 @@ typedef struct {
     point_t start;
     point_t finish;
     point_t *pool;
+    int dx, dy;
 } line_t;
 
 bool depr_get_line(line_t *diagonal);
