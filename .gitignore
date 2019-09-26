@@ -6,3 +6,4 @@
 /.vs
 /out/build/x64-Debug
 /cmake-build-debug
+/cmake-build-wsl

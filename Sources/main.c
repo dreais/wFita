@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <stdbool.h>
 #include "../Header/room.h"
 #include "../Header/shape.h"
@@ -37,26 +36,28 @@ int main(void)
 	room_t main;
 	bool success = false;
 
-	main.room = malloc(sizeof(char*) * 15);
+	main.room = calloc(15, sizeof(char *));
 	main.width = 15;
 	main.height = 15;
 	for (int i = 0; i < 15; i++)
 		main.room[i] = map_base[i];
     if (!get_line(&diagonal)) {
         printf("something went wrong\n");
-        return 1 ^ (int)success;
+        return 1;
     }
-    if (check_fallback(&diagonal, &next)) {
-        next.x = diagonal.pool[diagonal.size - 1].x;
-        next.y = diagonal.pool[diagonal.size - 1].y;
-        get_order_position(&main, &diagonal, &next);
-    }
+    check_fallback(&diagonal, &next);
+    obst = get_first_obst(&diagonal, start, finish, &main);
+    if (obst.x == -1 && obst.y == -1)
+        success = true; // no obstacle, we can just process with the movements
     while (success == false) {
+        get_order_position(&main, &diagonal, &next);
         obst = get_first_obst(&diagonal, start, finish, &main);
-        look_next_position(&main, &diagonal, obst, &next);
+        if (obst.x == -1 && obst.y == -1)
+            success = true; // no obstacle, we can just process with the movements
         success = true;
     }
-    return 1 ^ (int)success;
+    printf("%d\t%d\n", next.x, next.y);
+    return 0;
 }
 
 /**

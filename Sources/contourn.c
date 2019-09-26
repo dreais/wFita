@@ -24,11 +24,16 @@ static void insert_enum(dir_name *order, const dir_name to_insert[4])
     order[3] = to_insert[3];
 }
 
-static bool append_point(point_t *pool, const unsigned int size, const point_t to_append)
+static point_t *append_point(point_t *pool, const unsigned int size, const point_t to_append)
 {
-    pool = realloc(pool, sizeof(point_t) * size);
-    pool[size] = to_append;
-    return true;
+    point_t *new = calloc(size + 1, sizeof(point_t));
+
+    for (unsigned int i = 0; i < size; i++) {
+        new[i] = pool[i];
+    }
+    free(pool);
+    new[size] = to_append;
+    return new;
 }
 
 static bool get_diagonal(line_t *line, int x, int y)
@@ -45,15 +50,40 @@ static bool get_diagonal(line_t *line, int x, int y)
             y = y + (1 * (int)copysign(1, dy));
         counter++;
         line->size++;
-        append_point(line->pool, line->size, (point_t) {.x = x, .y = y});
+        line->pool = append_point(line->pool, line->size, (point_t) {.x = x, .y = y});
         if (x == line->finish.x && y == line->finish.y) {
             line->size++;
-            append_point(line->pool, line->size, (point_t) {.x = x, .y = y});
+            line->pool = append_point(line->pool, line->size, (point_t) {.x = x, .y = y});
             success = true;
         }
     }
     return true;
 }
+
+static dir_name get_position_direction_array(const int current_direction[2])
+{
+    dir_name direction = -1;
+
+    for (int i = 0; i < 4; i++) {
+        if (current_direction[0] == directions[i][0] && current_direction[1] == directions[i][1]) {
+            direction = i;
+            return direction;
+        }
+    }
+    return direction;
+}
+
+static void set_next_pos(room_t *room, point_t *next, const dir_name directions_path[4])
+{
+    for (int i = 0; i < 4; i++) {
+        if (room->room[next->y + directions[directions_path[i]][1]][next->x + directions[directions_path[i]][0]] != OBST) {
+            next->x = next->x + directions[directions_path[i]][0];
+            next->y = next->y + directions[directions_path[i]][1];
+            return;
+        }
+    }
+}
+
 
 //////////////////////////////////
 /** NON STATIC FUNCTION BELOW **/
@@ -65,19 +95,21 @@ bool get_line(line_t *line)
     int y = line->start.y;
 
     line->size = 0;
-    line->pool = malloc(sizeof(point_t) * 1);
+    line->pool = malloc(sizeof(point_t));
     line->pool[0] = line->start;
     while (abs(line->dx) != abs(line->dy)) {
+        printf("yes\n");
         if (abs(line->dx) > abs(line->dy)) {
             x = x + (1 * (int)copysign(1, line->dx));
             line->dx = line->finish.x - x;
             line->size++;
-            append_point(line->pool, line->size, (point_t) { .x = x, .y = y });
+            line->pool = append_point(line->pool, line->size, (point_t) { .x = x, .y = y });
         } else {
             y = y + (1 * (int)copysign(1, line->dy));
             line->dy = line->finish.y - y;
             line->size++;
-            append_point(line->pool, line->size, (point_t) { .x = x, .y = y });
+            printf("%d\n", line->dy);
+            line->pool = append_point(line->pool, line->size, (point_t) { .x = x, .y = y });
         }
     }
     if (!get_diagonal(line, x, y)) {
@@ -137,9 +169,6 @@ point_t get_first_obst(const line_t* diagonal, const point_t start, const point_
     return (point_t) { .x = -1, .y = -1 };
 }
 
-/////////////////////////
-/////////////////////////
-
 bool look_next_position(const room_t *room, const line_t *line, point_t start, point_t *tmp)
 {
     dir_name order[4] = {-1};
@@ -168,30 +197,6 @@ bool look_next_position(const room_t *room, const line_t *line, point_t start, p
     return false;
 }
 
-static dir_name get_position_direction_array(const int current_direction[2])
-{
-    dir_name direction = -1;
-
-    for (int i = 0; i < 4; i++) {
-        if (current_direction[0] == directions[i][0] && current_direction[1] == directions[i][1]) {
-            direction = i;
-            return direction;
-        }
-    }
-    return direction;
-}
-
-static void set_next_pos(room_t *room, point_t *next, const dir_name directions_path[4])
-{
-    for (int i = 0; i < 4; i++) {
-        if (room->room[next->y + directions[directions_path[i]][1]][next->x + directions[directions_path[i]][0]] != OBST) {
-            next->x = next->x + directions[directions_path[i]][0];
-            next->y = next->y + directions[directions_path[i]][1];
-            return;
-        }
-    }
-}
-
 void get_order_position(room_t *room, line_t *line, point_t *next)
 {
     int current_direction[2] = { // TODO: make define with these conditions (how dirty!)
@@ -213,13 +218,16 @@ void get_order_position(room_t *room, line_t *line, point_t *next)
     set_next_pos(room, next, directions_path);
 }
 
-bool check_fallback(line_t *line, const point_t *to_check)
+/// this is to be used once only, right after get_line()
+bool check_fallback(line_t *line, point_t *to_check)
 {
     bool result = false;
 
     for (unsigned int i = 0; i < line->size; i++) {
         if (line->pool[i].x == to_check->x && line->pool[i].y == to_check->y) {
             line->size = i + 1;
+            to_check->x = line->pool[line->size - 1].x;
+            to_check->y = line->pool[line->size - 1].y;
             result = true;
             return result;
         }
