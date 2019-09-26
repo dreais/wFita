@@ -45,8 +45,11 @@ int main(void)
         printf("something went wrong\n");
         return 1;
     }
-    check_fallback(&diagonal, &next);
+    for (int i = 0; i < diagonal.size; i++)
+        printf("(%d ; %d)\n", diagonal.pool[i].x, diagonal.pool[i].y);
     obst = get_first_obst(&diagonal, start, finish, &main);
+    check_fallback(&diagonal, &obst);
+    next = obst;
     if (obst.x == -1 && obst.y == -1)
         success = true; // no obstacle, we can just process with the movements
     while (success == false) {
@@ -57,6 +60,8 @@ int main(void)
         success = true;
     }
     printf("%d\t%d\n", next.x, next.y);
+    free(main.room);
+    free(diagonal.pool);
     return 0;
 }
 

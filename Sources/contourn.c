@@ -76,6 +76,8 @@ static dir_name get_position_direction_array(const int current_direction[2])
 static void set_next_pos(room_t *room, point_t *next, const dir_name directions_path[4])
 {
     for (int i = 0; i < 4; i++) {
+        printf("x=%d\n", next->x);
+        printf("y=%d\n", next->y);
         if (room->room[next->y + directions[directions_path[i]][1]][next->x + directions[directions_path[i]][0]] != OBST) {
             next->x = next->x + directions[directions_path[i]][0];
             next->y = next->y + directions[directions_path[i]][1];
@@ -98,7 +100,6 @@ bool get_line(line_t *line)
     line->pool = malloc(sizeof(point_t));
     line->pool[0] = line->start;
     while (abs(line->dx) != abs(line->dy)) {
-        printf("yes\n");
         if (abs(line->dx) > abs(line->dy)) {
             x = x + (1 * (int)copysign(1, line->dx));
             line->dx = line->finish.x - x;
@@ -108,7 +109,6 @@ bool get_line(line_t *line)
             y = y + (1 * (int)copysign(1, line->dy));
             line->dy = line->finish.y - y;
             line->size++;
-            printf("%d\n", line->dy);
             line->pool = append_point(line->pool, line->size, (point_t) { .x = x, .y = y });
         }
     }
@@ -223,14 +223,17 @@ bool check_fallback(line_t *line, point_t *to_check)
 {
     bool result = false;
 
+    printf("test: x=%d\ty=%d\n", to_check->x, to_check->y);
     for (unsigned int i = 0; i < line->size; i++) {
         if (line->pool[i].x == to_check->x && line->pool[i].y == to_check->y) {
             line->size = i + 1;
             to_check->x = line->pool[line->size - 1].x;
             to_check->y = line->pool[line->size - 1].y;
             result = true;
+            printf("test: x=%d\ty=%d\n", to_check->x, to_check->y);
             return result;
         }
     }
+    printf("test: x=%d\ty=%d\n", to_check->x, to_check->y);
     return result;
 }

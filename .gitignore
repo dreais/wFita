@@ -7,3 +7,8 @@
 /out/build/x64-Debug
 /cmake-build-debug
 /cmake-build-wsl
+CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
+MapGeneration
+Makefile
