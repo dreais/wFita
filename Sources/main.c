@@ -24,6 +24,20 @@ char map_base[15][15] = {
         {FLOR, FLOR, FLOR, FLOR, STAR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR, FLOR},
 };
 
+void print_cell(room_t *room, unsigned int y, unsigned int x, line_t *line)
+{
+    for (unsigned int i = 0; i < line->size; i++) {
+        if (line->pool[i].x == (int)x && line->pool[i].y == (int)y) {
+            printf("\033[0;32m%c\033[0m ", room->room[y][x]);
+            return;
+        }
+    }
+    if (room->room[y][x] == OBST)
+        printf("\033[0;31m%c\033[0m ", room->room[y][x]);
+    else
+        printf("%c ", room->room[y][x]);
+}
+
 // TODO: potentially use a file map + args
 int main(void)
 {
@@ -59,8 +73,11 @@ int main(void)
         diagonal.dx = finish.x - next.x;
         diagonal.dy = finish.y - next.y;
     }
-    for (unsigned i = 0; i < diagonal.size; i++) {
-        printf("x=%d\ty=%d\n", diagonal.pool[i].x, diagonal.pool[i].y);
+    for (unsigned int i = 0; i < main.height; i++) {
+        for (unsigned j = 0; j < main.width; j++) {
+            print_cell(&main, i, j, &diagonal);
+        }
+        printf("\n");
     }
     free(main.room);
     free(diagonal.pool);
