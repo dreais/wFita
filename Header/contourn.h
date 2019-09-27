@@ -11,4 +11,6 @@ bool look_next_position(const room_t *room, const line_t *line, point_t start, p
 bool check_fallback(line_t *line, point_t *to_check);
 bool get_order_position(room_t *room, line_t *line, point_t *next);
 
+// static point_t *append_point(point_t *pool, const unsigned int size, const point_t to_append)
+
 #endif //MAPGENERATION_CONTOURN_H

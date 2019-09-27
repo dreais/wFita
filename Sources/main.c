@@ -45,21 +45,23 @@ int main(void)
         printf("something went wrong\n");
         return 1;
     }
-    for (int i = 0; i < diagonal.size; i++)
-        printf("(%d ; %d)\n", diagonal.pool[i].x, diagonal.pool[i].y);
     obst = get_first_obst(&diagonal, start, finish, &main);
     check_fallback(&diagonal, &obst);
     next = obst;
     if (obst.x == -1 && obst.y == -1)
         success = true; // no obstacle, we can just process with the movements
     while (success == false) {
+        if (diagonal.finish.x == next.x && diagonal.finish.y == next.y) {
+            success = true;
+        }
         get_order_position(&main, &diagonal, &next);
         obst = get_first_obst(&diagonal, start, finish, &main);
-        if (obst.x == -1 && obst.y == -1)
-            success = true; // no obstacle, we can just process with the movements
-        success = true;
+        diagonal.dx = finish.x - next.x;
+        diagonal.dy = finish.y - next.y;
     }
-    printf("%d\t%d\n", next.x, next.y);
+    for (unsigned i = 0; i < diagonal.size; i++) {
+        printf("x=%d\ty=%d\n", diagonal.pool[i].x, diagonal.pool[i].y);
+    }
     free(main.room);
     free(diagonal.pool);
     return 0;

@@ -76,8 +76,6 @@ static dir_name get_position_direction_array(const int current_direction[2])
 static void set_next_pos(room_t *room, point_t *next, const dir_name directions_path[4])
 {
     for (int i = 0; i < 4; i++) {
-        printf("x=%d\n", next->x);
-        printf("y=%d\n", next->y);
         if (room->room[next->y + directions[directions_path[i]][1]][next->x + directions[directions_path[i]][0]] != OBST) {
             next->x = next->x + directions[directions_path[i]][0];
             next->y = next->y + directions[directions_path[i]][1];
@@ -136,14 +134,14 @@ point_t get_first_obst(const line_t* diagonal, const point_t start, const point_
                 if (sign_y == 1) {
                     if (x < width && y < height) {
                         if (room->room[y + 1][x] == OBST && room->room[y][x + 1] == OBST) {
-                            return (point_t) { .x = x, .y = y };
+                            return (point_t) { .x = (int)x, .y = (int)y };
                         }
                     }
                 }
                 else {
                     if (x < width && y > 0) {
                         if (room->room[y - 1][x] == OBST && room->room[y][x + 1] == OBST) {
-                            return (point_t) { .x = x, .y = y };
+                            return (point_t) { .x = (int)x, .y = (int)y };
                         }
                     }
                 }
@@ -152,14 +150,14 @@ point_t get_first_obst(const line_t* diagonal, const point_t start, const point_
                 if (sign_y == 1) {
                     if (x > 0 && y < height) {
                         if (room->room[y + 1][x] == OBST && room->room[y][x - 1] == OBST) {
-                            return (point_t) { .x = x, .y = y };
+                            return (point_t) { .x = (int)x, .y = (int)y };
                         }
                     }
                 }
                 else {
                     if (x > 0 && y > 0) {
                         if (room->room[y - 1][x] == OBST && room->room[y][x - 1] == OBST) {
-                            return (point_t) { .x = x, .y = y };
+                            return (point_t) { .x = (int)x, .y = (int)y };
                         }
                     }
                 }
@@ -167,34 +165,6 @@ point_t get_first_obst(const line_t* diagonal, const point_t start, const point_
         }
     }
     return (point_t) { .x = -1, .y = -1 };
-}
-
-bool look_next_position(const room_t *room, const line_t *line, point_t start, point_t *tmp)
-{
-    dir_name order[4] = {-1};
-
-    if (line->dx > 0) {
-        if (line->dy > 0) {
-            insert_enum(order, (dir_name[4]) {RIGHT, BOTTOM, LEFT, TOP});
-        } else {
-            insert_enum(order, (dir_name[4]) {TOP, RIGHT, BOTTOM, LEFT});
-        }
-    } else { //if dx < 0
-        if (line->dy > 0) {
-            insert_enum(order, (dir_name[4]) {BOTTOM, LEFT, TOP, RIGHT});
-        } else { // if dx < 0 && if dy < 0
-            insert_enum(order, (dir_name[4]) {LEFT, TOP, RIGHT, BOTTOM});
-        }
-    }
-    for (int i = 0; i < 4; i++) {
-        // we're testing all 4 positions around one given (which is the start)
-        if (room->room[start.y + directions[order[i]][1]][start.x + directions[order[i]][0]] != OBST) {
-            tmp->x = start.x + directions[order[i]][0];
-            tmp->y = start.y + directions[order[i]][1];
-            return true;
-        }
-    }
-    return false;
 }
 
 void get_order_position(room_t *room, line_t *line, point_t *next)
@@ -216,24 +186,22 @@ void get_order_position(room_t *room, line_t *line, point_t *next)
             directions_path[i] = 0;
     }
     set_next_pos(room, next, directions_path);
+    line->size++;
+    line->pool = append_point(line->pool, line->size, (*next));
 }
 
-/// this is to be used once only, right after get_line()
 bool check_fallback(line_t *line, point_t *to_check)
 {
     bool result = false;
 
-    printf("test: x=%d\ty=%d\n", to_check->x, to_check->y);
     for (unsigned int i = 0; i < line->size; i++) {
         if (line->pool[i].x == to_check->x && line->pool[i].y == to_check->y) {
-            line->size = i + 1;
+            line->size = i;
             to_check->x = line->pool[line->size - 1].x;
             to_check->y = line->pool[line->size - 1].y;
             result = true;
-            printf("test: x=%d\ty=%d\n", to_check->x, to_check->y);
             return result;
         }
     }
-    printf("test: x=%d\ty=%d\n", to_check->x, to_check->y);
     return result;
 }
