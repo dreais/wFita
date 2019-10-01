@@ -44,43 +44,23 @@ int main(void)
     // TODO: remove these manually start/finish to search them using a function instead
     point_t start = { .x = 4, .y = 14 };
     point_t finish = { .x = 11, .y = 0 };
-    line_t diagonal = { .start = start, .finish = finish, .dx =  finish.x - start.x,
-                        .dy= finish.y - start.y};
-    point_t obst, next = {.x = -1, .y = -1};
 	room_t main;
-	bool success = false;
+	line_t line;
 
 	main.room = malloc(sizeof(char *) * 15);
 	main.width = 15;
 	main.height = 15;
 	for (int i = 0; i < 15; i++)
 		main.room[i] = map_base[i];
-    if (!get_line(&diagonal)) {
-        printf("something went wrong\n");
-        return 1;
-    }
-    obst = get_first_obst(&diagonal, start, finish, &main);
-    check_fallback(&diagonal, &obst);
-    next = obst;
-    if (obst.x == -1 && obst.y == -1)
-        success = true; // no obstacle, we can just process with the movements
-    while (success == false) {
-        if (diagonal.finish.x == next.x && diagonal.finish.y == next.y) {
-            success = true;
-        }
-        get_order_position(&main, &diagonal, &next);
-        obst = get_first_obst(&diagonal, start, finish, &main);
-        diagonal.dx = finish.x - next.x;
-        diagonal.dy = finish.y - next.y;
-    }
+	line = create_path(start, finish, main);
     for (unsigned int i = 0; i < main.height; i++) {
         for (unsigned j = 0; j < main.width; j++) {
-            print_cell(&main, i, j, &diagonal);
+            print_cell(&main, i, j, &line);
         }
         printf("\n");
     }
     free(main.room);
-    free(diagonal.pool);
+    free(line.pool);
     return 0;
 }
 
