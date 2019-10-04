@@ -2,9 +2,9 @@
 // Created by Valentin on 9/25/2019.
 //
 
-#include <stdbool.h>
 #include <stdlib.h>
 #include <math.h>
+#include <stdbool.h>
 #include <stdio.h> // will leave it, i often use printf here
 #include "../../Header/shape.h"
 
@@ -15,14 +15,6 @@ static const int directions[4][2] = {
         {-1, 0}}; // LEFT
 
 typedef enum {TOP, RIGHT, BOTTOM, LEFT} dir_name;
-
-static void insert_enum(dir_name *order, const dir_name to_insert[4])
-{
-    order[0] = to_insert[0];
-    order[1] = to_insert[1];
-    order[2] = to_insert[2];
-    order[3] = to_insert[3];
-}
 
 static point_t *append_point(point_t *pool, const unsigned int size, const point_t to_append)
 {

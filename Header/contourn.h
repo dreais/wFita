@@ -5,6 +5,7 @@
 #ifndef MAPGENERATION_CONTOURN_H
 #define MAPGENERATION_CONTOURN_H
 
+#include <stdbool.h>
 #include "room.h"
 
 bool get_line(line_t *line);

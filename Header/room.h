@@ -18,4 +18,6 @@ typedef struct {
 	char** room;
 } room_t;
 
+room_t initialize_room(void);
+
 #endif //MAPGENERATION_ROOM_H
