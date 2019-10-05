@@ -1,34 +1,42 @@
 #include <time.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 static int SEED = 0;
+static int size_map = 0;
 
-static int hash[255] = {};
+//size could be define using a define before
+// TODO: get size using main args
 
-void define_hash(void)
+static int *hash = NULL;
+
+void define_hash(const int size)
 {
+    size_map = size;
     srand(time(NULL));
-    for (int i = 0; i < 255; i++)
-        hash[i] = rand() % 255;
+    hash = malloc(sizeof(int) * size);
+    for (int i = 0; i < size; i++) {
+        hash[i] = rand() % size;
+    }
 }
 
-int noise2(int x, int y)
+static int noise2(int x, int y)
 {
     int tmp = hash[(y + SEED) % 256];
     return hash[(tmp + x) % 256];
 }
 
-float lin_inter(float x, float y, float s)
+static float lin_inter(float x, float y, float s)
 {
     return x + s * (y-x);
 }
 
-float smooth_inter(float x, float y, float s)
+static float smooth_inter(float x, float y, float s)
 {
     return lin_inter(x, y, s * s * (3-2*s));
 }
 
-float noise2d(float x, float y)
+static float noise2d(float x, float y)
 {
     int x_int = (int) x;
     int y_int = (int) y;
@@ -40,27 +48,26 @@ float noise2d(float x, float y)
     int v = noise2(x_int+1, y_int+1);
     float low = smooth_inter(s, t, x_frac);
     float high = smooth_inter(u, v, x_frac);
+
     return smooth_inter(low, high, y_frac);
 }
 
 float perlin2d(float x, float y, float freq, int depth)
 {
-    define_hash();
     float xa = x*freq;
     float ya = y*freq;
     float amp = 1.0f;
     float fin = 0;
     float div = 0.0f;
-
     int i;
+
     for(i=0; i<depth; i++)
     {
-        div += 256 * amp;
+        div += (float)size_map * amp;
         fin += noise2d(xa, ya) * amp;
         amp /= 2;
         xa *= 2;
         ya *= 2;
     }
-
     return fin/div;
 }

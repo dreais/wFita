@@ -55,37 +55,62 @@ void print_room(const room_t room, const line_t line)
     }
 }
 
-float perlin2d(float x, float y, float freq, int depth);
-
 int main(void)
 {
+    HANDLE  hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int color;
     point_t start = { .x = 4, .y = 14 };
     point_t finish = { .x = 11, .y = 0 };
-	room_t room = initialize_room();
+	room_t room = initialize_room(300, 300);
 	line_t line;
 
-	line = create_path(start, finish, room);
-	for (int i = 0; i < 60; i++) {
-	    for (int j = 0; j < 200; j++) {
-	        if ((int) (10.0f * perlin2d(j, i, 0.1, 4)) == 1)
-	            printf(";");
-	        else if ((int) (10.0f * perlin2d(j, i, 0.1, 4)) == 2)
-	            printf(",");
-	        else if ((int) (10.0f * perlin2d(j, i, 0.1, 4)) > 5 && (int) (10.0f * perlin2d(j, i, 0.1, 4)) < 7)
-	            printf("%%");
-	        else if ((int) (10.0f * perlin2d(j, i, 0.1, 4)) > 7)
-	            printf("#");
-	        else
-	            printf(".");
-	    }
-	    printf("\n");
-	}
+    line = create_path(start, finish, room);
+    for (int i = 0; i < 65; i++) {
+        for (int j = 0, noise; j < 230; j++) {
+            noise = room.room[i][j] - 48;
+            if (noise > 0 && noise < 3) {
+                color = 2;
+                SetConsoleTextAttribute(hConsole, color);
+                printf(".");
+            } else if (noise >= 3 && noise < 5) {
+                color = 6;
+                SetConsoleTextAttribute(hConsole, color);
+                printf(",");
+            } else if (noise >= 5 && noise < 7) {
+                color = 8;
+                SetConsoleTextAttribute(hConsole, color);
+                printf(";");
+            } else {
+                color = 15;
+                SetConsoleTextAttribute(hConsole, color);
+                printf("%%");
+            }
+        }
+         printf("\n");
+    }
     free(room.room);
-    free(line.pool);
+//    free(line.pool);
     getchar();
     return 0;
 }
 
 /**
+	line = create_path(start, finish, room);
+
+
 putting here codes that is removed to try earlier parts of the program:
+    for (int y = 0; y < 65; y++) {
+        for (int x = 0, noise; x < 225; x++) {
+            noise = (int) (perlin2d(x, y, 0.1f, 4)/10);
+            if (noise > 0 && noise < 3)
+                printf(".");
+            else if (noise >= 3 && noise < 5)
+                printf(",");
+            else if (noise >= 5 && noise < 7)
+                printf(";");
+            else
+                printf("%%");
+        }
+        printf("\n");
+    }
  */
