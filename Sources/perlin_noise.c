@@ -20,6 +20,11 @@ void define_hash(const int size)
     }
 }
 
+void free_hash(void)
+{
+    free(hash);
+}
+
 static int noise2(int x, int y)
 {
     int tmp = hash[(y + SEED) % 256];

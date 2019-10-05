@@ -18,7 +18,7 @@ void print_cell(const room_t room, unsigned int y, unsigned int x, const line_t 
     for (unsigned int i = 0; i < line.size; i++) {
         if (line.pool[i].x == (int)x && line.pool[i].y == (int)y) {
 #ifdef unix
-            printf("\033[0;32m%c\033[0m ", room->room[y][x]);
+            printf("\033[0;32m%c\033[0m ", room.room[y][x]);
 #else
             color = 2;
             SetConsoleTextAttribute(hConsole, color);
@@ -29,9 +29,9 @@ void print_cell(const room_t room, unsigned int y, unsigned int x, const line_t 
     }
     if (room.room[y][x] == OBST) {
 #ifdef unix
-        printf("\033[0;31m%c\033[0m ", room->room[y][x]);
+        printf("\033[0;31m%c\033[0m ", room.room[y][x]);
     } else
-        printf("%c ", room->room[y][x]);
+        printf("%c ", room.room[y][x]);
 #else
         color = 12;
         SetConsoleTextAttribute(hConsole, color);
@@ -57,8 +57,10 @@ void print_room(const room_t room, const line_t line)
 
 int main(void)
 {
+#ifdef _WIN32
     HANDLE  hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     int color;
+#endif
     point_t start = { .x = 4, .y = 14 };
     point_t finish = { .x = 11, .y = 0 };
 	room_t room = initialize_room(300, 300);
@@ -69,27 +71,39 @@ int main(void)
         for (int j = 0, noise; j < 230; j++) {
             noise = room.room[i][j] - 48;
             if (noise > 0 && noise < 3) {
+#ifdef _WIN32
                 color = 2;
                 SetConsoleTextAttribute(hConsole, color);
+#endif
                 printf(".");
             } else if (noise >= 3 && noise < 5) {
+#ifdef _WIN32
                 color = 6;
                 SetConsoleTextAttribute(hConsole, color);
+#endif
                 printf(",");
             } else if (noise >= 5 && noise < 7) {
+#ifdef _WIN32
                 color = 8;
                 SetConsoleTextAttribute(hConsole, color);
+#endif
                 printf(";");
             } else {
-                color = 15;
+#ifdef _WIN32
+                color = 16;
                 SetConsoleTextAttribute(hConsole, color);
+#endif
                 printf("%%");
             }
         }
          printf("\n");
     }
+    // TODO proper freeing
+    for (int i = 0; i < room.width; i++)
+        free(room.room[i]);
     free(room.room);
-//    free(line.pool);
+    free(line.pool);
+    free_hash();
     getchar();
     return 0;
 }
