@@ -20,7 +20,4 @@ typedef struct {
     int dx, dy;
 } line_t;
 
-bool depr_get_line(line_t *diagonal);
-bool set_diag(line_t *diagonal, point_t obst, room_t *room);
-
 #endif //MAPGENERATION_SHAPE_H

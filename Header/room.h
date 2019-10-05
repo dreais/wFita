@@ -18,4 +18,9 @@ typedef struct {
 	char** room;
 } room_t;
 
+room_t initialize_room(const int width, const int height);
+void define_hash(const int size_map);
+float perlin2d(float x, float y, float freq, int depth);
+void free_hash(void);
+
 #endif //MAPGENERATION_ROOM_H
