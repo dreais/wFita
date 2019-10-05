@@ -12,3 +12,9 @@ We could think of many things that I haven't tried yet, as creating a thread ded
 
 **Side note:** My implemented algorithm here is not the fastest, by far, and may even be (very) slow. This is however 
 one that I'm implementing by passion and to see how far it goes, keep that in mind!
+
+## Sources used
+Perlin noise code:
+https://gist.github.com/nowl/828013
+
+Was a bit modified, for setting up the hash array dynamically.
