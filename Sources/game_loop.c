@@ -50,12 +50,7 @@ void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, 
     update_path_monster(10, player, room);
     move_monster(monster, 10, win);
     wmove(win, 0, 0);
-    wprintw(win, "%d\t%d\n", monster[0].p_cursor.x, monster[0].p_cursor.y);
-    for (int i = 0; i < 10; i++) {
-        wmove(win, i+10, 0);
-        wprintw(win, "%d\t%d", monster[i].p_cursor.x, monster[i].p_cursor.y);
-        if (create_path(monster[i].p_cursor, player->p_cursor, room).pool[0].x) {
-            wprintw(win, "\tOK\n");
-        }
-    }
+    monster[0].p_cursor = search_next_cell(monster[0].p_cursor, player->p_cursor, room);
+    wmove(win, );
+    waddch(win, monster[0].repr);
 }

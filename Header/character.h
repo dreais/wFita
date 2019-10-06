@@ -13,7 +13,7 @@
 
 #include "room.h"
 #include "shape.h"
-#include "contourn.h"
+#include "path.h"
 
 typedef struct {
     unsigned int level;

@@ -7,14 +7,13 @@
 #include <stdbool.h>
 #include <stdio.h> // will leave it, i often use printf here
 #include "../../Header/shape.h"
+#include "../../Header/path.h"
 
 static const int directions[4][2] = {
         {0, -1}, // TOP
         {1, 0}, // RIGHT
         {0, 1}, // BOTTOM
         {-1, 0}}; // LEFT
-
-typedef enum {TOP, RIGHT, BOTTOM, LEFT} dir_name;
 
 static point_t *append_point(point_t *pool, const unsigned int size, const point_t to_append)
 {
@@ -52,7 +51,7 @@ static bool get_diagonal(line_t *line, int x, int y)
     return true;
 }
 
-static dir_name get_position_direction_array(const int current_direction[2])
+dir_name get_position_direction_array(const int current_direction[2])
 {
     dir_name direction = -1;
 

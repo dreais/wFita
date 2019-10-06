@@ -11,7 +11,7 @@
 #include "../Header/room.h"
 #include "../Header/character.h"
 #include "../Header/shape.h"
-#include "../Header/contourn.h"
+#include "../Header/path.h"
 #include "../Header/core_game.h"
 #include "../Header/print.h" // printing rooms and stuff
 
@@ -48,12 +48,9 @@ int main(void)
     WINDOW *main_game = initialize_terminal();
     charac_t player = initialize_player();
     point_t camera = {.x = 0, .y = 0};
-    room_t room = initialize_room(300, 300);
     int key = 0;
+    room_t room = initialize_room(300, 300);
 
-    point_t finish = {.x = 50, .y = 60};
-
-    printw("%d\t%d\n", create_path(player.p_cursor, finish, room).pool[0].x, create_path(player.p_cursor, finish, room).pool[0].y);
     print_room(room, main_game, player.p_cursor, &camera);
     print_stats(main_game, player);
     wrefresh(main_game);
