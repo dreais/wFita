@@ -6,8 +6,13 @@
 #define MAPGENERATION_PRINT_H
 
 #include "room.h"
-#include "curses.h"
 #include "shape.h"
+
+#ifdef _WIN32
+#include "curses.h"
+#else
+#include <ncurses.h>
+#endif
 
 /**
  * COLORS DEFINITION
