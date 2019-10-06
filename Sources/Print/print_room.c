@@ -2,17 +2,17 @@
 // Created by Valentin on 10/6/2019.
 //
 
-#include "../Header/print.h"
-#include "../Header/room.h"
-#include "../Header/shape.h"
+#include "../../Header/print.h"
+#include "../../Header/room.h"
+#include "../../Header/shape.h"
 
 #ifdef _WIN32
-#include "../Header/curses.h"
+#include "../../Header/curses.h"
 #else
 #include <ncurses.h>
 #endif
 
-void adjust_camera(const room_t room, WINDOW *main_game, const point_t player_position, point_t *camera)
+static void adjust_camera(const room_t room, WINDOW *main_game, const point_t player_position, point_t *camera)
 {
     if (player_position.x < getmaxx(main_game) / 2) {
         camera->x = 0;
@@ -55,6 +55,7 @@ void print_room(const room_t room, WINDOW *main_game, const point_t player_posit
 {
     int counter = 0;
 
+    // TODO self explanatory
     adjust_camera(room, main_game, player_position, camera);
     if (use_color == true) {
         for (int i = camera->y; i < camera->y + (getmaxy(main_game) - 1); i++) {

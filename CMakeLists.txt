@@ -3,7 +3,7 @@ project(MapGeneration C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(MapGeneration Sources/main.c Header/room.h Header/shape.h Sources/Path/contourn.c Header/contourn.h Sources/init_var.c Sources/perlin_noise.c Sources/print.c Header/print.h)
+add_executable(MapGeneration Sources/main.c Header/room.h Header/shape.h Sources/Path/contourn.c Header/contourn.h Sources/init_var.c Sources/perlin_noise.c Header/print.h Sources/Character/movement.c Header/character.h Sources/Character/player.c Sources/Print/print_room.c Sources/Print/print_stats.c)
 
 target_link_libraries(MapGeneration ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/PDCurses/wincon/pdcurses.a)
 
