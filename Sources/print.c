@@ -62,6 +62,4 @@ void print_room(const room_t room, WINDOW *main_game, const point_t player_posit
             }
         }
     }
-    wmove(main_game, 0, 0);
-    wprintw(main_game, "%d\t%d", player_position.x, player_position.y);
 }
