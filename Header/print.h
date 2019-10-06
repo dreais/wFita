@@ -7,6 +7,7 @@
 
 #include "room.h"
 #include "shape.h"
+#include "character.h"
 
 #ifdef _WIN32
 #include "curses.h"
@@ -33,7 +34,11 @@
  * END OF COLORS DEFINITION
  */
 
+/// PRINT_ROOM.C
 void print_room(const room_t room, WINDOW *main_game, const point_t player_position, point_t *camera);
 void init_colors(void);
+
+/// PRINT_STATS.C
+void print_stats(WINDOW *main_game, const charac_t player);
 
 #endif //MAPGENERATION_PRINT_H
