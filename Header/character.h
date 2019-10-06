@@ -25,7 +25,7 @@ typedef struct {
     stat_t stat;
     point_t p_cursor;
     char repr;
-    path_t path; // ONLY USED IF MONSTER
+    line_t path; // ONLY USED IF MONSTER
 } charac_t;
 
 /// MOVEMENT.C

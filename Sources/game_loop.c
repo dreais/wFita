@@ -19,8 +19,6 @@ static bool was_initialized = false;
 
 static void create_monster_ptr(const room_t room, charac_t *player)
 {
-    point_t start;
-
     srand(time(NULL));
     monster = malloc(sizeof(charac_t) * 10);
     for (int i = 0; i < 10; i++) {
@@ -32,17 +30,13 @@ static void create_monster_ptr(const room_t room, charac_t *player)
         if (monster[i].p_cursor.y == player->p_cursor.y)
             monster[i].p_cursor.y = rand() % room.height;
         monster[i].repr = 'M';
-
-        monster[i].path.path = create_path(monster[i].p_cursor, player->p_cursor, room);
-        monster[i].path.index = 0;
     }
+    was_initialized = true;
 }
 
 static void update_path_monster(const int arr_size, charac_t *player, room_t room)
 {
-    for (int i = 0; i < arr_size; i++) {
-        monster[i].path.path = create_path(monster[i].p_cursor, player->p_cursor, room);
-    }
+
 }
 
 void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, point_t *camera)
@@ -55,4 +49,13 @@ void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, 
     print_room(room, win, player->p_cursor, camera);
     update_path_monster(10, player, room);
     move_monster(monster, 10, win);
+    wmove(win, 0, 0);
+    wprintw(win, "%d\t%d\n", monster[0].p_cursor.x, monster[0].p_cursor.y);
+    for (int i = 0; i < 10; i++) {
+        wmove(win, i+10, 0);
+        wprintw(win, "%d\t%d", monster[i].p_cursor.x, monster[i].p_cursor.y);
+        if (create_path(monster[i].p_cursor, player->p_cursor, room).pool[0].x) {
+            wprintw(win, "\tOK\n");
+        }
+    }
 }

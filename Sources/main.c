@@ -51,6 +51,9 @@ int main(void)
     room_t room = initialize_room(300, 300);
     int key = 0;
 
+    point_t finish = {.x = 50, .y = 60};
+
+    printw("%d\t%d\n", create_path(player.p_cursor, finish, room).pool[0].x, create_path(player.p_cursor, finish, room).pool[0].y);
     print_room(room, main_game, player.p_cursor, &camera);
     print_stats(main_game, player);
     wrefresh(main_game);
