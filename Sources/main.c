@@ -1,18 +1,30 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <signal.h>
 
 #ifdef _WIN32
 #include <windows.h>
-#include "../Header/curses.h"
-#else
-#include <ncurses.h>
-#include <sys/ioctl.h>
 #endif
 
 #include "../Header/room.h"
 #include "../Header/shape.h"
 #include "../Header/contourn.h"
+#include "../Header/curses.h"
+#include "../Header/print.h" // printing rooms and stuff
+
+point_t verify_player_position(const point_t p_cursor, const room_t room)
+{
+    point_t new_pos = {.x = p_cursor.x, .y = p_cursor.y};
+
+    if (new_pos.x < 0)
+        new_pos.x = 0;
+    else if (new_pos.x > room.width)
+        new_pos.x = (int) room.width;
+    if (new_pos.y < 0)
+        new_pos.y = 0;
+    else if (new_pos.y > room.height)
+        new_pos.y = (int) room.height;
+    return new_pos;
+}
 
 int main(void)
 {
@@ -22,38 +34,49 @@ int main(void)
     SetWindowPos(Console, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN) - 10, GetSystemMetrics(SM_CYSCREEN) - 10, SWP_SHOWWINDOW);
     int color;
 #endif
+    initscr();
+    WINDOW *main_game = newwin(LINES / 2 + (LINES / 3), COLS / 2 + (COLS / 2) / 2, 0, 0);
     point_t start = { .x = 4, .y = 14 };
     point_t finish = { .x = 11, .y = 0 };
-    point_t cursor_pos = {.x = 0, .y = 0};
+    point_t p_cursor = {.x = 1, .y = 1};
     room_t room = initialize_room(300, 300);
 	line_t line;
-    char c = 0;
+    int key = 0;
 
-    WINDOW *window = initscr();
+    noecho();
+    cbreak();
+    keypad(main_game, TRUE);
     line = create_path(start, finish, room);
-    for (int i = 0; i < 65; i++) {
-        for (int j = 0, noise; j < 230; j++) {
-            noise = room.room[i][j] - 48;
-            move(i, j);
-            if (noise > 0 && noise < 3) {
-                printw(".");
-            } else if (noise >= 3 && noise < 5) {
-                printw(",");
-            } else if (noise >= 5 && noise < 7) {
-                printw(";");
-            } else {
-                printw("%%");
-            }
+    print_room(room, main_game, p_cursor);
+    wrefresh(main_game);
+    while (key != 'q') {
+        key = wgetch(main_game);
+        switch (key) {
+            case KEY_LEFT:
+                p_cursor.x--;
+                break;
+            case KEY_RIGHT:
+                p_cursor.x++;
+                break;
+            case KEY_UP:
+                p_cursor.y--;
+                break;
+            case KEY_DOWN:
+                p_cursor.y++;
+                break;
+            default:
+                break;
         }
+        p_cursor = verify_player_position(p_cursor, room);
+        print_room(room, main_game, p_cursor);
+        wrefresh(main_game);
     }
-    move(0, 0);
-    for (int i = 0; i < room.width; i++)
+    endwin();
+    for (unsigned int i = 0; i < room.width; i++)
         free(room.room[i]);
     free(room.room);
     free(line.pool);
     free_hash();
-    getch();
-    endwin();
     return 0;
 }
 
