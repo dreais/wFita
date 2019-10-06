@@ -38,7 +38,7 @@ int main(void)
     WINDOW *main_game = newwin(LINES / 2 + (LINES / 3), COLS / 2 + (COLS / 2) / 2, 0, 0);
     point_t start = { .x = 4, .y = 14 };
     point_t finish = { .x = 11, .y = 0 };
-    point_t p_cursor = {.x = 280, .y = 230};
+    point_t p_cursor = {.x = 0, .y = 0};
     point_t camera = {.x = 0, .y = 0};
     room_t room = initialize_room(300, 300);
 	line_t line;
