@@ -44,6 +44,7 @@ int main(void)
 	line_t line;
     int key = 0;
 
+    init_colors();
     noecho();
     cbreak();
     curs_set(0);

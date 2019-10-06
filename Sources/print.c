@@ -28,6 +28,7 @@ void adjust_camera(const room_t room, WINDOW *main_game, const point_t player_po
 
 void init_colors(void)
 {
+    start_color();
     init_pair(GREEN, COLOR_GREEN, COLOR_BLACK);
     init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(WHITE, COLOR_WHITE, COLOR_BLACK);
@@ -47,10 +48,6 @@ void print_room(const room_t room, WINDOW *main_game, const point_t player_posit
 {
     point_t init = {.x = 0, .y = 0};
 
-    start_color();
-
-    // TODO adding more colors, variations for the grass for example
-    init_colors();
     adjust_camera(room, main_game, player_position, camera);
     for (int i = camera->y; i < camera->y + (getmaxy(main_game) - 1); i++) {
         wmove(main_game, init.y++, 0);

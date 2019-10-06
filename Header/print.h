@@ -29,5 +29,6 @@
  */
 
 void print_room(const room_t room, WINDOW *main_game, const point_t player_position, point_t *camera);
+void init_colors(void);
 
 #endif //MAPGENERATION_PRINT_H
