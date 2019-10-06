@@ -13,6 +13,6 @@
 #define YELLOW 2
 #define WHITE 3
 
-void print_room(const room_t room, WINDOW *main_game, const point_t player_position);
+void print_room(const room_t room, WINDOW *main_game, const point_t player_position, point_t *camera);
 
 #endif //MAPGENERATION_PRINT_H

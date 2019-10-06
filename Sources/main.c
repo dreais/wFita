@@ -17,12 +17,12 @@ point_t verify_player_position(const point_t p_cursor, const room_t room)
 
     if (new_pos.x < 0)
         new_pos.x = 0;
-    else if (new_pos.x > room.width)
-        new_pos.x = (int) room.width;
+    else if (new_pos.x > room.width - 1)
+        new_pos.x = (int) room.width - 1;
     if (new_pos.y < 0)
         new_pos.y = 0;
-    else if (new_pos.y > room.height)
-        new_pos.y = (int) room.height;
+    else if (new_pos.y > room.height - 1)
+        new_pos.y = (int) room.height - 1;
     return new_pos;
 }
 
@@ -38,16 +38,18 @@ int main(void)
     WINDOW *main_game = newwin(LINES / 2 + (LINES / 3), COLS / 2 + (COLS / 2) / 2, 0, 0);
     point_t start = { .x = 4, .y = 14 };
     point_t finish = { .x = 11, .y = 0 };
-    point_t p_cursor = {.x = 1, .y = 1};
+    point_t p_cursor = {.x = 280, .y = 230};
+    point_t camera = {.x = 0, .y = 0};
     room_t room = initialize_room(300, 300);
 	line_t line;
     int key = 0;
 
     noecho();
     cbreak();
+    curs_set(0);
     keypad(main_game, TRUE);
     line = create_path(start, finish, room);
-    print_room(room, main_game, p_cursor);
+    print_room(room, main_game, p_cursor, &camera);
     wrefresh(main_game);
     while (key != 'q') {
         key = wgetch(main_game);
@@ -68,8 +70,9 @@ int main(void)
                 break;
         }
         p_cursor = verify_player_position(p_cursor, room);
-        print_room(room, main_game, p_cursor);
+        print_room(room, main_game, p_cursor, &camera);
         wrefresh(main_game);
+        wmove(main_game, 10, 10);
     }
     endwin();
     for (unsigned int i = 0; i < room.width; i++)
