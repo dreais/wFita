@@ -12,6 +12,7 @@
 #include "../Header/character.h"
 #include "../Header/shape.h"
 #include "../Header/contourn.h"
+#include "../Header/core_game.h"
 #include "../Header/print.h" // printing rooms and stuff
 
 bool use_color = false;
@@ -55,9 +56,7 @@ int main(void)
     wrefresh(main_game);
     while (key != 'q') {
         key = wgetch(main_game);
-        input_treat(key, &player.p_cursor);
-        player.p_cursor = verify_player_position(player.p_cursor, room);
-        print_room(room, main_game, player.p_cursor, &camera);
+        main_loop(main_game, room, &player, key, &camera);
         wrefresh(main_game);
     }
     endwin();

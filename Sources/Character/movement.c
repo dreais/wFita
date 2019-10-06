@@ -10,6 +10,8 @@
 
 #include "../../Header/shape.h"
 
+static point_t old_position = {.x = -1, .y = -1};
+
 point_t verify_player_position(const point_t p_cursor, const room_t room)
 {
     point_t new_pos = {.x = p_cursor.x, .y = p_cursor.y};
@@ -22,6 +24,7 @@ point_t verify_player_position(const point_t p_cursor, const room_t room)
         new_pos.y = 0;
     else if (new_pos.y > room.height - 1)
         new_pos.y = (int) room.height - 1;
+    old_position = p_cursor;
     return new_pos;
 }
 

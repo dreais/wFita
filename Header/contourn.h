@@ -7,6 +7,12 @@
 
 #include <stdbool.h>
 #include "room.h"
+#include "shape.h"
+
+typedef struct {
+    line_t path;
+    int index;
+} path_t;
 
 bool get_line(line_t *line);
 point_t get_first_obst(const line_t* diagonal, const point_t start, const point_t finish, const room_t *room);
@@ -14,6 +20,7 @@ bool look_next_position(const room_t *room, const line_t *line, point_t start, p
 bool check_fallback(line_t *line, point_t *to_check);
 bool get_order_position(const room_t room, line_t *line, point_t *next);
 
+void free_path(path_t path);
 line_t create_path(const point_t start, const point_t finish, const room_t room);
 
 // static point_t *append_point(point_t *pool, const unsigned int size, const point_t to_append)
