@@ -8,123 +8,81 @@
 #include "../Header/room.h"
 #include "../Header/shape.h"
 #include "../Header/contourn.h"
+#include "../Header/curses.h"
+#include "../Header/print.h" // printing rooms and stuff
 
-void print_cell(const room_t room, unsigned int y, unsigned int x, const line_t line)
+point_t verify_player_position(const point_t p_cursor, const room_t room)
 {
-#ifdef _WIN32
-    HANDLE  hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    int color;
-#endif
-    for (unsigned int i = 0; i < line.size; i++) {
-        if (line.pool[i].x == (int)x && line.pool[i].y == (int)y) {
-#ifdef unix
-            printf("\033[0;32m%c\033[0m ", room.room[y][x]);
-#else
-            color = 2;
-            SetConsoleTextAttribute(hConsole, color);
-            printf("%c", room.room[y][x]);
-#endif
-            return;
-        }
-    }
-    if (room.room[y][x] == OBST) {
-#ifdef unix
-        printf("\033[0;31m%c\033[0m ", room.room[y][x]);
-    } else
-        printf("%c ", room.room[y][x]);
-#else
-        color = 12;
-        SetConsoleTextAttribute(hConsole, color);
-        printf("%c", room.room[y][x]);
-    } else {
-        color = 15;
-        SetConsoleTextAttribute(hConsole, color);
-        printf("%c", room.room[y][x]);
-    }
-#endif
+    point_t new_pos = {.x = p_cursor.x, .y = p_cursor.y};
 
-}
-
-void print_room(const room_t room, const line_t line)
-{
-    for (unsigned int i = 0; i < room.height; i++) {
-        for (unsigned j = 0; j < room.width; j++) {
-            print_cell(room, i, j, line);
-        }
-        printf("\n");
-    }
+    if (new_pos.x < 0)
+        new_pos.x = 0;
+    else if (new_pos.x > room.width - 1)
+        new_pos.x = (int) room.width - 1;
+    if (new_pos.y < 0)
+        new_pos.y = 0;
+    else if (new_pos.y > room.height - 1)
+        new_pos.y = (int) room.height - 1;
+    return new_pos;
 }
 
 int main(void)
 {
 #ifdef _WIN32
-    HANDLE  hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    HWND Console = GetConsoleWindow();
+    SetWindowPos(Console, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN) - 10, GetSystemMetrics(SM_CYSCREEN) - 10, SWP_SHOWWINDOW);
     int color;
 #endif
+    initscr();
+    WINDOW *main_game = newwin(LINES / 2 + (LINES / 3), COLS / 2 + (COLS / 2) / 2, 0, 0);
     point_t start = { .x = 4, .y = 14 };
     point_t finish = { .x = 11, .y = 0 };
-	room_t room = initialize_room(300, 300);
+    point_t p_cursor = {.x = 280, .y = 230};
+    point_t camera = {.x = 0, .y = 0};
+    room_t room = initialize_room(300, 300);
 	line_t line;
+    int key = 0;
 
+    noecho();
+    cbreak();
+    curs_set(0);
+    keypad(main_game, TRUE);
     line = create_path(start, finish, room);
-    for (int i = 0; i < 65; i++) {
-        for (int j = 0, noise; j < 230; j++) {
-            noise = room.room[i][j] - 48;
-            if (noise > 0 && noise < 3) {
-#ifdef _WIN32
-                color = 2;
-                SetConsoleTextAttribute(hConsole, color);
-#endif
-                printf(".");
-            } else if (noise >= 3 && noise < 5) {
-#ifdef _WIN32
-                color = 6;
-                SetConsoleTextAttribute(hConsole, color);
-#endif
-                printf(",");
-            } else if (noise >= 5 && noise < 7) {
-#ifdef _WIN32
-                color = 8;
-                SetConsoleTextAttribute(hConsole, color);
-#endif
-                printf(";");
-            } else {
-#ifdef _WIN32
-                color = 16;
-                SetConsoleTextAttribute(hConsole, color);
-#endif
-                printf("%%");
-            }
+    print_room(room, main_game, p_cursor, &camera);
+    wrefresh(main_game);
+    while (key != 'q') {
+        key = wgetch(main_game);
+        switch (key) {
+            case KEY_LEFT:
+                p_cursor.x--;
+                break;
+            case KEY_RIGHT:
+                p_cursor.x++;
+                break;
+            case KEY_UP:
+                p_cursor.y--;
+                break;
+            case KEY_DOWN:
+                p_cursor.y++;
+                break;
+            default:
+                break;
         }
-         printf("\n");
+        p_cursor = verify_player_position(p_cursor, room);
+        print_room(room, main_game, p_cursor, &camera);
+        wrefresh(main_game);
+        wmove(main_game, 10, 10);
     }
-    // TODO proper freeing
-    for (int i = 0; i < room.width; i++)
+    endwin();
+    for (unsigned int i = 0; i < room.width; i++)
         free(room.room[i]);
     free(room.room);
     free(line.pool);
     free_hash();
-    getchar();
     return 0;
 }
 
 /**
-	line = create_path(start, finish, room);
-
-
 putting here codes that is removed to try earlier parts of the program:
-    for (int y = 0; y < 65; y++) {
-        for (int x = 0, noise; x < 225; x++) {
-            noise = (int) (perlin2d(x, y, 0.1f, 4)/10);
-            if (noise > 0 && noise < 3)
-                printf(".");
-            else if (noise >= 3 && noise < 5)
-                printf(",");
-            else if (noise >= 5 && noise < 7)
-                printf(";");
-            else
-                printf("%%");
-        }
-        printf("\n");
-    }
  */
