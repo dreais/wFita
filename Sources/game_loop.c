@@ -10,6 +10,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "../Header/room.h"
 #include "../Header/character.h"
 #include "../Header/print.h"
@@ -36,14 +37,17 @@ static void create_monster_ptr(const room_t room, charac_t *player)
     was_initialized = true;
 }
 
-static bool cell_occupied(const int arr_size, const int current)
+static bool cell_occupied(const int arr_size, const int key, const point_t current)
 {
+    /// KEY IS ONLY USED WHEN A MONSTER IS BEING CHECKED. OTHERWISE, USE KEY > ARR_SIZE
     for (int i = 0; i < arr_size; i++) {
-        if (i != current) {
-            if (monster[i].p_cursor.x == monster[current].p_cursor.x &&
-            monster[i].p_cursor.y == monster[current].p_cursor.y) {
+        if (i != key) {
+            if (monster[i].p_cursor.x == current.x &&
+            monster[i].p_cursor.y == current.y) {
                 return true;
             }
+            wmove(debug, i, 20);
+            wprintw(debug, "monster[%d]:%d\t%d", i, monster[i].p_cursor.x, monster[i].p_cursor.y);
         }
     }
     return false;
@@ -56,7 +60,7 @@ static void update_path_monster(const int arr_size, charac_t *player, room_t roo
     for (int i = 0; i < arr_size; i++) {
         old_tmp = monster[i].p_cursor;
         monster[i].p_cursor = search_next_cell(monster[i].p_cursor, player->p_cursor, room);
-        if (cell_occupied(arr_size, i) == true) {
+        if (cell_occupied(arr_size, i, monster[i].p_cursor) == true) {
             monster[i].p_cursor = old_tmp;
         }
     }
@@ -64,12 +68,21 @@ static void update_path_monster(const int arr_size, charac_t *player, room_t roo
 
 void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, point_t *camera)
 {
+    point_t old_p_cursor;
+
     if (was_initialized == false)
         create_monster_ptr(room, player);
 
+    old_p_cursor = player->p_cursor;
     input_treat(key, &player->p_cursor);
+    wmove(debug, 0, 0);
+    wprintw(debug, "%d\t%d\n%d\t%d\n", old_p_cursor.x, old_p_cursor.y, player->p_cursor.x, player->p_cursor.y);
     player->p_cursor = verify_player_position(player->p_cursor, room);
+    if (cell_occupied(10, 10, player->p_cursor) == true)
+        player->p_cursor = old_p_cursor;
+    wprintw(debug, "%d\t%d\n", player->p_cursor.x, player->p_cursor.y);
     print_room(room, win, player->p_cursor, camera);
     update_path_monster(10, player, room);
     move_monster(monster, 10, win, camera);
+    wrefresh(debug);
 }
