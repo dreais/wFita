@@ -10,7 +10,6 @@
 
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
 #include "../Header/room.h"
 #include "../Header/character.h"
 #include "../Header/print.h"
@@ -18,6 +17,7 @@
 charac_t *monster;
 static bool was_initialized = false;
 
+/// DEBUG WINDOW. MIGHT GET REPLACED BY THE PARENT WINDOW LATER ON
 extern WINDOW *debug;
 
 static void create_monster_ptr(const room_t room, charac_t *player)
@@ -75,14 +75,18 @@ void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, 
 
     old_p_cursor = player->p_cursor;
     input_treat(key, &player->p_cursor);
+    /// DEBUG
     wmove(debug, 0, 0);
     wprintw(debug, "%d\t%d\n%d\t%d\n", old_p_cursor.x, old_p_cursor.y, player->p_cursor.x, player->p_cursor.y);
+    /// END DEBUG
     player->p_cursor = verify_player_position(player->p_cursor, room);
     if (cell_occupied(10, 10, player->p_cursor) == true)
         player->p_cursor = old_p_cursor;
-    wprintw(debug, "%d\t%d\n", player->p_cursor.x, player->p_cursor.y);
     print_room(room, win, player->p_cursor, camera);
     update_path_monster(10, player, room);
     move_monster(monster, 10, win, camera);
+    /// DEBUG
+    wprintw(debug, "%d\t%d\n", player->p_cursor.x, player->p_cursor.y);
     wrefresh(debug);
+    /// END DEBUG
 }
