@@ -30,7 +30,7 @@ static void create_monster_ptr(core_game_t *core)
         if (core->monster_arr[i].p_cursor.y == core->player.p_cursor.y)
             core->monster_arr[i].p_cursor.y = rand() % core->c_room.height;
         core->monster_arr[i].repr = 'M';
-        core->monster_arr[i].stat.state = true;
+        core->monster_arr[i].stat.state = alive;
     }
     was_initialized = true;
 }

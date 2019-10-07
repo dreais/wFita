@@ -48,7 +48,7 @@ int main(void)
     int key = 0;
 
     core.game_screen = initialize_terminal();
-    core.c_room = initialize_room(300, 300);;
+    core.c_room = initialize_room(300, 300);
     core.player = initialize_player();
     core.camera = malloc(sizeof(point_t)*1);
     core.camera = &(point_t) {.x = 0, .y = 0};
@@ -56,11 +56,19 @@ int main(void)
     print_room(&core);
     print_stats(core.game_screen, core.player);
     wrefresh(core.game_screen);
-    while (key != 'q') {
+    while (core.player.stat.state == alive && key != 'q') {
         key = wgetch(core.game_screen);
         main_loop(&core, key);
+        wmove(debug, 0, 0);
+        wclear(debug);
+        wprintw(debug, "state=%d", (int) core.player.stat.state);
+        wrefresh(debug);
         wrefresh(core.game_screen);
     }
+    move((LINES / 2) - 1, ((COLS) / 2) - (int)strlen(YOU_DIED) / 2);
+    printw(YOU_DIED);
+    refresh();
+    getch();
     endwin();
     free_objects(core.c_room);
     return 0;

@@ -96,6 +96,11 @@ typedef struct {
  * END OF COLORS DEFINITION
  */
 
+#define alive true
+#define dead false
+
+#define YOU_DIED "You died. Press any key to exit!"
+
 #include "character.h"
 #include "path.h"
 #include "print.h"

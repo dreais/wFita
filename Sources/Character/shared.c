@@ -11,7 +11,7 @@ void set_attack(charac_t *attacker, charac_t *defender)
 {
     defender->stat.health--;
     if (defender->stat.health <= 0) {
-        defender->stat.state = false;
+        defender->stat.state = dead;
         defender->p_cursor.x = -1;
         defender->p_cursor.y = -1;
     }
