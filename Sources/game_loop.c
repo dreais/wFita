@@ -36,10 +36,29 @@ static void create_monster_ptr(const room_t room, charac_t *player)
     was_initialized = true;
 }
 
-static void update_path_monster(const int arr_size, charac_t *player, room_t room)
+static bool cell_occupied(const int arr_size, const int current)
 {
     for (int i = 0; i < arr_size; i++) {
+        if (i != current) {
+            if (monster[i].p_cursor.x == monster[current].p_cursor.x &&
+            monster[i].p_cursor.y == monster[current].p_cursor.y) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+static void update_path_monster(const int arr_size, charac_t *player, room_t room)
+{
+    point_t old_tmp;
+
+    for (int i = 0; i < arr_size; i++) {
+        old_tmp = monster[i].p_cursor;
         monster[i].p_cursor = search_next_cell(monster[i].p_cursor, player->p_cursor, room);
+        if (cell_occupied(arr_size, i) == true) {
+            monster[i].p_cursor = old_tmp;
+        }
     }
 }
 
