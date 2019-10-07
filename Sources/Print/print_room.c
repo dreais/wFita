@@ -2,9 +2,7 @@
 // Created by Valentin on 10/6/2019.
 //
 
-#include "../../Header/print.h"
-#include "../../Header/room.h"
-#include "../../Header/shape.h"
+#include "../../Header/core_game.h"
 
 #ifdef _WIN32
 #include "../../Header/curses.h"
@@ -51,55 +49,55 @@ void init_colors(void)
 
 extern bool use_color;
 
-void print_room(const room_t room, WINDOW *main_game, const point_t player_position, point_t *camera)
+void print_room(core_game_t *core)
 {
     int counter = 0;
 
     // TODO self explanatory
-    adjust_camera(room, main_game, player_position, camera);
+    adjust_camera(core->c_room, core->game_screen, core->player.p_cursor, core->camera);
     if (use_color == true) {
-        for (int i = camera->y; i < camera->y + (getmaxy(main_game) - 1); i++) {
-            wmove(main_game, counter++, 0);
-            for (int j = camera->x, noise; j < camera->x + (getmaxx(main_game) - 2); j++) {
-                noise = room.room[i][j] - 48;
-                if (player_position.x == j && player_position.y == i) {
-                    wattron(main_game, A_BOLD);
-                    waddch(main_game, '@');
-                    wattroff(main_game, A_BOLD);
+        for (int i = core->camera->y; i < core->camera->y + (getmaxy(core->game_screen) - 1); i++) {
+            wmove(core->game_screen, counter++, 0);
+            for (int j = core->camera->x, noise; j < core->camera->x + (getmaxx(core->game_screen) - 2); j++) {
+                noise = core->c_room.room[i][j] - 48;
+                if (core->player.p_cursor.x == j && core->player.p_cursor.y == i) {
+                    wattron(core->game_screen, A_BOLD);
+                    waddch(core->game_screen, '@');
+                    wattroff(core->game_screen, A_BOLD);
                 } else if (noise > 0 && noise < 3) {
-                    wattron(main_game, COLOR_PAIR(LIGHT_GREEN));
-                    waddch(main_game, '.');
-                    wattroff(main_game, COLOR_PAIR(LIGHT_GREEN));
+                    wattron(core->game_screen, COLOR_PAIR(LIGHT_GREEN));
+                    waddch(core->game_screen, '.');
+                    wattroff(core->game_screen, COLOR_PAIR(LIGHT_GREEN));
                 } else if (noise >= 3 && noise < 5) {
-                    wattron(main_game, COLOR_PAIR(DARK_GREEN));
-                    waddch(main_game, ',');
-                    wattroff(main_game, COLOR_PAIR(DARK_GREEN));
+                    wattron(core->game_screen, COLOR_PAIR(DARK_GREEN));
+                    waddch(core->game_screen, ',');
+                    wattroff(core->game_screen, COLOR_PAIR(DARK_GREEN));
                 } else if (noise >= 5 && noise < 7) {
-                    wattron(main_game, COLOR_PAIR(GREY));
-                    waddch(main_game, ';');
-                    wattroff(main_game, COLOR_PAIR(GREY));
+                    wattron(core->game_screen, COLOR_PAIR(GREY));
+                    waddch(core->game_screen, ';');
+                    wattroff(core->game_screen, COLOR_PAIR(GREY));
                 } else {
-                    waddch(main_game, '%');
+                    waddch(core->game_screen, '%');
                 }
             }
         }
     } else {
-        for (int i = camera->y; i < camera->y + (getmaxy(main_game) - 1); i++) {
-            wmove(main_game, counter++, 0);
-            for (int j = camera->x, noise; j < camera->x + (getmaxx(main_game) - 2); j++) {
-                noise = room.room[i][j] - 48;
-                if (player_position.x == j && player_position.y == i) {
-                    wattron(main_game, A_BOLD);
-                    waddch(main_game, '@');
-                    wattroff(main_game, A_BOLD);
+        for (int i = core->camera->y; i < core->camera->y + (getmaxy(core->game_screen) - 1); i++) {
+            wmove(core->game_screen, counter++, 0);
+            for (int j = core->camera->x, noise; j < core->camera->x + (getmaxx(core->game_screen) - 2); j++) {
+                noise = core->c_room.room[i][j] - 48;
+                if (core->player.p_cursor.x == j && core->player.p_cursor.y == i) {
+                    wattron(core->game_screen, A_BOLD);
+                    waddch(core->game_screen, '@');
+                    wattroff(core->game_screen, A_BOLD);
                 } else if (noise > 0 && noise < 3) {
-                    waddch(main_game, '.');
+                    waddch(core->game_screen, '.');
                 } else if (noise >= 3 && noise < 5) {
-                    waddch(main_game, ',');
+                    waddch(core->game_screen, ',');
                 } else if (noise >= 5 && noise < 7) {
-                    waddch(main_game, ';');
+                    waddch(core->game_screen, ';');
                 } else {
-                    waddch(main_game, '%');
+                    waddch(core->game_screen, '%');
                 }
             }
         }

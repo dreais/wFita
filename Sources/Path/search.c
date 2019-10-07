@@ -4,8 +4,7 @@
 
 #include <math.h>
 #include <stdlib.h>
-#include "../../Header/shape.h"
-#include "../../Header/path.h"
+#include "../../Header/core_game.h"
 
 static const int directions[4][2] = {
         {0, -1}, // TOP

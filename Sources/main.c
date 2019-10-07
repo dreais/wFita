@@ -8,12 +8,7 @@
 #include <ncurses.h>
 #endif
 
-#include "../Header/room.h"
-#include "../Header/character.h"
-#include "../Header/shape.h"
-#include "../Header/path.h"
 #include "../Header/core_game.h"
-#include "../Header/print.h" // printing rooms and stuff
 
 bool use_color = false;
 WINDOW *debug;
@@ -49,22 +44,25 @@ int main(void)
     HWND Console = GetConsoleWindow();
     SetWindowPos(Console, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN) - 10, GetSystemMetrics(SM_CYSCREEN) - 10, SWP_SHOWWINDOW);
 #endif
-    WINDOW *main_game = initialize_terminal();
-    charac_t player = initialize_player();
-    point_t camera = {.x = 0, .y = 0};
+    core_game_t core;
     int key = 0;
-    room_t room = initialize_room(300, 300);
 
-    print_room(room, main_game, player.p_cursor, &camera);
-    print_stats(main_game, player);
-    wrefresh(main_game);
+    core.game_screen = initialize_terminal();
+    core.c_room = initialize_room(300, 300);;
+    core.player = initialize_player();
+    core.camera = malloc(sizeof(point_t)*1);
+    core.camera = &(point_t) {.x = 0, .y = 0};
+
+    print_room(&core);
+    print_stats(core.game_screen, core.player);
+    wrefresh(core.game_screen);
     while (key != 'q') {
-        key = wgetch(main_game);
-        main_loop(main_game, room, &player, key, &camera);
-        wrefresh(main_game);
+        key = wgetch(core.game_screen);
+        main_loop(&core, key);
+        wrefresh(core.game_screen);
     }
     endwin();
-    free_objects(room);
+    free_objects(core.c_room);
     return 0;
 }
 

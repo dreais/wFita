@@ -2,7 +2,7 @@
 // Created by Valentin on 10/6/2019.
 //
 
-#include "../../Header/character.h"
+#include "../../Header/core_game.h"
 
 // may be non-static later on
 static stat_t initialize_stats(void)
