@@ -38,7 +38,9 @@ static void create_monster_ptr(const room_t room, charac_t *player)
 
 static void update_path_monster(const int arr_size, charac_t *player, room_t room)
 {
-
+    for (int i = 0; i < arr_size; i++) {
+        monster[i].p_cursor = search_next_cell(monster[i].p_cursor, player->p_cursor, room);
+    }
 }
 
 void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, point_t *camera)
@@ -50,23 +52,5 @@ void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, 
     player->p_cursor = verify_player_position(player->p_cursor, room);
     print_room(room, win, player->p_cursor, camera);
     update_path_monster(10, player, room);
-    move_monster(monster, 10, win);
-    wmove(win, 0, 0);
-    monster[0].p_cursor = search_next_cell(monster[0].p_cursor, player->p_cursor, room);
-    if (monster[0].p_cursor.x >= camera->x && monster[0].p_cursor.x <= camera->x + getmaxx(win)) {
-        if (monster[0].p_cursor.y >= camera->y && monster[0].p_cursor.y <= camera->y + getmaxy(win)) {
-
-            wmove(win, monster[0].p_cursor.y - camera->y, monster[0].p_cursor.x - camera->x);
-
-            waddch(win, monster[0].repr);
-            wrefresh(win);
-
-            wclear(debug);
-            wmove(debug, 0, 0);
-            wprintw(debug, "monster %c pos=%d\t%d", monster[0].repr, monster[0].p_cursor.x, monster[0].p_cursor.y);
-            wmove(debug, 1, 0);
-            wprintw(debug, "player pos=%d\t%d", player->p_cursor.x, player->p_cursor.y);
-            wrefresh(debug);
-        }
-    }
+    move_monster(monster, 10, win, camera);
 }

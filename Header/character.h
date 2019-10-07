@@ -38,6 +38,6 @@ charac_t initialize_player(void);
 
 /// MONSTER.C
 
-void move_monster(charac_t *monster, const int arr_size, WINDOW* win);
+void move_monster(charac_t *monster, const int arr_size, WINDOW *win, point_t *camera);
 
 #endif //MAPGENERATION_CHARACTER_H
