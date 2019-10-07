@@ -49,17 +49,28 @@ static bool cell_occupied(core_game_t *core, const int index, const point_t curr
     return false;
 }
 
+static bool point_equals(point_t first, point_t second)
+{
+    if (first.x == second.x && first.y == second.y) {
+        return true;
+    }
+    return false;
+}
+
 static void update_path_monster(core_game_t *core)
 {
     point_t old_tmp;
 
-    for (int i = 0; i < core->size_monster_arr; i++) {
+    for (unsigned int i = 0; i < core->size_monster_arr; i++) {
         if (core->monster_arr[i].stat.state == true) {
             old_tmp = core->monster_arr[i].p_cursor;
             core->monster_arr[i].p_cursor = search_next_cell(core->monster_arr[i].p_cursor, core->player.p_cursor,
                                                              core->c_room);
-            if (cell_occupied(core, i, core->monster_arr[i].p_cursor) == true) {
+            if (point_equals(core->monster_arr[i].p_cursor, core->player.p_cursor)) {
+                core->monster_arr[i].p_cursor = old_tmp;
                 set_attack(&core->monster_arr[i], &core->player);
+            }
+            if (cell_occupied(core, (int) i, core->monster_arr[i].p_cursor) == true) {
                 core->monster_arr[i].p_cursor = old_tmp;
             }
         }

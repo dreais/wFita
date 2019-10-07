@@ -56,9 +56,6 @@ point_t search_next_cell(const point_t start, const point_t finish, const room_t
         new.x = start.x + directions[directions_path[rand_dir]][0];
         new.y = start.y + directions[directions_path[rand_dir]][1];
     }
-    if (new.x == finish.x && new.y == finish.y) {
-        return start;
-    }
     verify_pos_value(&new, room.width, room.height);
     return new;
 }
