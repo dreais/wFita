@@ -66,7 +66,7 @@ static void update_path_monster(const int arr_size, charac_t *player, room_t roo
     }
 }
 
-void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, point_t *camera)
+void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, point_t *camera, core_game_t *core)
 {
     point_t old_p_cursor;
 
@@ -82,7 +82,7 @@ void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, 
     player->p_cursor = verify_player_position(player->p_cursor, room);
     if (cell_occupied(10, 10, player->p_cursor) == true)
         player->p_cursor = old_p_cursor;
-    print_room(room, win, player->p_cursor, camera);
+    print_room(core);
     update_path_monster(10, player, room);
     move_monster(monster, 10, win, camera);
     /// DEBUG

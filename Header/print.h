@@ -8,6 +8,7 @@
 #include "room.h"
 #include "shape.h"
 #include "character.h"
+#include "core_game.h"
 
 #ifdef _WIN32
 #include "curses.h"
@@ -35,7 +36,7 @@
  */
 
 /// PRINT_ROOM.C
-void print_room(const room_t room, WINDOW *main_game, const point_t player_position, point_t *camera);
+void print_room(core_game_t *core);
 void init_colors(void);
 
 /// PRINT_STATS.C
