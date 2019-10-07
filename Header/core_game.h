@@ -90,6 +90,6 @@ typedef struct {
 #include "print.h"
 #include "room.h"
 
-void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, point_t *camera, core_game_t *core);
+void main_loop(core_game_t *core, const int key);
 
 #endif //MAPGENERATION_CORE_GAME_H

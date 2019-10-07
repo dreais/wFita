@@ -58,7 +58,7 @@ int main(void)
     wrefresh(core.game_screen);
     while (key != 'q') {
         key = wgetch(core.game_screen);
-        main_loop(core.game_screen, core.c_room, &core.player, key, core.camera, &core);
+        main_loop(&core, key);
         wrefresh(core.game_screen);
     }
     endwin();
