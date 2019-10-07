@@ -16,6 +16,7 @@
 #include "../Header/print.h" // printing rooms and stuff
 
 bool use_color = false;
+WINDOW *debug;
 
 WINDOW *initialize_terminal(void)
 {
@@ -26,8 +27,11 @@ WINDOW *initialize_terminal(void)
     noecho();
     cbreak();
     curs_set(0);
-    main_game = newwin(LINES / 2 + (LINES / 3), COLS / 2 + (COLS / 2) / 2, 0, 0);
+    main_game = newwin(LINES / 2 + (LINES / 3), ((COLS / 2) + ((COLS / 2) / 2))-2, 0, 0);
     keypad(main_game, TRUE);
+    /// MISC
+    debug = newwin(10, COLS, getmaxy(main_game), 0);
+    ///
     return main_game;
 }
 

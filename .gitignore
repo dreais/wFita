@@ -13,3 +13,5 @@ cmake_install.cmake
 MapGeneration
 Makefile
 *.o
+a.out
+# if you still have it, please delete the a.out! my mistake
