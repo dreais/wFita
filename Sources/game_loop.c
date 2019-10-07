@@ -17,6 +17,8 @@
 charac_t *monster;
 static bool was_initialized = false;
 
+extern WINDOW *debug;
+
 static void create_monster_ptr(const room_t room, charac_t *player)
 {
     srand(time(NULL));
@@ -51,6 +53,20 @@ void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, 
     move_monster(monster, 10, win);
     wmove(win, 0, 0);
     monster[0].p_cursor = search_next_cell(monster[0].p_cursor, player->p_cursor, room);
-    wmove(win, );
-    waddch(win, monster[0].repr);
+    if (monster[0].p_cursor.x >= camera->x && monster[0].p_cursor.x <= camera->x + getmaxx(win)) {
+        if (monster[0].p_cursor.y >= camera->y && monster[0].p_cursor.y <= camera->y + getmaxy(win)) {
+
+            wmove(win, monster[0].p_cursor.y - camera->y, monster[0].p_cursor.x - camera->x);
+
+            waddch(win, monster[0].repr);
+            wrefresh(win);
+
+            wclear(debug);
+            wmove(debug, 0, 0);
+            wprintw(debug, "monster %c pos=%d\t%d", monster[0].repr, monster[0].p_cursor.x, monster[0].p_cursor.y);
+            wmove(debug, 1, 0);
+            wprintw(debug, "player pos=%d\t%d", player->p_cursor.x, player->p_cursor.y);
+            wrefresh(debug);
+        }
+    }
 }
