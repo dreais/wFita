@@ -2,12 +2,12 @@
 // Created by Valentin on 10/6/2019.
 //
 
-#include "../../Header/character.h"
+#include "../../Header/core_game.h"
 
 // may be non-static later on
 static stat_t initialize_stats(void)
 {
-    stat_t new = {.experience = 0, .level = 1, .health = 10};
+    stat_t new = {.experience = 0, .level = 1, .health = 10, .max_health = 10, .state = alive};
 
     return new;
 }

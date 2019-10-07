@@ -4,8 +4,7 @@
 
 #include <math.h>
 #include <stdlib.h>
-#include "../../Header/shape.h"
-#include "../../Header/path.h"
+#include "../../Header/core_game.h"
 
 static const int directions[4][2] = {
         {0, -1}, // TOP
@@ -56,9 +55,6 @@ point_t search_next_cell(const point_t start, const point_t finish, const room_t
     } else {
         new.x = start.x + directions[directions_path[rand_dir]][0];
         new.y = start.y + directions[directions_path[rand_dir]][1];
-    }
-    if (new.x == finish.x && new.y == finish.y) {
-        return start;
     }
     verify_pos_value(&new, room.width, room.height);
     return new;

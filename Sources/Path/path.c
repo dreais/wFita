@@ -6,8 +6,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h> // will leave it, i often use printf here
-#include "../../Header/shape.h"
-#include "../../Header/path.h"
+#include "../../Header/core_game.h"
 
 static const int directions[4][2] = {
         {0, -1}, // TOP
@@ -67,7 +66,7 @@ dir_name get_position_direction_array(const int current_direction[2])
 static void set_next_pos(const room_t room, point_t *next, const dir_name directions_path[4])
 {
     for (int i = 0; i < 4; i++) {
-        if (room.room[next->y + directions[directions_path[i]][1]][next->x + directions[directions_path[i]][0]] != OBST) {
+        if (room.room[next->y + directions[directions_path[i]][1]][next->x + directions[directions_path[i]][0]] != 1) {
             next->x = next->x + directions[directions_path[i]][0];
             next->y = next->y + directions[directions_path[i]][1];
             return;
@@ -117,21 +116,21 @@ point_t get_first_obst(const line_t* diagonal, const point_t start, const point_
     for (unsigned int i = 0, x, y; i < diagonal->size; i++) {
         x = diagonal->pool[i].x;
         y = diagonal->pool[i].y;
-        if (room->room[diagonal->pool[i].y][diagonal->pool[i].x] == OBST) {
+        if (room->room[diagonal->pool[i].y][diagonal->pool[i].x] == 1) {
             return (point_t) { .x = diagonal->pool[i].x, .y = diagonal->pool[i].y };
         }
         else if (diagonal->pool[i].x > 0 && diagonal->pool[i].y > 0) {
             if (sign_x == 1) {
                 if (sign_y == 1) {
                     if (x < width && y < height) {
-                        if (room->room[y + 1][x] == OBST && room->room[y][x + 1] == OBST) {
+                        if (room->room[y + 1][x] == 1 && room->room[y][x + 1] == 1) {
                             return (point_t) { .x = (int)x, .y = (int)y };
                         }
                     }
                 }
                 else {
                     if (x < width && y > 0) {
-                        if (room->room[y - 1][x] == OBST && room->room[y][x + 1] == OBST) {
+                        if (room->room[y - 1][x] == 1 && room->room[y][x + 1] == 1) {
                             return (point_t) { .x = (int)x, .y = (int)y };
                         }
                     }
@@ -140,14 +139,14 @@ point_t get_first_obst(const line_t* diagonal, const point_t start, const point_
             else {
                 if (sign_y == 1) {
                     if (x > 0 && y < height) {
-                        if (room->room[y + 1][x] == OBST && room->room[y][x - 1] == OBST) {
+                        if (room->room[y + 1][x] == 1 && room->room[y][x - 1] == 1) {
                             return (point_t) { .x = (int)x, .y = (int)y };
                         }
                     }
                 }
                 else {
                     if (x > 0 && y > 0) {
-                        if (room->room[y - 1][x] == OBST && room->room[y][x - 1] == OBST) {
+                        if (room->room[y - 1][x] == 1 && room->room[y][x - 1] == 1) {
                             return (point_t) { .x = (int)x, .y = (int)y };
                         }
                     }

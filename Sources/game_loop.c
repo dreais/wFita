@@ -10,83 +10,89 @@
 
 #include <stdlib.h>
 #include <time.h>
-#include "../Header/room.h"
-#include "../Header/character.h"
-#include "../Header/print.h"
+#include "../Header/core_game.h"
 
-charac_t *monster;
 static bool was_initialized = false;
 
 /// DEBUG WINDOW. MIGHT GET REPLACED BY THE PARENT WINDOW LATER ON
 extern WINDOW *debug;
 
-static void create_monster_ptr(const room_t room, charac_t *player)
+static void create_monster_ptr(core_game_t *core)
 {
     srand(time(NULL));
-    monster = malloc(sizeof(charac_t) * 10);
-    for (int i = 0; i < 10; i++) {
-        monster[i].stat = (stat_t) {.experience = -1, .level = 1, .health = 10};
-        monster[i].p_cursor.x = rand() % room.width;
-        monster[i].p_cursor.y = rand() % room.height;
-        if (monster[i].p_cursor.x == player->p_cursor.x)
-            monster[i].p_cursor.x = rand() % room.width;
-        if (monster[i].p_cursor.y == player->p_cursor.y)
-            monster[i].p_cursor.y = rand() % room.height;
-        monster[i].repr = 'M';
+    core->monster_arr = malloc(sizeof(charac_t) * core->size_monster_arr);
+    for (int i = 0; i < core->size_monster_arr; i++) {
+        core->monster_arr[i].stat = (stat_t) {.experience = -1, .level = 1, .health = 10};
+        core->monster_arr[i].p_cursor.x = rand() % core->c_room.width;
+        core->monster_arr[i].p_cursor.y = rand() % core->c_room.height;
+        if (core->monster_arr[i].p_cursor.x == core->player.p_cursor.x)
+            core->monster_arr[i].p_cursor.x = rand() % core->c_room.width;
+        if (core->monster_arr[i].p_cursor.y == core->player.p_cursor.y)
+            core->monster_arr[i].p_cursor.y = rand() % core->c_room.height;
+        core->monster_arr[i].repr = 'M';
+        core->monster_arr[i].stat.state = alive;
     }
     was_initialized = true;
 }
 
-static bool cell_occupied(const int arr_size, const int key, const point_t current)
+static bool cell_occupied(core_game_t *core, const int index, const point_t current)
 {
     /// KEY IS ONLY USED WHEN A MONSTER IS BEING CHECKED. OTHERWISE, USE KEY > ARR_SIZE
-    for (int i = 0; i < arr_size; i++) {
-        if (i != key) {
-            if (monster[i].p_cursor.x == current.x &&
-            monster[i].p_cursor.y == current.y) {
+    for (unsigned int i = 0; i < core->size_monster_arr; i++) {
+        if (i != index) {
+            if (core->monster_arr[i].p_cursor.x == current.x &&
+            core->monster_arr[i].p_cursor.y == current.y) {
                 return true;
             }
-            wmove(debug, i, 20);
-            wprintw(debug, "monster[%d]:%d\t%d", i, monster[i].p_cursor.x, monster[i].p_cursor.y);
         }
     }
     return false;
 }
 
-static void update_path_monster(const int arr_size, charac_t *player, room_t room)
+static bool point_equals(point_t first, point_t second)
+{
+    if (first.x == second.x && first.y == second.y) {
+        return true;
+    }
+    return false;
+}
+
+static void update_path_monster(core_game_t *core)
 {
     point_t old_tmp;
 
-    for (int i = 0; i < arr_size; i++) {
-        old_tmp = monster[i].p_cursor;
-        monster[i].p_cursor = search_next_cell(monster[i].p_cursor, player->p_cursor, room);
-        if (cell_occupied(arr_size, i, monster[i].p_cursor) == true) {
-            monster[i].p_cursor = old_tmp;
+    for (unsigned int i = 0; i < core->size_monster_arr; i++) {
+        if (core->monster_arr[i].stat.state == true) {
+            old_tmp = core->monster_arr[i].p_cursor;
+            core->monster_arr[i].p_cursor = search_next_cell(core->monster_arr[i].p_cursor, core->player.p_cursor,
+                                                             core->c_room);
+            if (point_equals(core->monster_arr[i].p_cursor, core->player.p_cursor)) {
+                core->monster_arr[i].p_cursor = old_tmp;
+                set_attack(&core->monster_arr[i], &core->player);
+            }
+            if (cell_occupied(core, (int) i, core->monster_arr[i].p_cursor) == true) {
+                core->monster_arr[i].p_cursor = old_tmp;
+            }
         }
     }
 }
 
-void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, point_t *camera)
+void main_loop(core_game_t *core, const int key)
 {
     point_t old_p_cursor;
 
-    if (was_initialized == false)
-        create_monster_ptr(room, player);
-
-    old_p_cursor = player->p_cursor;
-    input_treat(key, &player->p_cursor);
-    /// DEBUG
-    wmove(debug, 0, 0);
-    wprintw(debug, "%d\t%d\n%d\t%d\n", old_p_cursor.x, old_p_cursor.y, player->p_cursor.x, player->p_cursor.y);
-    /// END DEBUG
-    player->p_cursor = verify_player_position(player->p_cursor, room);
-    if (cell_occupied(10, 10, player->p_cursor) == true)
-        player->p_cursor = old_p_cursor;
-    print_room(room, win, player->p_cursor, camera);
-    update_path_monster(10, player, room);
-    move_monster(monster, 10, win, camera);
-    /// DEBUG
-    wprintw(debug, "%d\t%d\n", player->p_cursor.x, player->p_cursor.y);
-    wrefresh(debug);
-    /// END DEBUG
+    if (was_initialized == false) {
+        core->size_monster_arr = 10;
+        create_monster_ptr(core);
+    }
+    old_p_cursor = core->player.p_cursor;
+    input_treat(key, &core->player.p_cursor);
+    core->player.p_cursor = verify_player_position(core->player.p_cursor, core->c_room);
+    if (cell_occupied(core, core->size_monster_arr, core->player.p_cursor) == true) {
+        core->player.p_cursor = old_p_cursor;
+    }
+    print_room(core);
+    update_path_monster(core);
+    move_monster(core);
+    print_stats(core->game_screen, core->player);
 }

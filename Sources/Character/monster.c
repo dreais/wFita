@@ -8,17 +8,22 @@
 #include <ncurses.h>
 #endif
 
-#include "../../Header/character.h"
-#include "../../Header/path.h"
+#include "../../Header/core_game.h"
 
-void move_monster(charac_t *monster, const int arr_size, WINDOW *win, point_t *camera)
+void move_monster(core_game_t *core)
 {
-    for (int i = 0; i < arr_size; i++) {
-        if (monster[i].p_cursor.x >= camera->x && monster[i].p_cursor.x <= camera->x + getmaxx(win)) {
-            if (monster[i].p_cursor.y >= camera->y && monster[i].p_cursor.y <= camera->y + getmaxy(win)) {
-                wmove(win, monster[i].p_cursor.y - camera->y, monster[i].p_cursor.x - camera->x);
+    for (unsigned int i = 0; i < core->size_monster_arr; i++) {
+        if (core->monster_arr[i].stat.state == true) {
+            if (core->monster_arr[i].p_cursor.x >= core->camera->x &&
+                core->monster_arr[i].p_cursor.x <= core->camera->x + getmaxx(core->game_screen)) {
 
-                waddch(win, monster[i].repr);
+                if (core->monster_arr[i].p_cursor.y >= core->camera->y &&
+                    core->monster_arr[i].p_cursor.y <= core->camera->y + getmaxy(core->game_screen)) {
+
+                    wmove(core->game_screen, core->monster_arr[i].p_cursor.y - core->camera->y,
+                          core->monster_arr[i].p_cursor.x - core->camera->x);
+                    waddch(core->game_screen, core->monster_arr[i].repr);
+                }
             }
         }
     }
