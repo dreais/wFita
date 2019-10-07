@@ -9,11 +9,6 @@
 #endif
 
 #include "../Header/core_game.h"
-#include "../Header/room.h"
-#include "../Header/character.h"
-#include "../Header/shape.h"
-#include "../Header/path.h"
-#include "../Header/print.h" // printing rooms and stuff
 
 bool use_color = false;
 WINDOW *debug;

@@ -2,16 +2,7 @@
 // Created by Valentin on 10/6/2019.
 //
 
-#include "../../Header/print.h"
-#include "../../Header/room.h"
-#include "../../Header/shape.h"
-#include "../../Header/character.h"
-
-#ifdef _WIN32
-#include "../../Header/curses.h"
-#else
-#include <ncurses.h>
-#endif
+#include "../../Header/core_game.h"
 
 static WINDOW *stat;
 static bool was_initialize = false;

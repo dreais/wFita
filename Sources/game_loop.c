@@ -10,9 +10,7 @@
 
 #include <stdlib.h>
 #include <time.h>
-#include "../Header/room.h"
-#include "../Header/character.h"
-#include "../Header/print.h"
+#include "../Header/core_game.h"
 
 charac_t *monster;
 static bool was_initialized = false;
@@ -37,7 +35,7 @@ static void create_monster_ptr(const room_t room, charac_t *player)
     was_initialized = true;
 }
 
-static bool cell_occupied(const int arr_size, const int key, const point_t current)
+static bool cell_occupied(const unsigned int arr_size, const int key, const point_t current)
 {
     /// KEY IS ONLY USED WHEN A MONSTER IS BEING CHECKED. OTHERWISE, USE KEY > ARR_SIZE
     for (int i = 0; i < arr_size; i++) {
@@ -70,23 +68,26 @@ void main_loop(WINDOW *win, const room_t room, charac_t *player, const int key, 
 {
     point_t old_p_cursor;
 
-    if (was_initialized == false)
+    if (was_initialized == false) {
         create_monster_ptr(room, player);
+        core->monster_arr = monster;
+        core->size_monster_arr = 10;
+    }
 
     old_p_cursor = player->p_cursor;
-    input_treat(key, &player->p_cursor);
+    input_treat(key, &core->player.p_cursor);
     /// DEBUG
     wmove(debug, 0, 0);
     wprintw(debug, "%d\t%d\n%d\t%d\n", old_p_cursor.x, old_p_cursor.y, player->p_cursor.x, player->p_cursor.y);
     /// END DEBUG
-    player->p_cursor = verify_player_position(player->p_cursor, room);
-    if (cell_occupied(10, 10, player->p_cursor) == true)
-        player->p_cursor = old_p_cursor;
+    core->player.p_cursor = verify_player_position(core->player.p_cursor, core->c_room);
+    if (cell_occupied(10, core->size_monster_arr, core->player.p_cursor) == true)
+        core->player.p_cursor = old_p_cursor;
     print_room(core);
     update_path_monster(10, player, room);
-    move_monster(monster, 10, win, camera);
+    move_monster(core);
     /// DEBUG
-    wprintw(debug, "%d\t%d\n", player->p_cursor.x, player->p_cursor.y);
+    wprintw(debug, "%d\t%d\n", core->player.p_cursor.x, core->player.p_cursor.y);
     wrefresh(debug);
     /// END DEBUG
 }

@@ -2,9 +2,7 @@
 // Created by Valentin on 10/6/2019.
 //
 
-#include "../../Header/print.h"
-#include "../../Header/room.h"
-#include "../../Header/shape.h"
+#include "../../Header/core_game.h"
 
 #ifdef _WIN32
 #include "../../Header/curses.h"
