@@ -18,19 +18,19 @@ static bool was_initialized = false;
 /// DEBUG WINDOW. MIGHT GET REPLACED BY THE PARENT WINDOW LATER ON
 extern WINDOW *debug;
 
-static void create_monster_ptr(const room_t room, charac_t *player)
+static void create_monster_ptr(core_game_t *core)
 {
     srand(time(NULL));
-    monster = malloc(sizeof(charac_t) * 10);
+    core->monster_arr = malloc(sizeof(charac_t) * core->size_monster_arr);
     for (int i = 0; i < 10; i++) {
-        monster[i].stat = (stat_t) {.experience = -1, .level = 1, .health = 10};
-        monster[i].p_cursor.x = rand() % room.width;
-        monster[i].p_cursor.y = rand() % room.height;
-        if (monster[i].p_cursor.x == player->p_cursor.x)
-            monster[i].p_cursor.x = rand() % room.width;
-        if (monster[i].p_cursor.y == player->p_cursor.y)
-            monster[i].p_cursor.y = rand() % room.height;
-        monster[i].repr = 'M';
+        core->monster_arr[i].stat = (stat_t) {.experience = -1, .level = 1, .health = 10};
+        core->monster_arr[i].p_cursor.x = rand() % core->c_room.width;
+        core->monster_arr[i].p_cursor.y = rand() % core->c_room.height;
+        if (core->monster_arr[i].p_cursor.x == core->player.p_cursor.x)
+            core->monster_arr[i].p_cursor.x = rand() % core->c_room.width;
+        if (core->monster_arr[i].p_cursor.y == core->player.p_cursor.y)
+            core->monster_arr[i].p_cursor.y = rand() % core->c_room.height;
+        core->monster_arr[i].repr = 'M';
     }
     was_initialized = true;
 }
@@ -69,9 +69,9 @@ void main_loop(core_game_t *core, const int key)
     point_t old_p_cursor;
 
     if (was_initialized == false) {
-        create_monster_ptr(core->c_room, &core->player);
-        core->monster_arr = monster;
         core->size_monster_arr = 10;
+        create_monster_ptr(core);
+        core->monster_arr = monster;
     }
 
     old_p_cursor = core->player.p_cursor;
