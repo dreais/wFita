@@ -7,7 +7,7 @@
 // may be non-static later on
 static stat_t initialize_stats(void)
 {
-    stat_t new = {.experience = 0, .level = 1, .health = 10};
+    stat_t new = {.experience = 0, .level = 1, .health = 10, .max_health = 10};
 
     return new;
 }

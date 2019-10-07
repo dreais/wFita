@@ -33,10 +33,21 @@ typedef struct {
 } line_t;
 
 /// CHARACTER TYPES
+typedef unsigned long long w_UUID;
+typedef struct {
+    short dmg;
+    short def;
+    float crit;
+    w_UUID piv_key; // unique identifier of the weapon
+    char name[]; // uses the piv_key previously defined to find in a pivot table the good weapon
+} weapon_t;
+
 typedef struct {
     unsigned int level;
     unsigned int experience;
     int health;
+    int max_health;
+    bool state;
 } stat_t;
 
 typedef struct {

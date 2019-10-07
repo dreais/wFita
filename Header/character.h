@@ -17,4 +17,7 @@ charac_t initialize_player(void);
 /// MONSTER.C
 void move_monster(core_game_t *core);
 
+/// SHARED.C
+void set_attack(charac_t *attacker, charac_t *defender);
+
 #endif //MAPGENERATION_CHARACTER_H

@@ -17,6 +17,8 @@ void print_stats(WINDOW *main_game, const charac_t player)
     if (was_initialize == false)
         initialize_stat_win(main_game);
     wmove(stat, 0, 0);
-    wprintw(stat, "Level=%d\nExp=%d\n", player.stat.level, player.stat.experience);
+    wclear(stat);
+    wprintw(stat, "Level=%d\nExp=%d\nHealth=%d/%d\n", player.stat.level, player.stat.experience, player.stat.health,
+            player.stat.max_health);
     wrefresh(stat);
 }
