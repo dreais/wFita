@@ -91,7 +91,6 @@ void print_room(core_game_t *core)
                     wattron(core->game_screen, A_BOLD);
                     wattron(core->game_screen, COLOR_PAIR(YELLOW));
                     waddch(core->game_screen, '@');
-                    wattroff(core->game_screen, A_BOLD);
                     wattroff(core->game_screen, COLOR_PAIR(YELLOW));
                     wattroff(core->game_screen, A_BOLD);
                 } else if (noise > 0 && noise < 3) {

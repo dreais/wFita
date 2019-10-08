@@ -149,7 +149,7 @@ const weapon_t piv_table[UID_MAX];
 
 /// -------- LOGS MSG --------
 #define WELCOME "Welcome aboard, adventurer."
-#define GOT_ATTACKED "You took a hit - it dealt %d damage."
+#define GOT_ATTACKED "You took a hit - it dealt %d damages."
 #define BLOCKED "You blocked the attack to %d."
 /// --------------------------
 

@@ -46,12 +46,12 @@ void set_attack(charac_t *attacker, charac_t *defender, core_game_t *core)
     }
     core->logs.index++;
     snprintf(core->logs.buffer[core->logs.index], getmaxx(core->logs.logs), GOT_ATTACKED, a_damage);
-    if (core->logs.index == core->logs.buffer_size - 1) {
-        core->logs.index--;
+    if (core->logs.index >= core->logs.buffer_size - 1) {
+        core->logs.index = core->logs.buffer_size - 2;
     } else {
         core->logs.index++;
+        snprintf(core->logs.buffer[core->logs.index], getmaxx(core->logs.logs) - 1, BLOCKED, d_block);
     }
-    snprintf(core->logs.buffer[core->logs.index], getmaxx(core->logs.logs), BLOCKED, d_block);
     if (defender->stat.health <= 0) {
         defender->stat.state = dead;
         defender->p_cursor.x = -1;
