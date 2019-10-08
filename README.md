@@ -1,4 +1,7 @@
 # wFita 
+
+**CURRENTLY IN VERSION [v0.2.0](https://github.com/dreais/wFita/releases/tag/v0.2.0)!**
+
 (windows Fed in the abyss)
 
 (Contains standalone map generation and path finding)
@@ -44,3 +47,16 @@ Was a bit modified, for setting up the hash array dynamically.
 [Colors converted table for PDCurses](https://stackoverflow.com/questions/47686906/ncurses-init-color-has-no-effect)
 
 I used the keys to keep a track as of what color the program uses.
+
+## A word regarding the issue
+I'm _tagging_ the issue with many labels. The most important to keep track of are the -priority- labels. 
+
+Priority goes from 1 to 3, 1 being the most important and 3 the less important. When adding a **x** priority, it's expected to have the **x-1** until x = 3
+
+Ex.:
+setting priority-l-1 should go with -l-2 and -l-3 as well.
+-l-2 should ONLY go with -l-3.
+
+Putting the non-priority with a priority level means that this is unlikely an issue I'll be working on in the near future, but will be later.
+
+Planned means that the issue is planned, but not being the priority, will be worked on when I feel like it. These are usually not big issues or problematics, so don't mind it.
