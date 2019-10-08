@@ -59,16 +59,14 @@ int main(void)
     while (core.player.stat.state == alive && key != 'q') {
         key = wgetch(core.game_screen);
         main_loop(&core, key);
-        wmove(debug, 0, 0);
-        wclear(debug);
-        wprintw(debug, "state=%d", (int) core.player.stat.state);
-        wrefresh(debug);
         wrefresh(core.game_screen);
     }
-    move((LINES / 2) - 1, ((COLS) / 2) - (int)strlen(YOU_DIED) / 2);
-    printw(YOU_DIED);
-    refresh();
-    getch();
+    if (core.player.stat.state == dead) {
+        move((LINES / 2) - 1, ((COLS) / 2) - (int) strlen(YOU_DIED) / 2);
+        printw(YOU_DIED);
+        refresh();
+        getch();
+    }
     endwin();
     free_objects(core.c_room);
     return 0;

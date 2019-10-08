@@ -31,17 +31,23 @@ static void create_monster_ptr(core_game_t *core)
             core->monster_arr[i].p_cursor.y = rand() % core->c_room.height;
         core->monster_arr[i].repr = 'M';
         core->monster_arr[i].stat.state = alive;
+        core->monster_arr[i].is_weapon_dual_hand = true;
+        core->monster_arr[i].right_hand = bare_hand;
+        core->monster_arr[i].left_hand = bare_hand;
     }
     was_initialized = true;
 }
 
-static bool cell_occupied(core_game_t *core, const int index, const point_t current)
+static bool cell_occupied(core_game_t *core, const int index, const point_t current, int *key)
 {
     /// KEY IS ONLY USED WHEN A MONSTER IS BEING CHECKED. OTHERWISE, USE KEY > ARR_SIZE
     for (unsigned int i = 0; i < core->size_monster_arr; i++) {
         if (i != index) {
             if (core->monster_arr[i].p_cursor.x == current.x &&
             core->monster_arr[i].p_cursor.y == current.y) {
+                if (key != NULL) {
+                    *key = i;
+                }
                 return true;
             }
         }
@@ -70,7 +76,7 @@ static void update_path_monster(core_game_t *core)
                 core->monster_arr[i].p_cursor = old_tmp;
                 set_attack(&core->monster_arr[i], &core->player);
             }
-            if (cell_occupied(core, (int) i, core->monster_arr[i].p_cursor) == true) {
+            if (cell_occupied(core, (int) i, core->monster_arr[i].p_cursor, NULL) == true) {
                 core->monster_arr[i].p_cursor = old_tmp;
             }
         }
@@ -80,6 +86,7 @@ static void update_path_monster(core_game_t *core)
 void main_loop(core_game_t *core, const int key)
 {
     point_t old_p_cursor;
+    int key_arr = 0;
 
     if (was_initialized == false) {
         core->size_monster_arr = 10;
@@ -88,8 +95,9 @@ void main_loop(core_game_t *core, const int key)
     old_p_cursor = core->player.p_cursor;
     input_treat(key, &core->player.p_cursor);
     core->player.p_cursor = verify_player_position(core->player.p_cursor, core->c_room);
-    if (cell_occupied(core, core->size_monster_arr, core->player.p_cursor) == true) {
+    if (cell_occupied(core, (int)core->size_monster_arr, core->player.p_cursor, &key_arr) == true) {
         core->player.p_cursor = old_p_cursor;
+        set_attack(&core->player, &core->monster_arr[key_arr]);
     }
     print_room(core);
     update_path_monster(core);
