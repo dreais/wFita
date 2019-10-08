@@ -19,7 +19,7 @@ void move_monster(core_game_t *core);
 
 /// SHARED
     /// SHARED_ATTACK.C
-    void set_attack(charac_t *attacker, charac_t *defender);
+    void set_attack(charac_t *attacker, charac_t *defender, core_game_t *core);
     /// SHARED_EQUIPMENT.C
     void set_equip(charac_t *user, equipment_t to_equip);
     void set_unequip(charac_t *user, equipment_t to_equip);

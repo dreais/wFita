@@ -60,6 +60,11 @@ typedef struct {
 } stat_t;
 
 typedef struct {
+    equipment_t *equipment;
+    unsigned short gold;
+} inventory_t;
+
+typedef struct {
     bool is_weapon_dual_hand;
     weapon_t left_hand;
     weapon_t right_hand;
@@ -80,6 +85,13 @@ typedef struct {
 
 /// CORE_GAME TYPES
 typedef struct {
+    unsigned int index;
+    unsigned int buffer_size;
+    char **buffer; // buffer[buffer_size]
+    WINDOW *logs;
+} g_logs;
+
+typedef struct {
     room_t c_room; // current
     charac_t player;
     point_t *camera;
@@ -87,6 +99,7 @@ typedef struct {
     unsigned int size_monster_arr;
     WINDOW *game_screen;
     WINDOW *stat_screen;
+    g_logs logs;
 } core_game_t;
 
 typedef struct {
@@ -132,6 +145,13 @@ typedef struct {
 #define UID_MAX 4
 const weapon_t piv_table[UID_MAX];
 /// ---------------------------
+
+
+/// -------- LOGS MSG --------
+#define WELCOME "Welcome aboard, adventurer."
+#define GOT_ATTACKED "You took a hit - it dealt %d damage."
+#define BLOCKED "You blocked the attack to %d."
+/// --------------------------
 
 void main_loop(core_game_t *core, const int key);
 

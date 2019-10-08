@@ -31,6 +31,26 @@ WINDOW *initialize_terminal(void)
     return main_game;
 }
 
+static void init_core_game(core_game_t *core)
+{
+    core->game_screen = initialize_terminal();
+    core->c_room = initialize_room(300, 300);
+    core->player = initialize_player();
+    core->camera = malloc(sizeof(point_t)*1);
+    core->camera = &(point_t) {.x = 0, .y = 0};
+
+    core->logs.logs = newwin(LINES - getmaxy(core->game_screen), COLS,
+            getmaxy(core->game_screen), 0);
+    core->logs.buffer_size = (unsigned int) getmaxy(core->logs.logs);
+    core->logs.index = 0;
+    core->logs.buffer = malloc(sizeof(char *) * core->logs.buffer_size);
+    // WINDOWS TYPE
+    for (u_int i = 0; i < core->logs.buffer_size; i++) {
+        core->logs.buffer[i] = malloc(sizeof(char) * getmaxx(core->logs.logs) - 1);
+    }
+    core->logs.buffer[0] = WELCOME;
+}
+
 int main(void)
 {
 #ifdef _WIN32
@@ -40,12 +60,7 @@ int main(void)
     core_game_t core;
     int key = 0;
 
-    core.game_screen = initialize_terminal();
-    core.c_room = initialize_room(300, 300);
-    core.player = initialize_player();
-    core.camera = malloc(sizeof(point_t)*1);
-    core.camera = &(point_t) {.x = 0, .y = 0};
-
+    init_core_game(&core);
     print_room(&core);
     print_stats(core.game_screen, core.player);
     wrefresh(core.game_screen);
@@ -66,4 +81,6 @@ int main(void)
 
 /**
 putting here codes that is removed to try earlier parts of the program:
+
+
  */
