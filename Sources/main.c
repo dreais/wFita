@@ -37,7 +37,8 @@ static void init_core_game(core_game_t *core)
     core->c_room = initialize_room(300, 300);
     core->player = initialize_player();
     core->camera = malloc(sizeof(point_t)*1);
-    core->camera = &(point_t) {.x = 0, .y = 0};
+    core->camera->x = 0;
+    core->camera->y = 0;
 
     core->logs.logs = newwin(LINES - getmaxy(core->game_screen), COLS,
             getmaxy(core->game_screen), 0);

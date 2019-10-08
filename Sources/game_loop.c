@@ -100,7 +100,7 @@ void main_loop(core_game_t *core, const int key)
     if (cell_occupied(core, (int)core->size_monster_arr, core->player.p_cursor, &key_arr) == true) {
         core->player.p_cursor = old_p_cursor;
         set_attack(&core->player, &core->monster_arr[key_arr], core);
-    }
+     }
     print_room(core);
     update_path_monster(core);
     print_stats(core->game_screen, core->player);

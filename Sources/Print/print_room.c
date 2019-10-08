@@ -23,7 +23,7 @@ static void adjust_camera(const room_t room, WINDOW *main_game, const point_t pl
     if (player_position.y < getmaxy(main_game) / 2) {
         camera->y = 0;
     } else if (player_position.y > room.height - (getmaxy(main_game) / 2) + 1) {
-        camera->y = camera->y;
+        return;
     } else {
         camera->y = player_position.y - (getmaxy(main_game) / 2);
     }
@@ -93,6 +93,7 @@ void print_room(core_game_t *core)
                     waddch(core->game_screen, '@');
                     wattroff(core->game_screen, A_BOLD);
                     wattroff(core->game_screen, COLOR_PAIR(YELLOW));
+                    wattroff(core->game_screen, A_BOLD);
                 } else if (noise > 0 && noise < 3) {
                     waddch(core->game_screen, '.');
                 } else if (noise >= 3 && noise < 5) {
