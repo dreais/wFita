@@ -13,14 +13,6 @@ void quit_game(core_game_t *core)
     printw(EXIT_MSG);
     refresh();
     if (getch() == 'q') {
-        free(core->camera);
-        free(core->monster_arr);
-        delwin(core->game_screen);
-        delwin(core->stat_screen);
-        for (unsigned int i = 0; i < core->c_room.height; i++) {
-            free(core->c_room.room[i]);
-        }
-        free(core->c_room.room);
         endwin();
         exit(0);
     }
