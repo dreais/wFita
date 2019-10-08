@@ -19,6 +19,7 @@ extern WINDOW *debug;
 
 static void create_monster_ptr(core_game_t *core)
 {
+    // TODO monster should be passive until player are x blocks away
     srand(time(NULL));
     core->monster_arr = malloc(sizeof(charac_t) * core->size_monster_arr);
     for (int i = 0; i < core->size_monster_arr; i++) {
@@ -74,13 +75,14 @@ static void update_path_monster(core_game_t *core)
                                                              core->c_room);
             if (point_equals(core->monster_arr[i].p_cursor, core->player.p_cursor)) {
                 core->monster_arr[i].p_cursor = old_tmp;
-                set_attack(&core->monster_arr[i], &core->player);
+                set_attack(&core->monster_arr[i], &core->player, core);
             }
             if (cell_occupied(core, (int) i, core->monster_arr[i].p_cursor, NULL) == true) {
                 core->monster_arr[i].p_cursor = old_tmp;
             }
         }
     }
+    move_monster(core);
 }
 
 void main_loop(core_game_t *core, const int key)
@@ -97,10 +99,10 @@ void main_loop(core_game_t *core, const int key)
     core->player.p_cursor = verify_player_position(core->player.p_cursor, core->c_room);
     if (cell_occupied(core, (int)core->size_monster_arr, core->player.p_cursor, &key_arr) == true) {
         core->player.p_cursor = old_p_cursor;
-        set_attack(&core->player, &core->monster_arr[key_arr]);
-    }
+        set_attack(&core->player, &core->monster_arr[key_arr], core);
+     }
     print_room(core);
     update_path_monster(core);
-    move_monster(core);
     print_stats(core->game_screen, core->player);
+    print_logs(core);
 }
