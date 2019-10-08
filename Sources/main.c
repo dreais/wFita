@@ -23,19 +23,12 @@ WINDOW *initialize_terminal(void)
     cbreak();
     curs_set(0);
     main_game = newwin(LINES / 2 + (LINES / 3), ((COLS / 2) + ((COLS / 2) / 2))-2, 0, 0);
+    curs_set(0);
     keypad(main_game, TRUE);
     /// MISC
     debug = newwin(10, COLS, getmaxy(main_game), 0);
     ///
     return main_game;
-}
-
-void free_objects(room_t room)
-{
-    for (unsigned int i = 0; i < room.width; i++)
-        free(room.room[i]);
-    free(room.room);
-    free_hash();
 }
 
 int main(void)
@@ -56,21 +49,18 @@ int main(void)
     print_room(&core);
     print_stats(core.game_screen, core.player);
     wrefresh(core.game_screen);
-    while (core.player.stat.state == alive && key != 'q') {
+    while (core.player.stat.state == alive) {
         key = wgetch(core.game_screen);
         main_loop(&core, key);
-        wmove(debug, 0, 0);
-        wclear(debug);
-        wprintw(debug, "state=%d", (int) core.player.stat.state);
-        wrefresh(debug);
         wrefresh(core.game_screen);
     }
-    move((LINES / 2) - 1, ((COLS) / 2) - (int)strlen(YOU_DIED) / 2);
-    printw(YOU_DIED);
-    refresh();
-    getch();
+    if (core.player.stat.state == dead) {
+        move((LINES / 2) - 1, ((COLS) / 2) - (int) strlen(YOU_DIED) / 2);
+        printw(YOU_DIED);
+        refresh();
+        getch();
+    }
     endwin();
-    free_objects(core.c_room);
     return 0;
 }
 

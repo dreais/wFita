@@ -9,7 +9,7 @@
 
 /// MOVEMENT.C
 point_t verify_player_position(const point_t p_cursor, const room_t room);
-void input_treat(const int key, point_t *p_cursor);
+void input_treat(const int key, core_game_t *core);
 
 /// PLAYER.C
 charac_t initialize_player(void);
@@ -17,7 +17,11 @@ charac_t initialize_player(void);
 /// MONSTER.C
 void move_monster(core_game_t *core);
 
-/// SHARED.C
-void set_attack(charac_t *attacker, charac_t *defender);
+/// SHARED
+    /// SHARED_ATTACK.C
+    void set_attack(charac_t *attacker, charac_t *defender);
+    /// SHARED_EQUIPMENT.C
+    void set_equip(charac_t *user, equipment_t to_equip);
+    void set_unequip(charac_t *user, equipment_t to_equip);
 
 #endif //MAPGENERATION_CHARACTER_H

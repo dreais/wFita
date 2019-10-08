@@ -45,6 +45,8 @@ void init_colors(void)
     init_color(COLOR_GREY, 854,854,854);
     init_pair(GREY, COLOR_GREY, COLOR_BLACK);
 
+    init_color(COLOR_BROWN, 1000,686,372);
+    init_pair(BROWN, COLOR_BROWN, COLOR_BLACK);
 }
 
 extern bool use_color;
@@ -53,7 +55,6 @@ void print_room(core_game_t *core)
 {
     int counter = 0;
 
-    // TODO self explanatory
     adjust_camera(core->c_room, core->game_screen, core->player.p_cursor, core->camera);
     if (use_color == true) {
         for (int i = core->camera->y; i < core->camera->y + (getmaxy(core->game_screen) - 1); i++) {
@@ -88,8 +89,10 @@ void print_room(core_game_t *core)
                 noise = core->c_room.room[i][j] - 48;
                 if (core->player.p_cursor.x == j && core->player.p_cursor.y == i) {
                     wattron(core->game_screen, A_BOLD);
+                    wattron(core->game_screen, COLOR_PAIR(YELLOW));
                     waddch(core->game_screen, '@');
                     wattroff(core->game_screen, A_BOLD);
+                    wattroff(core->game_screen, COLOR_PAIR(YELLOW));
                 } else if (noise > 0 && noise < 3) {
                     waddch(core->game_screen, '.');
                 } else if (noise >= 3 && noise < 5) {
