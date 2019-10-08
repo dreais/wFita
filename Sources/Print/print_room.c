@@ -45,6 +45,8 @@ void init_colors(void)
     init_color(COLOR_GREY, 854,854,854);
     init_pair(GREY, COLOR_GREY, COLOR_BLACK);
 
+    init_color(COLOR_BROWN, 1000,686,372);
+    init_pair(BROWN, COLOR_BROWN, COLOR_BLACK);
 }
 
 extern bool use_color;
