@@ -9,7 +9,7 @@
 
 /// MOVEMENT.C
 point_t verify_player_position(const point_t p_cursor, const room_t room);
-void input_treat(const int key, point_t *p_cursor);
+void input_treat(const int key, core_game_t *core);
 
 /// PLAYER.C
 charac_t initialize_player(void);

@@ -15,9 +15,9 @@ void move_monster(core_game_t *core)
     for (unsigned int i = 0; i < core->size_monster_arr; i++) {
         if (core->monster_arr[i].stat.state == true) {
             if (core->monster_arr[i].p_cursor.x >= core->camera->x &&
-                core->monster_arr[i].p_cursor.x < (core->camera->x + getmaxx(core->game_screen)) - 1) {
+                core->monster_arr[i].p_cursor.x < (core->camera->x + getmaxx(core->game_screen)) - 2) {
 
-                if (core->monster_arr[i].p_cursor.y > core->camera->y &&
+                if (core->monster_arr[i].p_cursor.y >= core->camera->y &&
                     core->monster_arr[i].p_cursor.y < (core->camera->y + getmaxy(core->game_screen)) - 1) {
 
                     wmove(core->game_screen, core->monster_arr[i].p_cursor.y - core->camera->y,

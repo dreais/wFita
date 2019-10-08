@@ -25,22 +25,3 @@ point_t verify_player_position(const point_t p_cursor, const room_t room)
     return new_pos;
 }
 
-void input_treat(const int key, point_t *p_cursor)
-{
-    switch (key) {
-        case KEY_LEFT:
-            p_cursor->x--;
-            break;
-        case KEY_RIGHT:
-            p_cursor->x++;
-            break;
-        case KEY_UP:
-            p_cursor->y--;
-            break;
-        case KEY_DOWN:
-            p_cursor->y++;
-            break;
-        default:
-            break;
-    }
-}

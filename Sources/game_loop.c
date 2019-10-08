@@ -93,7 +93,7 @@ void main_loop(core_game_t *core, const int key)
         create_monster_ptr(core);
     }
     old_p_cursor = core->player.p_cursor;
-    input_treat(key, &core->player.p_cursor);
+    input_treat(key, core);
     core->player.p_cursor = verify_player_position(core->player.p_cursor, core->c_room);
     if (cell_occupied(core, (int)core->size_monster_arr, core->player.p_cursor, &key_arr) == true) {
         core->player.p_cursor = old_p_cursor;

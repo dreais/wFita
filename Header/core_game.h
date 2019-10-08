@@ -89,6 +89,11 @@ typedef struct {
     WINDOW *stat_screen;
 } core_game_t;
 
+typedef struct {
+    int key;
+    void (*func)(core_game_t *);
+} key_func;
+
 /**
  * COLORS DEFINITION
  * first define is the COLOR_PAIR key
@@ -106,23 +111,27 @@ typedef struct {
 #define COLOR_LIGHT_GREEN 119
 #define COLOR_BROWN 215
 #define COLOR_GREY 253
-/**
- * END OF COLORS DEFINITION
- */
+/// -------- END OF COLORS DEFINITION --------
 
 #define alive true
 #define dead false
 
 #define YOU_DIED "You died. Press any key to exit!"
+#define EXIT_MSG "You pressed 'q'. Press 'q' again to quit, or any other key to cancel."
 
+/// -------- INCLUDES --------
 #include "character.h"
 #include "path.h"
 #include "print.h"
 #include "room.h"
 #include "item_list.h"
+#include "Keyboard/input.h"
+/// --------------------------
 
+/// -------- ITEM LIST --------
 #define UID_MAX 4
 const weapon_t piv_table[UID_MAX];
+/// ---------------------------
 
 void main_loop(core_game_t *core, const int key);
 
