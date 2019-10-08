@@ -6,7 +6,7 @@
 /// EX.: ATTACKING BASED ON STATS, TAKING DAMAGES,...
 
 #include <stdlib.h>
-#include "../../Header/core_game.h"
+#include "../../../Header/core_game.h"
 
 static unsigned int roll_attack(weapon_t w_attack)
 {

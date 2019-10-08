@@ -3,7 +3,7 @@ project(MapGeneration C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(MapGeneration Sources/main.c Header/room.h Sources/Path/path.c Header/path.h Sources/init_var.c Sources/perlin_noise.c Header/print.h Sources/Character/movement.c Header/character.h Sources/Character/player.c Sources/Print/print_room.c Sources/Print/print_stats.c Sources/game_loop.c Header/core_game.h Sources/Character/monster.c Sources/Path/free_path.c Sources/Path/search.c Sources/Character/shared.c Sources/Misc/Weapon/weapon_roll.c Header/item_list.h)
+add_executable(MapGeneration Sources/main.c Header/room.h Sources/Path/path.c Header/path.h Sources/init_var.c Sources/perlin_noise.c Header/print.h Sources/Character/movement.c Header/character.h Sources/Character/player.c Sources/Print/print_room.c Sources/Print/print_stats.c Sources/game_loop.c Header/core_game.h Sources/Character/monster.c Sources/Path/free_path.c Sources/Path/search.c Sources/Character/Shared/shared_attack.c Sources/Misc/Weapon/weapon_roll.c Header/item_list.h Sources/Character/Shared/shared_equipment.c)
 
 target_link_libraries(MapGeneration ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/PDCurses/wincon/pdcurses.a)
 

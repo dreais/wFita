@@ -44,6 +44,13 @@ typedef struct {
     float crit;
 } weapon_t;
 
+typedef enum {WEAPON, ARMOR, SPELL} eType; // equipment type
+typedef struct {
+    w_UID piv_key;
+    wSlot_ID slot;
+    eType eType;
+} equipment_t;
+
 typedef struct {
     unsigned int level;
     unsigned int experience;
@@ -111,6 +118,9 @@ typedef struct {
 #include "print.h"
 #include "room.h"
 #include "item_list.h"
+
+#define UID_MAX 4
+const weapon_t piv_table[UID_MAX];
 
 void main_loop(core_game_t *core, const int key);
 
