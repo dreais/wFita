@@ -41,7 +41,9 @@ void set_attack(charac_t *attacker, charac_t *defender)
     unsigned int d_block = roll_block(defender->left_hand);
     unsigned int a_damage = roll_attack(attacker->right_hand);
 
-    defender->stat.health -= a_damage - d_block;
+    if (a_damage > d_block) {
+        defender->stat.health -= a_damage - d_block;
+    }
     if (defender->stat.health <= 0) {
         defender->stat.state = dead;
         defender->p_cursor.x = -1;

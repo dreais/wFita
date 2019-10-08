@@ -41,6 +41,7 @@ const weapon_t leather_shield = (weapon_t) {
     .crit = 0.2
 };
 
+// NOT TO BE USED!
 const weapon_t creative_sword = (weapon_t) {
     .slot = LEFT_RIGHT_HAND,
     .piv_key = 9999,
