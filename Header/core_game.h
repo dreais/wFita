@@ -33,13 +33,15 @@ typedef struct {
 } line_t;
 
 /// CHARACTER TYPES
-typedef unsigned long long w_UUID;
+typedef unsigned long long w_UID;
+typedef enum {LEFT_HAND, RIGHT_HAND, LEFT_RIGHT_HAND} wSlot_ID;
 typedef struct {
-    short dmg;
+    wSlot_ID slot; // weapon slot. self-explanatory
+    w_UID piv_key; // unique identifier of the weapon
+    char *name; // uses the piv_key previously defined to find in a pivot table the good weapon
+    short dmg; // for dmg/def/crit, see Sources/Misc/Weapon/weapon_roll.c
     short def;
     float crit;
-    w_UUID piv_key; // unique identifier of the weapon
-    char name[]; // uses the piv_key previously defined to find in a pivot table the good weapon
 } weapon_t;
 
 typedef struct {
@@ -51,6 +53,9 @@ typedef struct {
 } stat_t;
 
 typedef struct {
+    bool is_weapon_dual_hand;
+    weapon_t left_hand;
+    weapon_t right_hand;
     stat_t stat;
     point_t p_cursor;
     char repr;
@@ -105,6 +110,7 @@ typedef struct {
 #include "path.h"
 #include "print.h"
 #include "room.h"
+#include "item_list.h"
 
 void main_loop(core_game_t *core, const int key);
 
