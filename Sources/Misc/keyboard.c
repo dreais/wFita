@@ -4,7 +4,7 @@
 
 #include "../../Header/core_game.h"
 
-#define SIZE_KEY_ARRAY 5
+#define SIZE_KEY_ARRAY 6
 
 // TODO: could add a mask to determine what args to send
 static const key_func key_f[] = {
@@ -12,7 +12,8 @@ static const key_func key_f[] = {
         {.key = KEY_DOWN, .func = &move_down},
         {.key = KEY_LEFT, .func = &move_left},
         {.key = KEY_RIGHT, .func = &move_right},
-        {.key = 'q', .func = &quit_game}
+        {.key = 'q', .func = &quit_game},
+        {.key = 'c', .func = &clear_logs}
 };
 
 void input_treat(const int key, core_game_t *core)
