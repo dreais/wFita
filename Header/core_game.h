@@ -33,6 +33,14 @@ typedef struct {
 } line_t;
 
 /// CHARACTER TYPES
+typedef struct {
+    unsigned int level;
+    unsigned int experience;
+    int health;
+    int max_health;
+    bool state;
+} stat_t;
+
 typedef unsigned long long w_UID;
 typedef enum {LEFT_HAND, RIGHT_HAND, LEFT_RIGHT_HAND} wSlot_ID;
 typedef struct {
@@ -50,14 +58,6 @@ typedef struct {
     wSlot_ID slot;
     eType eType;
 } equipment_t;
-
-typedef struct {
-    unsigned int level;
-    unsigned int experience;
-    int health;
-    int max_health;
-    bool state;
-} stat_t;
 
 typedef struct {
     equipment_t *equipment;
@@ -92,6 +92,13 @@ typedef struct {
 } g_logs;
 
 typedef struct {
+    point_t cursor;
+    char repr;
+} stairs_t;
+
+typedef struct {
+    stairs_t stairs;
+    unsigned short current_stage;
     room_t c_room; // current
     charac_t player;
     point_t *camera;

@@ -104,5 +104,5 @@ void main_loop(core_game_t *core, const int key)
     print_room(core);
     update_path_monster(core);
     print_stats(core->game_screen, core->player);
-    print_logs(core);
+    //print_logs(core);
 }

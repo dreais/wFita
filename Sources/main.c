@@ -34,7 +34,7 @@ WINDOW *initialize_terminal(void)
 static void init_core_game(core_game_t *core)
 {
     core->game_screen = initialize_terminal();
-    core->c_room = initialize_room(300, 300);
+    core->c_room = initialize_room(1000, 1000);
     core->player = initialize_player();
     core->camera = malloc(sizeof(point_t)*1);
     core->camera->x = 0;
@@ -60,8 +60,11 @@ int main(void)
 #endif
     core_game_t core;
     int key = 0;
-
+    // LINES 86 & getmaxy 71
     init_core_game(&core);
+    printw("%d\n", getmaxy(core.game_screen));
+    refresh();
+    getch();
     print_room(&core);
     print_stats(core.game_screen, core.player);
     wrefresh(core.game_screen);

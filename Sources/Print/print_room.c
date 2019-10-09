@@ -94,11 +94,11 @@ void print_room(core_game_t *core)
                     wattroff(core->game_screen, COLOR_PAIR(YELLOW));
                     wattroff(core->game_screen, A_BOLD);
                 } else if (noise > 0 && noise < 3) {
-                    waddch(core->game_screen, '.');
+                    waddch(core->game_screen, 176);
                 } else if (noise >= 3 && noise < 5) {
-                    waddch(core->game_screen, ',');
+                    waddch(core->game_screen, 177);
                 } else if (noise >= 5 && noise < 7) {
-                    waddch(core->game_screen, ';');
+                    waddch(core->game_screen, 178);
                 } else {
                     waddch(core->game_screen, '%');
                 }
