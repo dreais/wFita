@@ -24,12 +24,12 @@ static void create_monster_ptr(core_game_t *core)
     core->monster_arr = malloc(sizeof(charac_t) * core->size_monster_arr);
     for (int i = 0; i < core->size_monster_arr; i++) {
         core->monster_arr[i].stat = (stat_t) {.experience = -1, .level = 1, .health = 10};
-        core->monster_arr[i].p_cursor.x = rand() % core->c_room.width;
-        core->monster_arr[i].p_cursor.y = rand() % core->c_room.height;
+        core->monster_arr[i].p_cursor.x = rand() % core->floors[core->current_stage].c_room.width;
+        core->monster_arr[i].p_cursor.y = rand() % core->floors[core->current_stage].c_room.height;
         if (core->monster_arr[i].p_cursor.x == core->player.p_cursor.x)
-            core->monster_arr[i].p_cursor.x = rand() % core->c_room.width;
+            core->monster_arr[i].p_cursor.x = rand() % core->floors[core->current_stage].c_room.width;
         if (core->monster_arr[i].p_cursor.y == core->player.p_cursor.y)
-            core->monster_arr[i].p_cursor.y = rand() % core->c_room.height;
+            core->monster_arr[i].p_cursor.y = rand() % core->floors[core->current_stage].c_room.height;
         core->monster_arr[i].repr = 'M';
         core->monster_arr[i].stat.state = alive;
         core->monster_arr[i].is_weapon_dual_hand = true;
@@ -53,6 +53,12 @@ static bool cell_occupied(core_game_t *core, const int index, const point_t curr
             }
         }
     }
+    if (index == core->size_monster_arr) {
+        if (current.x == core->floors[core->current_stage].stairs.cursor.x && current.y == core->floors[core->current_stage].stairs.cursor.y) {
+            *key = core->size_monster_arr;
+            return true;
+        }
+    }
     return false;
 }
 
@@ -72,7 +78,7 @@ static void update_path_monster(core_game_t *core)
         if (core->monster_arr[i].stat.state == true) {
             old_tmp = core->monster_arr[i].p_cursor;
             core->monster_arr[i].p_cursor = search_next_cell(core->monster_arr[i].p_cursor, core->player.p_cursor,
-                                                             core->c_room);
+                                                             core->floors[core->current_stage].c_room);
             if (point_equals(core->monster_arr[i].p_cursor, core->player.p_cursor)) {
                 core->monster_arr[i].p_cursor = old_tmp;
                 set_attack(&core->monster_arr[i], &core->player, core);
@@ -85,7 +91,7 @@ static void update_path_monster(core_game_t *core)
     move_monster(core);
 }
 
-void main_loop(core_game_t *core, const int key)
+void main_loop(core_game_t *core, int key)
 {
     point_t old_p_cursor;
     int key_arr = 0;
@@ -96,10 +102,25 @@ void main_loop(core_game_t *core, const int key)
     }
     old_p_cursor = core->player.p_cursor;
     input_treat(key, core);
-    core->player.p_cursor = verify_player_position(core->player.p_cursor, core->c_room);
+    core->player.p_cursor = verify_player_position(core->player.p_cursor, core->floors[core->current_stage].c_room);
     if (cell_occupied(core, (int)core->size_monster_arr, core->player.p_cursor, &key_arr) == true) {
-        core->player.p_cursor = old_p_cursor;
-        set_attack(&core->player, &core->monster_arr[key_arr], core);
+        if (key_arr == core->size_monster_arr) {
+            // changement d'étage
+            wmove(core->logs.logs, 0, 0);
+            wprintw(core->logs.logs, "Press SPACE to continue\n");
+            wrefresh(core->logs.logs);
+            key = wgetch(core->game_screen);
+            if (key == ' ') {
+                core->current_stage++;
+                core->floors[1].c_room = initialize_room(1000, 1000);
+                wclear(core->game_screen);
+                print_room(core);
+                return;
+            }
+        } else {
+            core->player.p_cursor = old_p_cursor;
+            set_attack(&core->player, &core->monster_arr[key_arr], core);
+        }
      }
     print_room(core);
     update_path_monster(core);

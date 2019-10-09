@@ -34,7 +34,8 @@ WINDOW *initialize_terminal(void)
 static void init_core_game(core_game_t *core)
 {
     core->game_screen = initialize_terminal();
-    core->c_room = initialize_room(1000, 1000);
+    core->floors = malloc(sizeof(floor_t) * MAX_FLOOR);
+    core->floors[0].c_room = initialize_room(1000, 1000);
     core->player = initialize_player();
     core->camera = malloc(sizeof(point_t)*1);
     core->camera->x = 0;
@@ -50,6 +51,10 @@ static void init_core_game(core_game_t *core)
         core->logs.buffer[i] = malloc(sizeof(char) * getmaxx(core->logs.logs) - 1);
     }
     core->logs.buffer[0] = WELCOME;
+    core->floors[0].stairs.repr =  181;
+    core->floors[0].stairs.cursor.x = 50;
+    core->floors[0].stairs.cursor.y = 50;
+    core->current_stage = 0;
 }
 
 int main(void)

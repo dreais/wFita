@@ -98,8 +98,12 @@ typedef struct {
 
 typedef struct {
     stairs_t stairs;
-    unsigned short current_stage;
     room_t c_room; // current
+} floor_t;
+
+typedef struct {
+    floor_t *floors;
+    unsigned short current_stage;
     charac_t player;
     point_t *camera;
     charac_t *monster_arr;
@@ -126,6 +130,7 @@ typedef struct {
 #define LIGHT_GREEN 5
 #define GREY 6
 #define BROWN 7
+#define RED 8
 
 #define COLOR_DARK_GREEN 22
 #define COLOR_LIGHT_GREEN 119
@@ -135,6 +140,8 @@ typedef struct {
 
 #define alive true
 #define dead false
+
+#define MAX_FLOOR 100
 
 #define YOU_DIED "You died. Press any key to exit!"
 #define EXIT_MSG "You pressed 'q'. Press 'q' again to quit, or any other key to cancel."
@@ -160,6 +167,6 @@ const weapon_t piv_table[UID_MAX];
 #define BLOCKED "You blocked the attack to %d."
 /// --------------------------
 
-void main_loop(core_game_t *core, const int key);
+void main_loop(core_game_t *core, int key);
 
 #endif //MAPGENERATION_CORE_GAME_H
