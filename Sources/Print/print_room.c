@@ -35,6 +35,7 @@ void init_colors(void)
     init_pair(GREEN, COLOR_GREEN, COLOR_BLACK);
     init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(WHITE, COLOR_WHITE, COLOR_BLACK);
+    init_pair(RED, COLOR_RED, COLOR_RED);
 
     init_color(COLOR_LIGHT_GREEN, 0,686,0);
     init_pair(LIGHT_GREEN, COLOR_LIGHT_GREEN, COLOR_BLACK);
@@ -55,16 +56,18 @@ void print_room(core_game_t *core)
 {
     int counter = 0;
 
-    adjust_camera(core->c_room, core->game_screen, core->player.p_cursor, core->camera);
+    adjust_camera(core->floors[core->current_stage].c_room, core->game_screen, core->player.p_cursor, core->camera);
     if (use_color == true) {
         for (int i = core->camera->y; i < core->camera->y + (getmaxy(core->game_screen) - 1); i++) {
             wmove(core->game_screen, counter++, 0);
             for (int j = core->camera->x, noise; j < core->camera->x + (getmaxx(core->game_screen) - 2); j++) {
-                noise = core->c_room.room[i][j] - 48;
+                noise = core->floors[core->current_stage].c_room.room[i][j] - 48;
                 if (core->player.p_cursor.x == j && core->player.p_cursor.y == i) {
                     wattron(core->game_screen, A_BOLD);
                     waddch(core->game_screen, '@');
                     wattroff(core->game_screen, A_BOLD);
+                } else if (core->floors[core->current_stage].stairs.cursor.x == j && core->floors[core->current_stage].stairs.cursor.y == i) {
+                    waddch(core->game_screen, core->floors[core->current_stage].stairs.repr);
                 } else if (noise > 0 && noise < 3) {
                     wattron(core->game_screen, COLOR_PAIR(LIGHT_GREEN));
                     waddch(core->game_screen, '.');
@@ -86,13 +89,17 @@ void print_room(core_game_t *core)
         for (int i = core->camera->y; i < core->camera->y + (getmaxy(core->game_screen) - 1); i++) {
             wmove(core->game_screen, counter++, 0);
             for (int j = core->camera->x, noise; j < core->camera->x + (getmaxx(core->game_screen) - 2); j++) {
-                noise = core->c_room.room[i][j] - 48;
+                noise = core->floors[core->current_stage].c_room.room[i][j] - 48;
                 if (core->player.p_cursor.x == j && core->player.p_cursor.y == i) {
                     wattron(core->game_screen, A_BOLD);
                     wattron(core->game_screen, COLOR_PAIR(YELLOW));
                     waddch(core->game_screen, '@');
                     wattroff(core->game_screen, COLOR_PAIR(YELLOW));
                     wattroff(core->game_screen, A_BOLD);
+                } else if (core->floors[core->current_stage].stairs.cursor.x == j && core->floors[core->current_stage].stairs.cursor.y == i) {
+                    wattron(core->game_screen, WHITE);
+                    waddch(core->game_screen, core->floors[core->current_stage].stairs.repr);
+                    wattroff(core->game_screen, WHITE);
                 } else if (noise > 0 && noise < 3) {
                     waddch(core->game_screen, '.');
                 } else if (noise >= 3 && noise < 5) {

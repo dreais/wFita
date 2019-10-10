@@ -11,7 +11,7 @@ void print_logs(core_game_t *core)
     for (unsigned int i = 0; i < core->logs.index; i++) {
         if (count > 0) {
             wmove(core->logs.logs, i, 0);
-            wprintw(core->logs.logs, "%d:%s", i, core->logs.buffer[count--]);
+            wprintw(core->logs.logs, "%d:\t%s", i, core->logs.buffer[count--]);
         }
     }
     wrefresh(core->logs.logs);

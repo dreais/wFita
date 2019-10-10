@@ -33,6 +33,14 @@ typedef struct {
 } line_t;
 
 /// CHARACTER TYPES
+typedef struct {
+    unsigned int level;
+    unsigned int experience;
+    int health;
+    int max_health;
+    bool state;
+} stat_t;
+
 typedef unsigned long long w_UID;
 typedef enum {LEFT_HAND, RIGHT_HAND, LEFT_RIGHT_HAND} wSlot_ID;
 typedef struct {
@@ -50,14 +58,6 @@ typedef struct {
     wSlot_ID slot;
     eType eType;
 } equipment_t;
-
-typedef struct {
-    unsigned int level;
-    unsigned int experience;
-    int health;
-    int max_health;
-    bool state;
-} stat_t;
 
 typedef struct {
     equipment_t *equipment;
@@ -92,7 +92,18 @@ typedef struct {
 } g_logs;
 
 typedef struct {
+    point_t cursor;
+    char repr;
+} stairs_t;
+
+typedef struct {
+    stairs_t stairs;
     room_t c_room; // current
+} floor_t;
+
+typedef struct {
+    floor_t *floors;
+    unsigned short current_stage;
     charac_t player;
     point_t *camera;
     charac_t *monster_arr;
@@ -119,6 +130,7 @@ typedef struct {
 #define LIGHT_GREEN 5
 #define GREY 6
 #define BROWN 7
+#define RED 8
 
 #define COLOR_DARK_GREEN 22
 #define COLOR_LIGHT_GREEN 119
@@ -128,6 +140,8 @@ typedef struct {
 
 #define alive true
 #define dead false
+
+#define MAX_FLOOR 100
 
 #define YOU_DIED "You died. Press any key to exit!"
 #define EXIT_MSG "You pressed 'q'. Press 'q' again to quit, or any other key to cancel."
@@ -153,6 +167,6 @@ const weapon_t piv_table[UID_MAX];
 #define BLOCKED "You blocked the attack to %d."
 /// --------------------------
 
-void main_loop(core_game_t *core, const int key);
+void main_loop(core_game_t *core, int key);
 
 #endif //MAPGENERATION_CORE_GAME_H
