@@ -147,7 +147,7 @@ void main_loop(core_game_t *core, int key)
             key = wgetch(core->game_screen);
             if (key == KEY_SPACE) {
                 core->current_stage++;
-                core->floors[1].c_room = initialize_room(1000, 1000);
+                core->floors[1].c_room = initialize_room(300, 300);
                 wclear(core->game_screen);
                 print_room(core);
                 return;
