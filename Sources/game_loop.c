@@ -70,6 +70,37 @@ static bool point_equals(point_t first, point_t second)
     return false;
 }
 
+static void movement_quality_check(point_t *current_mob, point_t blocking_point, core_game_t *core)
+{
+    int dx = blocking_point.x - current_mob->x;
+    int dy = blocking_point.y - current_mob->y;
+    int choice = (int) rand() % 2;
+
+    wclear(core->logs.logs);
+    wprintw(core->logs.logs, "%d\t%d", dx, dy);
+    wrefresh(core->logs.logs);
+    if (dx == dy && dx == 0) {
+        return;
+    }
+    if (dx != 0) {
+        if (current_mob->y > 0 && current_mob->y < (int) core->floors->c_room.height - 1) {
+            current_mob->y = current_mob->y + ((choice == 0) ? 1 : -1);
+        } else if (current_mob->y == 0) {
+            current_mob->y++;
+        } else {
+            current_mob->y--;
+        }
+    } else if (dy != 0) {
+        if (current_mob->x > 0 && current_mob->x < (int) core->floors->c_room.width - 1) {
+            current_mob->x = current_mob->x + ((choice == 0) ? 1 : -1);
+        } else if (current_mob->x == 0) {
+            current_mob->x++;
+        } else {
+            current_mob->x--;
+        }
+    }
+}
+
 static void update_path_monster(core_game_t *core)
 {
     point_t old_tmp;
@@ -84,6 +115,7 @@ static void update_path_monster(core_game_t *core)
                 set_attack(&core->monster_arr[i], &core->player, core);
             }
             if (cell_occupied(core, (int) i, core->monster_arr[i].p_cursor, NULL) == true) {
+                movement_quality_check(&old_tmp, core->monster_arr[i].p_cursor, core);
                 core->monster_arr[i].p_cursor = old_tmp;
             }
         }
