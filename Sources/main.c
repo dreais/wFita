@@ -25,12 +25,17 @@ int main(int argc, char **argv __attribute__((unused)))
     int key = 0;
 
     get_log_file();
-	fprintf(output, "[INFO] Iteration number %llu\n", iteration_n++);
+#ifdef _WIN32
+	output_logs_str(PREFIX_DEBUG, "CXSCREEN=%d\n", GetSystemMetrics(SM_CXSCREEN) - 10);
+	output_logs_str(PREFIX_DEBUG, "CYSCREEN=%d\n", GetSystemMetrics(SM_CYSCREEN) - 10);
+#endif
 	if (argc > 1) {
 		// TODO parsing properly options (if there is any)
 	}
-	// TODO printing in logs some useful information - size of the screen/term, allocations, etc
     init_core_game(&core);
+	output_logs_str(PREFIX_DEBUG, "Room width=%d\n", core.floors->c_room.width);
+	output_logs_str(PREFIX_DEBUG, "Room height=%d\n", core.floors->c_room.height);
+	output_logs_str(PREFIX_INFO, "Iteration number %llu\n", iteration_n++);
     print_room(&core);
     print_stats(core.game_screen, core.player);
     wrefresh(core.game_screen);
@@ -46,6 +51,7 @@ int main(int argc, char **argv __attribute__((unused)))
         refresh();
         getch();
     }
+	close_file();
     endwin();
     return 0;
 }
