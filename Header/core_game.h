@@ -146,6 +146,8 @@ typedef struct {
 #define YOU_DIED "You died. Press any key to exit!"
 #define EXIT_MSG "You pressed 'q'. Press 'q' again to quit, or any other key to cancel."
 
+#define KEY_SPACE ' '
+
 /// -------- INCLUDES --------
 #include "character.h"
 #include "path.h"

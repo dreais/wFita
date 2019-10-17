@@ -68,7 +68,7 @@ int main(void)
 #endif
     core_game_t core;
     int key = 0;
-    // LINES 86 & getmaxy 71
+
     init_core_game(&core);
     printw("%d\n", getmaxy(core.game_screen));
     refresh();
