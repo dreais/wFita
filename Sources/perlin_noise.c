@@ -8,6 +8,7 @@ static int size_map = 0;
 //size could be define using a define before
 // TODO: get size using main args
 
+// TODO: using char instead of int might make it lighter for the program if the map is very huge, as the table is contained in the cache.
 static int *hash = NULL;
 
 void define_hash(const int size)

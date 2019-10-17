@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #ifdef _WIN32
@@ -14,53 +13,9 @@ bool use_color = false;
 bool use_color = true;
 #endif
 
-WINDOW *debug;
+static unsigned long long iteration_n = 0;
 
-WINDOW *initialize_terminal(void)
-{
-    WINDOW *main_game;
-
-    initscr();
-    init_colors();
-    noecho();
-    cbreak();
-    curs_set(0);
-    main_game = newwin(LINES / 2 + (LINES / 3), ((COLS / 2) + ((COLS / 2) / 2))-2, 0, 0);
-    curs_set(0);
-    keypad(main_game, TRUE);
-    /// MISC
-    debug = newwin(10, COLS, getmaxy(main_game), 0);
-    ///
-    return main_game;
-}
-
-static void init_core_game(core_game_t *core)
-{
-    core->game_screen = initialize_terminal();
-    core->floors = malloc(sizeof(floor_t) * MAX_FLOOR);
-    core->floors[0].c_room = initialize_room(300, 300);
-    core->player = initialize_player();
-    core->camera = malloc(sizeof(point_t)*1);
-    core->camera->x = 0;
-    core->camera->y = 0;
-
-    core->logs.logs = newwin(LINES - getmaxy(core->game_screen), COLS,
-            getmaxy(core->game_screen), 0);
-    core->logs.buffer_size = (unsigned int) getmaxy(core->logs.logs);
-    core->logs.index = 0;
-    core->logs.buffer = malloc(sizeof(char *) * core->logs.buffer_size);
-    // WINDOWS TYPE
-    for (u_int i = 0; i < core->logs.buffer_size; i++) {
-        core->logs.buffer[i] = malloc(sizeof(char) * getmaxx(core->logs.logs) - 1);
-    }
-    core->logs.buffer[0] = WELCOME;
-    core->floors[0].stairs.repr =  181;
-    core->floors[0].stairs.cursor.x = 50;
-    core->floors[0].stairs.cursor.y = 50;
-    core->current_stage = 0;
-}
-
-int main(void)
+int main(int argc, char **argv __attribute__((unused)))
 {
 #ifdef _WIN32
     HWND Console = GetConsoleWindow();
@@ -69,14 +24,18 @@ int main(void)
     core_game_t core;
     int key = 0;
 
+    get_log_file();
+	fprintf(output, "[INFO] Iteration number %llu\n", iteration_n++);
+	if (argc > 1) {
+		// TODO parsing properly options (if there is any)
+	}
+	// TODO printing in logs some useful information - size of the screen/term, allocations, etc
     init_core_game(&core);
-    printw("%d\n", getmaxy(core.game_screen));
-    refresh();
-    getch();
     print_room(&core);
     print_stats(core.game_screen, core.player);
     wrefresh(core.game_screen);
     while (core.player.stat.state == alive) {
+    	output_logs_str(PREFIX_INFO, "Iteration number %llu\n", iteration_n++);
         key = wgetch(core.game_screen);
         main_loop(&core, key);
         wrefresh(core.game_screen);

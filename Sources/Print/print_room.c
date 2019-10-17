@@ -35,7 +35,7 @@ void init_colors(void)
     init_pair(GREEN, COLOR_GREEN, COLOR_BLACK);
     init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(WHITE, COLOR_WHITE, COLOR_BLACK);
-    init_pair(RED, COLOR_RED, COLOR_RED);
+    init_pair(RED, COLOR_RED, COLOR_BLACK);
 
     init_color(COLOR_LIGHT_GREEN, 0,686,0);
     init_pair(LIGHT_GREEN, COLOR_LIGHT_GREEN, COLOR_BLACK);
