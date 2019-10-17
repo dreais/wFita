@@ -162,6 +162,10 @@ typedef struct {
 const weapon_t piv_table[UID_MAX];
 /// ---------------------------
 
+/// -------- EXTERN --------
+extern const char log_path[];
+extern FILE *output;
+/// ------------------------
 
 /// -------- LOGS MSG --------
 #define WELCOME "Welcome aboard, adventurer."

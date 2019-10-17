@@ -60,7 +60,22 @@ static void init_core_game(core_game_t *core)
     core->current_stage = 0;
 }
 
-int main(void)
+const char log_path[] = "output.log";
+FILE *output;
+
+static void get_log_file(void)
+{
+	output = fopen(log_path, "w+");
+	if (output == NULL) {
+		fprintf(stderr, "%s could not be opened.\n", log_path);
+		return;
+	}
+	fprintf(output, "[INFO] Opening file to read/write, setting cursor at initial position.\n");
+	fprintf(output, "[INFO] If you're reading this line, please don't mind it. Just some file opening :)\n");
+	fprintf(output, "[INFO] Logfile named '%s' opened without issue\n", log_path);
+}
+
+int main(int argc, char **argv __attribute__((unused)))
 {
 #ifdef _WIN32
     HWND Console = GetConsoleWindow();
@@ -69,6 +84,10 @@ int main(void)
     core_game_t core;
     int key = 0;
 
+    get_log_file();
+	if (argc > 1) {
+		// TODO parsing properly options (if there is any)
+	}
     init_core_game(&core);
     printw("%d\n", getmaxy(core.game_screen));
     refresh();
