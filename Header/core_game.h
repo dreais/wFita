@@ -167,7 +167,6 @@ const weapon_t piv_table[UID_MAX];
 /// ---------------------------
 
 /// -------- EXTERN VAR --------
-extern FILE *output;
 /// ----------------------------
 
 /// -------- LOGS MSG --------
@@ -176,6 +175,7 @@ extern FILE *output;
 #define BLOCKED "You blocked the attack to %d."
 /// --------------------------
 
+void close_file(void);
 void output_logs_str(const char prefix[], const char str[], ...);
 void get_log_file(void);
 void init_core_game(core_game_t *core);

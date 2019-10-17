@@ -7,9 +7,9 @@
 #include <stdlib.h>
 #include "../Header/core_game.h"
 
-FILE *output;
+static FILE *output;
 
-const char format_specifier[6][4] = {
+static const char format_specifier[6][4] = {
 		"c",
 		"d",
 		"li",
@@ -80,6 +80,11 @@ void output_logs_str(const char prefix[], const char str[], ...)
 	}
 	va_end(arg_list);
 	free(buffer);
+}
+
+void close_file(void)
+{
+	fclose(output);
 }
 
 void get_log_file(void)
