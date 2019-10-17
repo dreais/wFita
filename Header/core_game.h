@@ -148,6 +148,10 @@ typedef struct {
 
 #define KEY_SPACE ' '
 
+#define PREFIX_DEBUG "[DEBUG] "
+#define PREFIX_INFO "[INFO] "
+#define PREFIX_WARNING "[WARNING] "
+
 /// -------- INCLUDES --------
 #include "character.h"
 #include "path.h"
@@ -162,10 +166,9 @@ typedef struct {
 const weapon_t piv_table[UID_MAX];
 /// ---------------------------
 
-/// -------- EXTERN --------
-extern const char log_path[];
+/// -------- EXTERN VAR --------
 extern FILE *output;
-/// ------------------------
+/// ----------------------------
 
 /// -------- LOGS MSG --------
 #define WELCOME "Welcome aboard, adventurer."
@@ -173,6 +176,9 @@ extern FILE *output;
 #define BLOCKED "You blocked the attack to %d."
 /// --------------------------
 
+void output_logs_str(const char prefix[], const char str[], ...);
+void get_log_file(void);
+void init_core_game(core_game_t *core);
 void main_loop(core_game_t *core, int key);
 
 #endif //MAPGENERATION_CORE_GAME_H
