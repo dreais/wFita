@@ -1,16 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifdef _WIN32
 #include <windows.h>
-#include "../Header/curses.h"
-#else
-#include <ncurses.h>
 #endif
 
 #include "../Header/core_game.h"
 
+#ifdef _WIN32
 bool use_color = false;
+#else
+bool use_color = true;
+#endif
+
 WINDOW *debug;
 
 WINDOW *initialize_terminal(void)
@@ -35,7 +38,7 @@ static void init_core_game(core_game_t *core)
 {
     core->game_screen = initialize_terminal();
     core->floors = malloc(sizeof(floor_t) * MAX_FLOOR);
-    core->floors[0].c_room = initialize_room(1000, 1000);
+    core->floors[0].c_room = initialize_room(300, 300);
     core->player = initialize_player();
     core->camera = malloc(sizeof(point_t)*1);
     core->camera->x = 0;
@@ -65,7 +68,7 @@ int main(void)
 #endif
     core_game_t core;
     int key = 0;
-    // LINES 86 & getmaxy 71
+
     init_core_game(&core);
     printw("%d\n", getmaxy(core.game_screen));
     refresh();
