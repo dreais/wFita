@@ -2,5 +2,5 @@ language: c
 
 script:
     - mkdir build && cd build
-    - cmake -DCMAKE_BUILD_TYPE=Unit_test && make
+    - cmake -DCMAKE_BUILD_TYPE=Unit_test .. && make
     - ./wFita
