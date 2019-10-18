@@ -13,6 +13,11 @@ bool use_color = false;
 bool use_color = true;
 #endif
 
+#ifdef SNOW_ENABLED
+#include "../Header/snow/snow.h"
+snow_main();
+#else
+
 static unsigned long long iteration_n = 0;
 
 int main(int argc, char **argv __attribute__((unused)))
@@ -61,3 +66,5 @@ putting here codes that is removed to try earlier parts of the program:
 
 
  */
+
+#endif
