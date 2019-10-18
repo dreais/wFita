@@ -6,6 +6,7 @@
 /.vs
 /out/build/x64-Debug
 /cmake-build-debug
+/cmake-build-release
 /cmake-build-wsl
 CMakeFiles
 CMakeCache.txt
