@@ -42,7 +42,7 @@ void set_attack(charac_t *attacker, charac_t *defender, core_game_t *core)
     unsigned int a_damage = roll_attack(attacker->right_hand);
 
     if (a_damage > d_block) {
-        defender->stat.health -= a_damage - d_block;
+        defender->stat.health -= (int)(a_damage - d_block);
     }
     if (defender->stat.health <= 0) {
         defender->stat.state = dead;

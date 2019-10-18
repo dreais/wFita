@@ -1,14 +1,14 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.12)
 project(wFita C)
 
 set(CMAKE_C_STANDARD 11)
 
 add_executable(wFita Sources/main.c Header/room.h Sources/Path/path.c Header/path.h Sources/init_var.c Sources/perlin_noise.c Header/print.h Sources/Character/movement.c Header/character.h Sources/Character/player.c Sources/Print/print_room.c Sources/Print/print_stats.c Sources/game_loop.c Header/core_game.h Sources/Character/monster.c Sources/Path/free_path.c Sources/Path/search.c Sources/Character/Shared/shared_attack.c Sources/Misc/Weapon/weapon_roll.c Header/item_list.h Sources/Character/Shared/shared_equipment.c Sources/Misc/keyboard.c Sources/Misc/Input/arrows.c Header/Keyboard/input.h Sources/Misc/Input/menu.c Sources/Print/logs.c Sources/Misc/Bestiary/bestiary.c Sources/output_logs.c)
 
-if (CMAKE_BUILD_TYPE MATCHES "Debug")
-	message(STATUS "Entering debug mode, linking Snow unit test library")
+if (CMAKE_BUILD_TYPE MATCHES "Unit_test")
+	message(STATUS "Entering unit test mode, linking Snow unit test library")
 	target_compile_options(wFita PRIVATE -DSNOW_ENABLED)
-endif (CMAKE_BUILD_TYPE MATCHES "Debug")
+endif (CMAKE_BUILD_TYPE MATCHES "Unit_test")
 
 if (WIN32)
 	target_link_libraries(wFita ${CMAKE_CURRENT_SOURCE_DIR}/Libraries/PDCurses/wincon/pdcurses.a)

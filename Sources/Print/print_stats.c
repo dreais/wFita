@@ -16,7 +16,6 @@ static void initialize_stat_win(WINDOW *main_game)
 static void health_bar(const int width, const charac_t player)
 {
 	float f_percentage = ((float)player.stat.health / (float)player.stat.max_health) * 100.0f;
-	int i_percentage = (int) roundf(f_percentage);
 	float f_progress_bar;
 
 	for (int i = 1; i < width + 1; i++) {
