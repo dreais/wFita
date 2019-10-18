@@ -20,7 +20,7 @@ const weapon_t bare_hand = (weapon_t) {
     .name = "bare_hand_0",
     .dmg = 1,
     .def = 1,
-    .crit = 0.1
+    .crit = 0.1f
 };
 
 const weapon_t short_sword = (weapon_t) {
@@ -29,7 +29,7 @@ const weapon_t short_sword = (weapon_t) {
     .name = "short_sword_1",
     .dmg = 2,
     .def = -1,
-    .crit = 0.4
+    .crit = 0.4f
 };
 
 const weapon_t leather_shield = (weapon_t) {
@@ -38,7 +38,7 @@ const weapon_t leather_shield = (weapon_t) {
     .name = "leather_shield_2",
     .dmg = -1,
     .def = 2,
-    .crit = 0.2
+    .crit = 0.2f
 };
 
 // NOT TO BE USED!
@@ -51,6 +51,7 @@ const weapon_t creative_sword = (weapon_t) {
     .crit = 5
 };
 
+/**
 #define UID_MAX 4
 const weapon_t piv_table[UID_MAX] = {
         bare_hand,
@@ -58,3 +59,4 @@ const weapon_t piv_table[UID_MAX] = {
         leather_shield,
         creative_sword
 };
+*/
