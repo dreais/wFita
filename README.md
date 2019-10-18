@@ -60,3 +60,22 @@ setting priority-l-1 should go with -l-2 and -l-3 as well.
 Putting the non-priority with a priority level means that this is unlikely an issue I'll be working on in the near future, but will be later.
 
 Planned means that the issue is planned, but not being the priority, will be worked on when I feel like it. These are usually not big issues or problematics, so don't mind it.
+
+## Building
+
+### Requirements (tested and built on):
+- CMake version >= 3.13
+- Windows: MinGW 64 bits >= 8.1.0
+- Unix: GCC >= 4.5
+
+### Steps
+On Windows, easiest way:
+1. Have CLion
+2. Open CLion, Open New project
+3. Load CMakeLists, build it (don't forget the right toolchain^)
+
+On Unix:
+1. `git clone https://github.com/dreais/wfita`
+2. `cd wfita`
+3. `mkdir build && cd build`
+4. `cmake .. && make`
