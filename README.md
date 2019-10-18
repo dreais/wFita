@@ -1,6 +1,6 @@
 # wFita 
 
-**CURRENTLY IN VERSION [v0.2.0](https://github.com/dreais/wFita/releases/tag/v0.2.0)!**
+**CURRENTLY IN VERSION [v0.3.0](https://github.com/dreais/wFita/releases/tag/v0.3.0)!**
 
 (windows Fed in the abyss)
 
@@ -34,17 +34,23 @@ If you're lazy, here's a quick summary:
         - they cannot go on top of themself (as expected of a hitbox!)
 - Basic printing
     - You can print using (or not) colors. Might get laggy on windows! see #14
+    - Health bar (with colors!) on point, will be the same with EXP bar
+    - Log file, named as of now "output.log", is created on launch.
 - Core game
     - Currently now much:
         - structures are being prepared/done for the characters. charac_t is ONE monster/player.
         - windows. the main 'window' is for the games, and there's 2 others for logs and player's state
+    - Can change the floor you're in (only 1 implemented statically though)
+    - You can attack enemies and enemies can attack you
+    - Integrated basic stuff (weapons and armors)
+    
  
 ## Sources used
 [Perlin noise code](https://gist.github.com/nowl/828013)
 
 Was a bit modified, for setting up the hash array dynamically.
 
-[Colors converted table for PDCurses](https://stackoverflow.com/questions/47686906/ncurses-init-color-has-no-effect)
+[Colors converted table for PDCurses](https://stackoverflow.com/a/47771858)
 
 I used the keys to keep a track as of what color the program uses.
 
