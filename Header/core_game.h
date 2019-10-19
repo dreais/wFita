@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <time.h>
 #ifdef _WIN32
 #include "curses.h"
 #else
