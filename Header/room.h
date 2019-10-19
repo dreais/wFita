@@ -5,6 +5,7 @@
 #ifndef MAPGENERATION_ROOM_H
 #define MAPGENERATION_ROOM_H
 
+#include <time.h>
 #include "core_game.h"
 
 room_t recreate_room(room_t to_rebuild);
