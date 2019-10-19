@@ -11,6 +11,8 @@
 #include <ncurses.h>
 #endif
 
+extern bool use_color;
+
 static void adjust_camera(const room_t room, WINDOW *main_game, const point_t player_position, point_t *camera)
 {
     if (player_position.x < getmaxx(main_game) / 2) {
@@ -51,8 +53,6 @@ void init_colors(void)
     init_pair(BROWN, COLOR_BROWN, COLOR_BLACK);
 }
 
-extern bool use_color;
-
 static void print_colored_cell(WINDOW *to_print, char repr, short COLOR, int y, int x, bool bold)
 {
 	wmove(to_print, y, x);
@@ -65,6 +65,23 @@ static void print_colored_cell(WINDOW *to_print, char repr, short COLOR, int y, 
 	if (bold == true) {
 		wattroff(to_print, A_BOLD);
 	}
+}
+
+static char assign_repr_map(char int_repr)
+{
+	char repr;
+	int noise = int_repr - 48;
+
+	if (noise > 0 && noise < 3) {
+		repr = '.';
+	} else if (noise >= 3 && noise < 5) {
+		repr = ',';
+	} else if (noise >= 5 && noise < 7) {
+		repr = ';';
+	} else {
+		repr = '%';
+	}
+	return repr;
 }
 
 void print_room(core_game_t *core)
@@ -104,8 +121,9 @@ void print_room(core_game_t *core)
         for (int i = core->camera->y, tmp_x; i < core->camera->y + (getmaxy(core->game_screen) - 1); i++) {
             wmove(core->game_screen, counter++, 0);
             char *tmp = malloc(sizeof(char) * getmaxx(core->game_screen));
-			for (int cnt = 0; cnt < getmaxx(core->game_screen); cnt++)
-				tmp[cnt] = core->floors[core->current_stage].c_room.room[i][core->camera->x + cnt];
+			for (int cnt = 0; cnt < getmaxx(core->game_screen); cnt++) {
+				tmp[cnt] = assign_repr_map(core->floors[core->current_stage].c_room.room[i][core->camera->x + cnt]);
+			}
 			wprintw(core->game_screen, "%s", tmp);
 			free(tmp);
 			if (core->player.p_cursor.y == i) {
