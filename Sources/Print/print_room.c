@@ -68,6 +68,11 @@ static void print_colored_cell(WINDOW *to_print, char repr, short COLOR, int y, 
 	}
 }
 
+typedef struct {
+	char *colored_line;
+	short COLOR_APPLY;
+} shorten_str;
+
 static char assign_repr_map(char int_repr)
 {
 	char repr;
@@ -85,15 +90,23 @@ static char assign_repr_map(char int_repr)
 	return repr;
 }
 
-typedef struct {
-	char *colored_line;
-	short COLOR_APPLY;
-} shorten_str;
+static short color_condition(char repr)
+{
+	if (repr == '.') {
+		return LIGHT_GREEN;
+	} else if (repr == ',') {
+		return DARK_GREEN;
+	} else if (repr == ';') {
+		return GREY;
+	} else {
+		return WHITE;
+	}
+}
 
-static shorten_str *apply_color_lines(const char *str)
+static shorten_str *apply_color_lines(const char *str, int *nbr_str)
 {
 	shorten_str *colored_lines;
-	int nbr_color = 0;
+	int nbr_color = 1, j = 0;
 	char tmp_value = str[0];
 
 	for (int i = 0; i < (int) strlen(str); i++) {
@@ -104,8 +117,23 @@ static shorten_str *apply_color_lines(const char *str)
 	}
 	tmp_value = str[0];
 	colored_lines = malloc(sizeof(shorten_str) * nbr_color);
-	for(int i = 0; i < nbr_color; i++) {
+	for (int i = 0, size_str = 0; i < nbr_color; i++) {
+		for (; j < (int) strlen(str); j++) {
+			if (tmp_value == str[j]) {
+				size_str++;
+			} else {
+				break;
+			}
+		}
+		colored_lines[i].colored_line = malloc(sizeof(char) * (size_str) + 1);
+		colored_lines[i].colored_line[size_str] = '\0';
+		colored_lines[i].COLOR_APPLY = color_condition(tmp_value);
+		for (int offset = 0; offset < size_str; offset++) {
+			colored_lines[i].colored_line[offset] = str[(j - size_str) + offset];
+		}
+		tmp_value = str[j];
 	}
+	*nbr_str = nbr_color;
 	return colored_lines;
 }
 
@@ -113,6 +141,7 @@ void print_room(core_game_t *core)
 {
     int counter = 0;
     shorten_str *colored_lines;
+    int nbr_str = 0;
 
     adjust_camera(core->floors[core->current_stage].c_room, core->game_screen, core->player.p_cursor, core->camera);
     if (use_color == true) {
@@ -120,11 +149,17 @@ void print_room(core_game_t *core)
 			wmove(core->game_screen, counter++, 0);
 			char *tmp = malloc(sizeof(char) * getmaxx(core->game_screen));
 			for (int cnt = 0; cnt < getmaxx(core->game_screen); cnt++) {
-				tmp[cnt] = core->floors[core->current_stage].c_room.room[i][core->camera->x + cnt];
-				colored_lines = apply_color_lines(tmp);
+				tmp[cnt] = assign_repr_map(core->floors[core->current_stage].c_room.room[i][core->camera->x + cnt]);
 			}
-			wprintw(core->game_screen, "%s", tmp);
+			colored_lines = apply_color_lines(tmp, &nbr_str);
+			for (int j = 0; j < nbr_str; j++) {
+				wattron(core->game_screen, COLOR_PAIR(colored_lines[j].COLOR_APPLY));
+				wprintw(core->game_screen, "%s", colored_lines[j].colored_line);
+				wattroff(core->game_screen, COLOR_PAIR(colored_lines[j].COLOR_APPLY));
+				free(colored_lines[j].colored_line);
+			}
 			free(tmp);
+			free(colored_lines);
 			if (core->player.p_cursor.y == i) {
 				tmp_x = core->player.p_cursor.x - core->camera->x;
 				print_colored_cell(core->game_screen, '@', YELLOW, counter - 1, tmp_x, true);
@@ -160,4 +195,3 @@ void print_room(core_game_t *core)
         }
     }
 }
-//core->floors[core->current_stage].stairs.cursor.x == j && core->floors[core->current_stage].stairs.cursor.y == i
