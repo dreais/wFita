@@ -76,6 +76,7 @@ typedef struct {
 
 /// ROOM TYPES
 typedef struct {
+	time_t seed;
     unsigned int x;
     unsigned int y;
     unsigned int width;
@@ -123,6 +124,7 @@ typedef struct {
  * first define is the COLOR_PAIR key
  * second define is the index from the converted table (see "Sources" in the README)
  */
+#define BLANK 0
 #define GREEN 1
 #define YELLOW 2
 #define WHITE 3
@@ -131,6 +133,9 @@ typedef struct {
 #define GREY 6
 #define BROWN 7
 #define RED 8
+
+#define RED_BG 9
+#define GREY_BG 10
 
 #define COLOR_DARK_GREEN 22
 #define COLOR_LIGHT_GREEN 119
@@ -175,6 +180,7 @@ const weapon_t piv_table[UID_MAX];
 #define BLOCKED "You blocked the attack to %d."
 /// --------------------------
 
+void destroy_room(room_t *room);
 void close_file(void);
 void output_logs_str(const char prefix[], const char str[], ...);
 void get_log_file(void);
