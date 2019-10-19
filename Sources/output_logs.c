@@ -9,13 +9,14 @@
 
 static FILE *output;
 
-static const char format_specifier[6][4] = {
+static const char format_specifier[7][4] = {
 		"c",
 		"d",
 		"li",
 		"lu",
 		"lli",
-		"llu"
+		"llu",
+		"s"
 };
 
 static void append_buffer(char *buff, int buff_size, char type[4], va_list *arg_list)
@@ -37,6 +38,8 @@ static void append_buffer(char *buff, int buff_size, char type[4], va_list *arg_
 		snprintf(buff, buff_size, str_type, va_arg(*arg_list, long long int));
 	} else if (strcmp(type, format_specifier[i++]) == 0) { // llu
 		snprintf(buff, buff_size, str_type, va_arg(*arg_list, unsigned long long));
+	} else if (strcmp(type, format_specifier[i]) == 0) { // s
+		snprintf(buff, buff_size, str_type, va_arg(*arg_list, char *));
 	}
 }
 
@@ -45,14 +48,14 @@ void output_logs_str(const char prefix[], const char str[], ...)
 	va_list arg_list;
 	unsigned int cursor = 0, backup = 0;
 	char type[4] = {'\0'};
-	int BUFF_MAX = 24;
+	int BUFF_MAX = 1024;
 	char *buffer = malloc(sizeof(char) * BUFF_MAX);
 
 	fprintf(output, "%s", prefix);
 	va_start(arg_list, str);
 	while (str[cursor]) {
 		if (str[cursor] == '%') {
-			for (int i = 0; i < 6; i++) {
+			for (int i = 0; i < 7; i++) {
 				backup = cursor + 1;
 				if (str[backup] == '%')
 					break;
