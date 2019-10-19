@@ -3,6 +3,7 @@
 //
 
 #include <stdlib.h>
+#include <string.h>
 #include "../../Header/core_game.h"
 
 #ifdef _WIN32
@@ -84,39 +85,58 @@ static char assign_repr_map(char int_repr)
 	return repr;
 }
 
+typedef struct {
+	char *colored_line;
+	short COLOR_APPLY;
+} shorten_str;
+
+static shorten_str *apply_color_lines(const char *str)
+{
+	shorten_str *colored_lines;
+	int nbr_color = 0;
+	char tmp_value = str[0];
+
+	for (int i = 0; i < (int) strlen(str); i++) {
+		if (tmp_value != str[i]) {
+			tmp_value = str[i];
+			nbr_color++;
+		}
+	}
+	tmp_value = str[0];
+	colored_lines = malloc(sizeof(shorten_str) * nbr_color);
+	for(int i = 0; i < nbr_color; i++) {
+	}
+	return colored_lines;
+}
+
 void print_room(core_game_t *core)
 {
     int counter = 0;
+    shorten_str *colored_lines;
 
     adjust_camera(core->floors[core->current_stage].c_room, core->game_screen, core->player.p_cursor, core->camera);
     if (use_color == true) {
-        for (int i = core->camera->y; i < core->camera->y + (getmaxy(core->game_screen) - 1); i++) {
-            wmove(core->game_screen, counter++, 0);
-            for (int j = core->camera->x, noise; j < core->camera->x + (getmaxx(core->game_screen) - 2); j++) {
-            	noise = core->floors[core->current_stage].c_room.room[i][j] - 48;
-                if (core->player.p_cursor.x == j && core->player.p_cursor.y == i) {
-                    wattron(core->game_screen, A_BOLD);
-                    waddch(core->game_screen, '@');
-                    wattroff(core->game_screen, A_BOLD);
-                } else if (core->floors[core->current_stage].stairs.cursor.x == j && core->floors[core->current_stage].stairs.cursor.y == i) {
-                    waddch(core->game_screen, core->floors[core->current_stage].stairs.repr);
-                } else if (noise > 0 && noise < 3) {
-                    wattron(core->game_screen, COLOR_PAIR(LIGHT_GREEN));
-                    waddch(core->game_screen, '.');
-                    wattroff(core->game_screen, COLOR_PAIR(LIGHT_GREEN));
-                } else if (noise >= 3 && noise < 5) {
-                    wattron(core->game_screen, COLOR_PAIR(DARK_GREEN));
-                    waddch(core->game_screen, ',');
-                    wattroff(core->game_screen, COLOR_PAIR(DARK_GREEN));
-                } else if (noise >= 5 && noise < 7) {
-                    wattron(core->game_screen, COLOR_PAIR(GREY));
-                    waddch(core->game_screen, ';');
-                    wattroff(core->game_screen, COLOR_PAIR(GREY));
-                } else {
-                    waddch(core->game_screen, '%');
-                }
-            }
-        }
+		for (int i = core->camera->y, tmp_x; i < core->camera->y + (getmaxy(core->game_screen) - 1); i++) {
+			wmove(core->game_screen, counter++, 0);
+			char *tmp = malloc(sizeof(char) * getmaxx(core->game_screen));
+			for (int cnt = 0; cnt < getmaxx(core->game_screen); cnt++) {
+				tmp[cnt] = core->floors[core->current_stage].c_room.room[i][core->camera->x + cnt];
+				colored_lines = apply_color_lines(tmp);
+			}
+			wprintw(core->game_screen, "%s", tmp);
+			free(tmp);
+			if (core->player.p_cursor.y == i) {
+				tmp_x = core->player.p_cursor.x - core->camera->x;
+				print_colored_cell(core->game_screen, '@', YELLOW, counter - 1, tmp_x, true);
+			}
+			if (core->floors[core->current_stage].stairs.cursor.y == i) {
+				tmp_x = core->floors[core->current_stage].stairs.cursor.x;
+				if (tmp_x >= core->camera->x && tmp_x <= core->camera->x + (getmaxx(core->game_screen) - 1)) {
+					tmp_x = tmp_x - core->camera->x;
+					print_colored_cell(core->game_screen, 181, WHITE, counter - 1, tmp_x, false);
+				}
+			}
+		}
     } else {
         for (int i = core->camera->y, tmp_x; i < core->camera->y + (getmaxy(core->game_screen) - 1); i++) {
             wmove(core->game_screen, counter++, 0);

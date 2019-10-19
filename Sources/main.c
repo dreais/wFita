@@ -8,7 +8,7 @@
 #include "../Header/core_game.h"
 
 #ifdef _WIN32
-bool use_color = false;
+bool use_color = true;
 #else
 bool use_color = true;
 #endif
