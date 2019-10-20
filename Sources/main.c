@@ -69,6 +69,7 @@ int main(int argc, char **argv __attribute__((unused)))
 #endif
         key = wgetch(core.game_screen);
         main_loop(&core, key);
+		wrefresh(core.game_screen);
     }
     if (core.player.stat.state == dead) {
         move((LINES / 2) - 1, ((COLS) / 2) - (int) strlen(YOU_DIED) / 2);

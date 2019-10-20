@@ -205,5 +205,4 @@ void print_room(core_game_t *core)
 			}
         }
     }
-    wrefresh(core->game_screen);
 }
