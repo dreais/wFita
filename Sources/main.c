@@ -21,20 +21,26 @@ snow_main();
 static unsigned long long iteration_n = 0;
 
 #ifdef _WIN32
-static bool resize_window_app(void)
+static bool resize_window_app(core_game_t *core)
 {
 	INPUT_RECORD input_rec[128];
 	DWORD event_read;
 	HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+	char *tmp_first_line = truncate_map_line(core->floors[core->current_stage].c_room.room[0], getmaxx(core->game_screen));
 
 	if (ReadConsoleInput(hStdin, input_rec, 128, &event_read)) {
 		for (int i = 0; i < (int) event_read; i++) {
 			if (input_rec[i].EventType == WINDOW_BUFFER_SIZE_EVENT) {
-				output_logs_str(PREFIX_INFO, "Console window has been resized\n");
+				output_logs_str(PREFIX_WARNING, "Console window has been resized\n");
 				resize_term(0, 0);
+				print_room(core);
+				mvwprintw(core->game_screen, 0, 0, "%s", tmp_first_line);
+				wrefresh(core->game_screen);
+				refresh();
 			}
 		}
 	}
+	free(tmp_first_line);
 	return true;
 }
 #endif
@@ -49,28 +55,20 @@ int main(int argc, char **argv __attribute__((unused)))
     int key = 0;
 
     get_log_file();
-#ifdef _WIN32
-	output_logs_str(PREFIX_DEBUG, "CXSCREEN=%d\n", GetSystemMetrics(SM_CXSCREEN) - 10);
-	output_logs_str(PREFIX_DEBUG, "CYSCREEN=%d\n", GetSystemMetrics(SM_CYSCREEN) - 10);
-#endif
 	if (argc > 1) {
 		// TODO parsing properly options (if there is any)
 	}
     init_core_game(&core);
-	output_logs_str(PREFIX_DEBUG, "Room width=%d\n", core.floors->c_room.width);
-	output_logs_str(PREFIX_DEBUG, "Room height=%d\n", core.floors->c_room.height);
-	output_logs_str(PREFIX_INFO, "Iteration number %llu\n", iteration_n++);
     print_room(&core);
     print_stats(core.game_screen, core.player);
+    mvwprintw(core.game_screen, 0, 0, "%s", core.floors[0].c_room.room[0]);
     wrefresh(core.game_screen);
     while (core.player.stat.state == alive) {
 #ifdef _WIN32
-		resize_window_app();
+		resize_window_app(&core);
 #endif
-    	output_logs_str(PREFIX_INFO, "Iteration number %llu\n", iteration_n++);
         key = wgetch(core.game_screen);
         main_loop(&core, key);
-        wrefresh(core.game_screen);
     }
     if (core.player.stat.state == dead) {
         move((LINES / 2) - 1, ((COLS) / 2) - (int) strlen(YOU_DIED) / 2);
@@ -82,11 +80,4 @@ int main(int argc, char **argv __attribute__((unused)))
     endwin();
     return 0;
 }
-
-/**
-putting here codes that is removed to try earlier parts of the program:
-
-
- */
-
 #endif

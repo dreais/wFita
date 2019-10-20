@@ -7,6 +7,7 @@
 
 #include "core_game.h"
 
+char *truncate_map_line(const char *line, int size);
 room_t initialize_room(const int width, const int height);
 void define_hash(const int size_map);
 float perlin2d(float x, float y, float freq, int depth);
