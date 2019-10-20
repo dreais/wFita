@@ -18,7 +18,6 @@ __attribute__((unused)) static WINDOW *initialize_terminal(void)
 	init_colors();
 	noecho();
 	cbreak();
-	curs_set(0);
 	main_game = newwin(LINES / 2 + (LINES / 3), ((COLS / 2) + ((COLS / 2) / 2))-2, 0, 0);
 	curs_set(0);
 	keypad(main_game, TRUE);
