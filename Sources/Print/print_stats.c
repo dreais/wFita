@@ -5,12 +5,16 @@
 #include "../../Header/core_game.h"
 #include <math.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 static WINDOW *stat;
 static bool was_initialize = false;
 
 static void initialize_stat_win(WINDOW *main_game)
 {
-    stat = newwin(LINES / 2, 50, 0, getmaxx(main_game) + 1);
+    stat = newwin(LINES / 2, (COLS - getmaxx(main_game)) - 1, 0, getmaxx(main_game) + 1);
 }
 
 static void health_bar(const int width, const charac_t player)
@@ -21,19 +25,23 @@ static void health_bar(const int width, const charac_t player)
 	for (int i = 1; i < width + 1; i++) {
 		f_progress_bar = ((float)i / (float)width) * 100.0f;
 		if (f_progress_bar <= f_percentage) {
-			wattron(stat, COLOR_PAIR(RED));
+			wattron(stat, COLOR_PAIR(RED_BG));
 			wprintw(stat, "|");
-			wattroff(stat, COLOR_PAIR(RED));
+			wattroff(stat, COLOR_PAIR(RED_BG));
 		} else {
+			wattron(stat, COLOR_PAIR(GREY_BG));
 			wprintw(stat, "|");
+			wattroff(stat, COLOR_PAIR(GREY_BG));
 		}
 	}
 }
 
 void print_stats(WINDOW *main_game, const charac_t player)
 {
-    if (was_initialize == false)
-        initialize_stat_win(main_game);
+    if (was_initialize == false) {
+		initialize_stat_win(main_game);
+		was_initialize = true;
+	}
     wmove(stat, 0, 0);
     wclear(stat);
     wprintw(stat, "Level=%d\nExp=%d\nHealth=%d/%d\n", player.stat.level, player.stat.experience, player.stat.health,

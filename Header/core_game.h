@@ -14,10 +14,8 @@
 #include <ncurses.h>
 #endif
 
-
 /// ENUM TYPEDEFs
 typedef enum {TOP, RIGHT, BOTTOM, LEFT} dir_name;
-
 
 /// SHAPE TYPES
 typedef struct {
