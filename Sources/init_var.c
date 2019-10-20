@@ -2,6 +2,7 @@
 // Created by Valentin on 10/4/2019.
 //
 #include <stdlib.h>
+#include <time.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -23,11 +24,32 @@ __attribute__((unused)) static WINDOW *initialize_terminal(void)
 	return main_game;
 }
 
+room_t recreate_room(room_t to_rebuild)
+{
+	room_t main_r;
+	int noise;
+
+	define_hash((int)to_rebuild.width, to_rebuild.seed);
+	main_r.width = to_rebuild.width;
+	main_r.height = to_rebuild.height;
+	main_r.room = malloc(sizeof(char *) * main_r.height);
+	for (unsigned int i = 0; i < main_r.height; i++) {
+		main_r.room[i] = malloc(sizeof(char) * main_r.width);
+		for (unsigned int j = 0; j < main_r.width; j++) {
+			noise = (int)(10.0f * perlin2d(i, j, 0.1f, 4));
+			main_r.room[i][j] = '0' + noise;
+		}
+	}
+	to_rebuild.room = main_r.room;
+	return to_rebuild;
+}
+
 room_t initialize_room(const int width, const int height) {
     room_t main_r;
     int noise;
 
-    define_hash(width);
+    main_r.seed = time(NULL);
+    define_hash(width, main_r.seed);
 	main_r.width = width;
 	main_r.height = height;
 	main_r.room = malloc(sizeof(char *) * main_r.height);

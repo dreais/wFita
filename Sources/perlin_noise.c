@@ -1,6 +1,5 @@
 #include <time.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 static int SEED = 0;
 static int size_map = 0;
@@ -11,10 +10,10 @@ static int size_map = 0;
 // TODO: using char instead of int might make it lighter for the program if the map is very huge, as the table is contained in the cache.
 static int *hash = NULL;
 
-void define_hash(const int size)
+void define_hash(const int size, time_t seed)
 {
     size_map = size;
-    srand(time(NULL));
+	srand(seed);
     hash = malloc(sizeof(int) * size);
     for (int i = 0; i < size; i++) {
         hash[i] = rand() % size;

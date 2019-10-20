@@ -146,8 +146,19 @@ void main_loop(core_game_t *core, int key)
             wrefresh(core->logs.logs);
             key = wgetch(core->game_screen);
             if (key == KEY_SPACE) {
+            	if (core->current_stage == 1) {
+					destroy_room(&core->floors[1].c_room);
+					core->current_stage = 0;
+					core->floors[0].c_room = recreate_room(core->floors[0].c_room);
+					wclear(core->game_screen);
+					print_room(core);
+					return;
+            	}
+				destroy_room(&core->floors[0].c_room);
                 core->current_stage++;
                 core->floors[1].c_room = initialize_room(300, 300);
+                core->floors[1].stairs.cursor = (point_t) {.x = 30, .y = 30};
+                core->floors[1].stairs.repr = 181;
                 wclear(core->game_screen);
                 print_room(core);
                 return;

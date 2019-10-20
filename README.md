@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/dreais/wFita.svg?branch=master)](https://travis-ci.com/dreais/wFita)
 # wFita 
 
 **CURRENTLY IN VERSION [v0.3.0](https://github.com/dreais/wFita/releases/tag/v0.3.0)!**
