@@ -40,6 +40,7 @@ void init_colors(void)
     init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(WHITE, COLOR_WHITE, COLOR_BLACK);
     init_pair(RED, COLOR_RED, COLOR_BLACK);
+    init_pair(RED_BG, COLOR_RED, COLOR_RED);
 
     init_color(COLOR_LIGHT_GREEN, 0,686,0);
     init_pair(LIGHT_GREEN, COLOR_LIGHT_GREEN, COLOR_BLACK);
@@ -49,6 +50,7 @@ void init_colors(void)
 
     init_color(COLOR_GREY, 854,854,854);
     init_pair(GREY, COLOR_GREY, COLOR_BLACK);
+    init_pair(GREY_BG, COLOR_GREY, COLOR_GREY);
 
     init_color(COLOR_BROWN, 1000,686,372);
     init_pair(BROWN, COLOR_BROWN, COLOR_BLACK);

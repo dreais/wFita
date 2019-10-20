@@ -8,7 +8,7 @@
 #include "../Header/core_game.h"
 
 #ifdef _WIN32
-bool use_color = true;
+bool use_color = false;
 #else
 bool use_color = true;
 #endif
@@ -20,10 +20,29 @@ snow_main();
 
 static unsigned long long iteration_n = 0;
 
+#ifdef _WIN32
+static bool resize_window_app(void)
+{
+	INPUT_RECORD input_rec[128];
+	DWORD event_read;
+	HANDLE hStdin = GetStdHandle(STD_INPUT_HANDLE);
+
+	if (ReadConsoleInput(hStdin, input_rec, 128, &event_read)) {
+		for (int i = 0; i < (int) event_read; i++) {
+			if (input_rec[i].EventType == WINDOW_BUFFER_SIZE_EVENT) {
+				output_logs_str(PREFIX_INFO, "Console window has been resized\n");
+				resize_term(0, 0);
+			}
+		}
+	}
+	return true;
+}
+#endif
+
 int main(int argc, char **argv __attribute__((unused)))
 {
 #ifdef _WIN32
-    HWND Console = GetConsoleWindow();
+	HWND Console = GetConsoleWindow();
     SetWindowPos(Console, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN) - 10, GetSystemMetrics(SM_CYSCREEN) - 10, SWP_SHOWWINDOW);
 #endif
     core_game_t core;
@@ -45,6 +64,9 @@ int main(int argc, char **argv __attribute__((unused)))
     print_stats(core.game_screen, core.player);
     wrefresh(core.game_screen);
     while (core.player.stat.state == alive) {
+#ifdef _WIN32
+		resize_window_app();
+#endif
     	output_logs_str(PREFIX_INFO, "Iteration number %llu\n", iteration_n++);
         key = wgetch(core.game_screen);
         main_loop(&core, key);

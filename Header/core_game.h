@@ -13,10 +13,8 @@
 #include <ncurses.h>
 #endif
 
-
 /// ENUM TYPEDEFs
 typedef enum {TOP, RIGHT, BOTTOM, LEFT} dir_name;
-
 
 /// SHAPE TYPES
 typedef struct {
@@ -131,6 +129,9 @@ typedef struct {
 #define GREY 6
 #define BROWN 7
 #define RED 8
+
+#define RED_BG 9
+#define GREY_BG 10
 
 #define COLOR_DARK_GREEN 22
 #define COLOR_LIGHT_GREEN 119
