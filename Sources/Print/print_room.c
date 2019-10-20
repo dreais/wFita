@@ -139,17 +139,29 @@ static shorten_str *apply_color_lines(const char *str, int *nbr_str)
 	return colored_lines;
 }
 
+char *truncate_map_line(const char *line, int size)
+{
+	char *truncated = malloc(sizeof(char) * (size + 1));
+
+	truncated[size] = '\0';
+	for (int i = 0; i < size; i++) {
+		truncated[i] = assign_repr_map(line[i]);
+	}
+	return truncated;
+}
+
 void print_room(core_game_t *core)
 {
     int counter = 0;
     shorten_str *colored_lines;
     int nbr_str = 0;
+    char *tmp;
 
+	wrefresh(core->game_screen);
     adjust_camera(core->floors[core->current_stage].c_room, core->game_screen, core->player.p_cursor, core->camera);
     if (use_color == true) {
 		for (int i = core->camera->y, tmp_x; i < core->camera->y + (getmaxy(core->game_screen) - 1); i++) {
 			wmove(core->game_screen, counter++, 0);
-			char *tmp = malloc(sizeof(char) * getmaxx(core->game_screen));
 			for (int cnt = 0; cnt < getmaxx(core->game_screen); cnt++) {
 				tmp[cnt] = assign_repr_map(core->floors[core->current_stage].c_room.room[i][core->camera->x + cnt]);
 			}
@@ -176,12 +188,9 @@ void print_room(core_game_t *core)
 		}
     } else {
         for (int i = core->camera->y, tmp_x; i < core->camera->y + (getmaxy(core->game_screen) - 1); i++) {
-            wmove(core->game_screen, counter++, 0);
-            char *tmp = malloc(sizeof(char) * getmaxx(core->game_screen));
-			for (int cnt = 0; cnt < getmaxx(core->game_screen); cnt++) {
-				tmp[cnt] = assign_repr_map(core->floors[core->current_stage].c_room.room[i][core->camera->x + cnt]);
-			}
-			wprintw(core->game_screen, "%s", tmp);
+			wmove(core->game_screen, counter++, 0);
+			tmp = truncate_map_line(core->floors[core->current_stage].c_room.room[i], getmaxx(core->game_screen));
+			wprintw(core->game_screen, "%s\r\n", tmp);
 			free(tmp);
 			if (core->player.p_cursor.y == i) {
 				tmp_x = core->player.p_cursor.x - core->camera->x;
@@ -196,4 +205,5 @@ void print_room(core_game_t *core)
 			}
         }
     }
+    wrefresh(core->game_screen);
 }
