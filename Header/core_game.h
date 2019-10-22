@@ -23,6 +23,10 @@ typedef struct {
     int y;
 } point_t;
 
+/**
+ * @struct line_t
+ * @brief DEPRECATED
+ */
 typedef struct {
     unsigned int size;
     point_t start;
@@ -32,6 +36,20 @@ typedef struct {
 } line_t;
 
 /// CHARACTER TYPES
+/**
+ * @struct stat_t
+ * @brief Struct containing multiple stats
+ * @var level
+ * an unsigned integer with the level. Calculated based on the experience
+ * @var experience
+ * an unsigned integer with the experience obtained. Shown on the stat window
+ * @var health
+ * player's/enemies' health at any point
+ * @var max_health
+ * player's/enemies' maximum health
+ * @var state
+ * value is either "dead" or "alive"
+ */
 typedef struct {
     unsigned int level;
     unsigned int experience;
@@ -63,6 +81,22 @@ typedef struct {
     unsigned short gold;
 } inventory_t;
 
+/**
+ * \struct charac_t
+ * \brief Structure representing a character (player, NPC, enemy)
+ * @var is_weapon_dual_hand
+ * true if the character uses a dual weapon hand
+ * @var left_hand
+ * weapon_t being the left hand. note that if is_weapon_dual_hand true, left_hand == right_hand
+ * @var right_hand
+ * weapon_t being the right hand.
+ * @var stat
+ * stat_t containing a character's stats. enemies' XP will be the XP they're giving away when dying
+ * @var p_cursor
+ * position of a character contained as a point_t type
+ * @var repr
+ * representation of the character on the map
+ */
 typedef struct {
     bool is_weapon_dual_hand;
     weapon_t left_hand;
