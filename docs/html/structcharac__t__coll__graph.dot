@@ -1,0 +1,15 @@
+digraph "charac_t"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="charac_t",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" right_hand\nleft_hand" ,fontname="Helvetica"];
+  Node2 [label="weapon_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structweapon__t.html",tooltip="Struct containing informations about a weapon. This is merely to create weapon with damage..."];
+  Node3 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" stat" ,fontname="Helvetica"];
+  Node3 [label="stat_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structstat__t.html",tooltip="CHARACTER TYPES. "];
+  Node4 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" path" ,fontname="Helvetica"];
+  Node4 [label="line_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structline__t.html",tooltip="DEPRECATED. PLEASE DO NOT USE FOR NOW. "];
+  Node5 -> Node4 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" finish\npool\nstart" ,fontname="Helvetica"];
+  Node5 [label="point_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structpoint__t.html",tooltip="Struct containing a coordinate with x and y axis. "];
+  Node5 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" p_cursor" ,fontname="Helvetica"];
+}

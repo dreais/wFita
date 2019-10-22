@@ -1,0 +1,89 @@
+\hypertarget{struct__win}{}\section{\+\_\+win Struct Reference}
+\label{struct__win}\index{\+\_\+win@{\+\_\+win}}
+
+
+Collaboration diagram for \+\_\+win\+:
+% FIG 0
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{struct__win_a3c9396e362f6045db955d354ac8afdd3}\label{struct__win_a3c9396e362f6045db955d354ac8afdd3}} 
+int {\bfseries \+\_\+cury}
+\item 
+\mbox{\Hypertarget{struct__win_ac1223f2a5936f9f5c50395b54d681bb8}\label{struct__win_ac1223f2a5936f9f5c50395b54d681bb8}} 
+int {\bfseries \+\_\+curx}
+\item 
+\mbox{\Hypertarget{struct__win_a6db30778f2228f10811e08763a329897}\label{struct__win_a6db30778f2228f10811e08763a329897}} 
+int {\bfseries \+\_\+maxy}
+\item 
+\mbox{\Hypertarget{struct__win_a418239ce0ef32b00f5f88d09044308b2}\label{struct__win_a418239ce0ef32b00f5f88d09044308b2}} 
+int {\bfseries \+\_\+maxx}
+\item 
+\mbox{\Hypertarget{struct__win_aebc14f76a10a6a6e8e325cdce8efa920}\label{struct__win_aebc14f76a10a6a6e8e325cdce8efa920}} 
+int {\bfseries \+\_\+begy}
+\item 
+\mbox{\Hypertarget{struct__win_a47b1f8dd0ac3881c2545f837c4c7df48}\label{struct__win_a47b1f8dd0ac3881c2545f837c4c7df48}} 
+int {\bfseries \+\_\+begx}
+\item 
+\mbox{\Hypertarget{struct__win_a52c42a525dd996467c9b52bc34978a1d}\label{struct__win_a52c42a525dd996467c9b52bc34978a1d}} 
+int {\bfseries \+\_\+flags}
+\item 
+\mbox{\Hypertarget{struct__win_a3cd540fac581731242998fae056c2790}\label{struct__win_a3cd540fac581731242998fae056c2790}} 
+chtype {\bfseries \+\_\+attrs}
+\item 
+\mbox{\Hypertarget{struct__win_ad4ff09ef157d2fd83b6408ab06027e35}\label{struct__win_ad4ff09ef157d2fd83b6408ab06027e35}} 
+chtype {\bfseries \+\_\+bkgd}
+\item 
+\mbox{\Hypertarget{struct__win_a274143649a929aa1ce4be65af7e7c10d}\label{struct__win_a274143649a929aa1ce4be65af7e7c10d}} 
+bool {\bfseries \+\_\+clear}
+\item 
+\mbox{\Hypertarget{struct__win_ac86819092f1b3e917149ec14566baa12}\label{struct__win_ac86819092f1b3e917149ec14566baa12}} 
+bool {\bfseries \+\_\+leaveit}
+\item 
+\mbox{\Hypertarget{struct__win_ac356e38e11aaa2735ada881ec6eb4683}\label{struct__win_ac356e38e11aaa2735ada881ec6eb4683}} 
+bool {\bfseries \+\_\+scroll}
+\item 
+\mbox{\Hypertarget{struct__win_aa82aca18ad8733b07009a2f2b3450bf4}\label{struct__win_aa82aca18ad8733b07009a2f2b3450bf4}} 
+bool {\bfseries \+\_\+nodelay}
+\item 
+\mbox{\Hypertarget{struct__win_a364446f14ce98f50e6db2f64340d29ae}\label{struct__win_a364446f14ce98f50e6db2f64340d29ae}} 
+bool {\bfseries \+\_\+immed}
+\item 
+\mbox{\Hypertarget{struct__win_a43fd73fe8831832d65549a187f318bd5}\label{struct__win_a43fd73fe8831832d65549a187f318bd5}} 
+bool {\bfseries \+\_\+sync}
+\item 
+\mbox{\Hypertarget{struct__win_a0ced9223c6470c2ad199513dac314a91}\label{struct__win_a0ced9223c6470c2ad199513dac314a91}} 
+bool {\bfseries \+\_\+use\+\_\+keypad}
+\item 
+\mbox{\Hypertarget{struct__win_a6e174764854b4bfaa441b4a4682f161a}\label{struct__win_a6e174764854b4bfaa441b4a4682f161a}} 
+chtype $\ast$$\ast$ {\bfseries \+\_\+y}
+\item 
+\mbox{\Hypertarget{struct__win_a4403cf4cb02f847df9ba2d7223c84624}\label{struct__win_a4403cf4cb02f847df9ba2d7223c84624}} 
+int $\ast$ {\bfseries \+\_\+firstch}
+\item 
+\mbox{\Hypertarget{struct__win_a01dc8f287591772108a05ce259d819f3}\label{struct__win_a01dc8f287591772108a05ce259d819f3}} 
+int $\ast$ {\bfseries \+\_\+lastch}
+\item 
+\mbox{\Hypertarget{struct__win_adecbf065adc82ff57f0013a8381b01d0}\label{struct__win_adecbf065adc82ff57f0013a8381b01d0}} 
+int {\bfseries \+\_\+tmarg}
+\item 
+\mbox{\Hypertarget{struct__win_abc41beddf6fae4b7736db67034165c39}\label{struct__win_abc41beddf6fae4b7736db67034165c39}} 
+int {\bfseries \+\_\+bmarg}
+\item 
+\mbox{\Hypertarget{struct__win_aa35c75071b7f47b1b6b5f008cb5aa40c}\label{struct__win_aa35c75071b7f47b1b6b5f008cb5aa40c}} 
+int {\bfseries \+\_\+delayms}
+\item 
+\mbox{\Hypertarget{struct__win_a4cfae0166106a740706fcd93a3b4b84d}\label{struct__win_a4cfae0166106a740706fcd93a3b4b84d}} 
+int {\bfseries \+\_\+parx}
+\item 
+\mbox{\Hypertarget{struct__win_aaa257b14b762738fbbfd531a530c0a6c}\label{struct__win_aaa257b14b762738fbbfd531a530c0a6c}} 
+int {\bfseries \+\_\+pary}
+\item 
+\mbox{\Hypertarget{struct__win_a91014d37281ccdde7d37cfc9f2208e6b}\label{struct__win_a91014d37281ccdde7d37cfc9f2208e6b}} 
+struct \hyperlink{struct__win}{\+\_\+win} $\ast$ {\bfseries \+\_\+parent}
+\end{DoxyCompactItemize}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Header/curses.\+h\end{DoxyCompactItemize}

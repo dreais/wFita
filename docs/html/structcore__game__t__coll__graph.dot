@@ -1,0 +1,31 @@
+digraph "core_game_t"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="core_game_t",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" floors" ,fontname="Helvetica"];
+  Node2 [label="floor_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structfloor__t.html",tooltip="Struct containing the stair information, and the room_t variable. "];
+  Node3 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" stairs" ,fontname="Helvetica"];
+  Node3 [label="stairs_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structstairs__t.html",tooltip="Struct containing the position and the character&#39;s representation of a stair (for a given floor) ..."];
+  Node4 -> Node3 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" cursor" ,fontname="Helvetica"];
+  Node4 [label="point_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structpoint__t.html",tooltip="Struct containing a coordinate with x and y axis. "];
+  Node5 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" c_room" ,fontname="Helvetica"];
+  Node5 [label="room_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structroom__t.html",tooltip="ROOM TYPES. "];
+  Node6 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" logs" ,fontname="Helvetica"];
+  Node6 [label="g_logs",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structg__logs.html",tooltip="Struct containing the log WINDOW and its parameters. "];
+  Node7 -> Node6 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" logs" ,fontname="Helvetica"];
+  Node7 [label="_win",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct__win.html"];
+  Node7 -> Node7 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" _parent" ,fontname="Helvetica"];
+  Node4 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" camera" ,fontname="Helvetica"];
+  Node8 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" monster_arr\nplayer" ,fontname="Helvetica"];
+  Node8 [label="charac_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structcharac__t.html",tooltip="Structure representing a character (player, NPC, enemy) "];
+  Node9 -> Node8 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" right_hand\nleft_hand" ,fontname="Helvetica"];
+  Node9 [label="weapon_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structweapon__t.html",tooltip="Struct containing informations about a weapon. This is merely to create weapon with damage..."];
+  Node10 -> Node8 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" stat" ,fontname="Helvetica"];
+  Node10 [label="stat_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structstat__t.html",tooltip="CHARACTER TYPES. "];
+  Node11 -> Node8 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" path" ,fontname="Helvetica"];
+  Node11 [label="line_t",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structline__t.html",tooltip="DEPRECATED. PLEASE DO NOT USE FOR NOW. "];
+  Node4 -> Node11 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" finish\npool\nstart" ,fontname="Helvetica"];
+  Node4 -> Node8 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" p_cursor" ,fontname="Helvetica"];
+  Node7 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" game_screen\nstat_screen" ,fontname="Helvetica"];
+}

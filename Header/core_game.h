@@ -17,7 +17,10 @@
 /// ENUM TYPEDEFs
 typedef enum {TOP, RIGHT, BOTTOM, LEFT} dir_name;
 
-/// SHAPE TYPES
+/**
+ * @struct point_t
+ * @brief Struct containing a coordinate with x and y axis
+ */
 typedef struct {
     int x;
     int y;
@@ -25,7 +28,7 @@ typedef struct {
 
 /**
  * @struct line_t
- * @brief DEPRECATED
+ * @brief DEPRECATED. PLEASE DO NOT USE FOR NOW
  */
 typedef struct {
     unsigned int size;
@@ -39,37 +42,37 @@ typedef struct {
 /**
  * @struct stat_t
  * @brief Struct containing multiple stats
- * @var level
- * an unsigned integer with the level. Calculated based on the experience
- * @var experience
- * an unsigned integer with the experience obtained. Shown on the stat window
- * @var health
- * player's/enemies' health at any point
- * @var max_health
- * player's/enemies' maximum health
- * @var state
- * value is either "dead" or "alive"
+ * @details This structure can be used to store stats of a given character, be it the player, a NPC or an enemy.
+ * If the experience variable is set for an enemy, when a player kill it, this'll be the amount given by the kill.
  */
 typedef struct {
-    unsigned int level;
-    unsigned int experience;
-    int health;
-    int max_health;
-    bool state;
+    unsigned int level; /// an unsigned integer with the level. Calculated based on the experience
+    unsigned int experience; /// an unsigned integer containing the XP to be shown on the STAT WINDOW
+    int health; /// player's/enemies' health at any point
+    int max_health; /// player's/enemies' maximum health
+    bool state; /// value is either "dead" or "alive"
 } stat_t;
 
 typedef unsigned long long w_UID;
 typedef enum {LEFT_HAND, RIGHT_HAND, LEFT_RIGHT_HAND} wSlot_ID;
+/**
+ * @struct weapon_t
+ * @brief Struct containing informations about a weapon. This is merely to create weapon with damage, def, etc
+ */
 typedef struct {
-    wSlot_ID slot; // weapon slot. self-explanatory
-    w_UID piv_key; // unique identifier of the weapon
-    char *name; // uses the piv_key previously defined to find in a pivot table the good weapon
-    short dmg; // for dmg/def/crit, see Sources/Misc/Weapon/weapon_roll.c
-    short def;
-    float crit;
+    wSlot_ID slot; /// left/right hand or both. This variable is to determine which slot.
+    w_UID piv_key; /// the unique identifier of the weapon
+    char *name; /// name of the weapon. snake_case with a piv_key, as example_example_001
+    short dmg; /// damage the weapon deal. if this is a defensive piece of equipment, will be null or -1
+    short def; /// defense of a defensive equipment. will be null or -1 if it's a weapon
+    float crit; /// the critical rate the weapon/defensive equipment will have. the higher, the better chance you'll get of a critick!
 } weapon_t;
 
 typedef enum {WEAPON, ARMOR, SPELL} eType; // equipment type
+/**
+ * @struct equipment_t
+ * @brief Struct containing IDs and type of a precise equipment
+ */
 typedef struct {
     w_UID piv_key;
     wSlot_ID slot;
@@ -108,6 +111,10 @@ typedef struct {
 } charac_t;
 
 /// ROOM TYPES
+/**
+ * @struct room_t
+ * @brief Struct containing some information about a specific room (the map itself), not a floor.
+ */
 typedef struct {
 	time_t seed;
     unsigned int x;
@@ -117,7 +124,10 @@ typedef struct {
     char** room;
 } room_t;
 
-/// CORE_GAME TYPES
+/**
+ * @struct g_logs
+ * @brief Struct containing the log WINDOW and its parameters
+ */
 typedef struct {
     unsigned int index;
     unsigned int buffer_size;
@@ -125,16 +135,28 @@ typedef struct {
     WINDOW *logs;
 } g_logs;
 
+/**
+ * @struct stairs_t
+ * @brief Struct containing the position and the character's representation of a stair (for a given floor)
+ */
 typedef struct {
     point_t cursor;
     char repr;
 } stairs_t;
 
+/**
+ * @struct floor_t
+ * @brief Struct containing the stair information, and the room_t variable.
+ */
 typedef struct {
     stairs_t stairs;
     room_t c_room; // current
 } floor_t;
 
+/**
+ * @struct core_game_t
+ * @brief Most important type - it contains every major information of the game
+ */
 typedef struct {
     floor_t *floors;
     unsigned short current_stage;
@@ -147,6 +169,10 @@ typedef struct {
     g_logs logs;
 } core_game_t;
 
+/**
+ * @struct key_func
+ * @brief Struct used to link a key to a specific function
+ */
 typedef struct {
     int key;
     void (*func)(core_game_t *);
