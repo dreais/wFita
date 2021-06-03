@@ -4,8 +4,6 @@
 
 #include "raylib.h"
 #include "core_game.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 static Rectangle player_frame = (Rectangle) {36.0f, 0.0f, 8.0f, 8.0f};
 static Rectangle player_stretch = {0};

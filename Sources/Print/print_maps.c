@@ -86,5 +86,4 @@ void display_textures(core_game_t *core, int zoom)
         }
     }
     print_player(core, zoom, screen_h, screen_w);
-    fprintf(stderr, "x:%d\ty:%d\n", core->player.pos.x, core->player.pos.y);
 }

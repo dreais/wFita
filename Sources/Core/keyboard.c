@@ -46,8 +46,5 @@ void input_treat(core_game_t *core)
         if (IsKeyDown(key_f[i].key)) {
             (key_f[i].func)(core);
         }
-//        if (key == key_f[i].key) {
-//            (key_f[i].func)(core);
-//        }
     }
 }

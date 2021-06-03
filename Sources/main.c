@@ -2,9 +2,6 @@
 #include "core_game.h"
 #include "init.h"
 
-#include <stdio.h>
-#include <unistd.h>
-
 int main(void)
 {
     core_game_t core;
@@ -16,11 +13,8 @@ int main(void)
     core.tilemap_color = LoadTexture("Resources/colored_tilemap.png");
     core.tilemap_mono = LoadTexture("Resources/monochrome_tilemap.png");
     core.font = LoadFont("Resources/VT323-Regular.ttf");
-    SetTargetFPS(10);               // Set our game to run at 60 frames-per-second
-
-    fprintf(stderr, "%s\n", core.floors[core.current_stage].c_room.room[0]);
+    SetTargetFPS(10);
     game_loop(&core);
-    CloseWindow();        // Close window and OpenGL context
-
+    CloseWindow();
     return 0;
 }
